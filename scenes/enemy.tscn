@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://cydvsy2fg6d5e"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_rheqo"]
+[ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_nbfk6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v371p"]
+size = Vector2(62, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1x6j"]
+size = Vector2(64, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vj3ap"]
+size = Vector2(64, 32)
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 13
+script = ExtResource("1_rheqo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_nbfk6")
+
+[node name="EnemyShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_v371p")
+
+[node name="PlatformBody" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 16
+
+[node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
+position = Vector2(0, -14)
+shape = SubResource("RectangleShape2D_b1x6j")
+one_way_collision = true
+
+[node name="ContactDamage" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContactDamage"]
+shape = SubResource("RectangleShape2D_vj3ap")
+
+[connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]
