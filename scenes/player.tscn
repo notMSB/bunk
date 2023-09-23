@@ -21,5 +21,5 @@ shape = SubResource("RectangleShape2D_pwljv")
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -250)
 drag_vertical_enabled = true
-drag_top_margin = 0.51
+drag_top_margin = 1.0
 drag_bottom_margin = 1.0

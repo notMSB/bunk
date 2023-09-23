@@ -8,7 +8,7 @@ const BOTTOM_LIMIT = 300
 const LEFT_LIMIT = 600
 const RIGHT_LIMIT = 600
 
-const TIMER_START = .75
+const TIMER_START = .5
 var timer = TIMER_START
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,15 +19,18 @@ func _process(delta):
 		timer = TIMER_START
 
 func spawn():
+	var xPos = CAMERA.get_screen_center_position().x + LEFT_LIMIT - randi() % (LEFT_LIMIT + RIGHT_LIMIT)
 	var yPos = CAMERA.get_screen_center_position().y + TOP_LIMIT - randi() % (TOP_LIMIT + BOTTOM_LIMIT)
 	
 	var newEnemy = Enemy.instantiate()
 	add_child(newEnemy)
 	newEnemy.set_camera(CAMERA)
-	var rando = randi() % 2
+	var rando = randi() % 3
 	if rando == 0:
 		newEnemy.global_position = Vector2(CAMERA.get_screen_center_position().x - LEFT_LIMIT, yPos)
 		newEnemy.velocity.x = 100
-	else:
+	elif rando == 1:
 		newEnemy.global_position = Vector2(CAMERA.get_screen_center_position().x + RIGHT_LIMIT, yPos)
 		newEnemy.velocity.x = -100
+	else:
+		newEnemy.global_position = Vector2(xPos, CAMERA.get_screen_center_position().y - 350)
