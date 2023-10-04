@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var PLAYER = get_node("../Player")
 @onready var CAMERA = get_node("../Player/Camera2D")
 @export var Enemy : PackedScene
 
@@ -8,7 +9,7 @@ const BOTTOM_LIMIT = 300
 const LEFT_LIMIT = 600
 const RIGHT_LIMIT = 600
 
-const TIMER_START = .5
+const TIMER_START = .8
 var timer = TIMER_START
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -24,7 +25,7 @@ func spawn():
 	
 	var newEnemy = Enemy.instantiate()
 	add_child(newEnemy)
-	newEnemy.set_camera(CAMERA)
+	newEnemy.setup(PLAYER, CAMERA)
 	var rando = randi() % 3
 	if rando == 0:
 		newEnemy.global_position = Vector2(CAMERA.get_screen_center_position().x - LEFT_LIMIT, yPos)

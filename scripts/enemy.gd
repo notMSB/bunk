@@ -31,12 +31,15 @@ func _physics_process(delta):
 		boostTimer = BOOST_DEFAULT
 		velocity.y = DEFAULT_VELOCITY
 
-func set_camera(cam):
+func setup(p, cam):
 	camera = cam
+	$AI.setup(p)
 
 func change():
 	velocity.x = 0
+	velocity.y = DEFAULT_VELOCITY
 	isPlatform = true
+	$AI.queue_free()
 	$Sprite2D.texture = ResourceLoader.load("res://assets/sprites/platform.png")
 	$PlatformBody.visible = true
 	$ContactDamage.visible = false

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://0yy4i0l8ajh1"]
+[gd_scene load_steps=6 format=3 uid="uid://0yy4i0l8ajh1"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_2e5t6"]
 [ext_resource type="Texture2D" uid="uid://cgvmcx23r8ods" path="res://assets/sprites/player.png" id="2_f5gig"]
-[ext_resource type="PackedScene" uid="uid://dak8tshl61njw" path="res://scenes/bullet.tscn" id="2_ii5y7"]
+[ext_resource type="PackedScene" uid="uid://m6ux2qjpvwha" path="res://scenes/laser_gun.tscn" id="3_5i3k8"]
+[ext_resource type="PackedScene" uid="uid://cd5egnil261mn" path="res://scenes/basic_gun.tscn" id="3_dpfgx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pwljv"]
 size = Vector2(32, 64)
@@ -10,7 +11,6 @@ size = Vector2(32, 64)
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 30
 script = ExtResource("1_2e5t6")
-Bullet = ExtResource("2_ii5y7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_f5gig")
@@ -23,3 +23,9 @@ offset = Vector2(0, -250)
 drag_vertical_enabled = true
 drag_top_margin = 1.0
 drag_bottom_margin = 1.0
+
+[node name="Weapon" type="Node2D" parent="."]
+
+[node name="laser_gun" parent="Weapon" instance=ExtResource("3_5i3k8")]
+
+[node name="basic_gun" parent="Weapon" instance=ExtResource("3_dpfgx")]

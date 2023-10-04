@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cydvsy2fg6d5e"]
+[gd_scene load_steps=7 format=3 uid="uid://cydvsy2fg6d5e"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_rheqo"]
 [ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_nbfk6"]
+[ext_resource type="Script" path="res://scripts/crab_ai.gd" id="3_qh04d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v371p"]
 size = Vector2(62, 30)
@@ -10,7 +11,7 @@ size = Vector2(62, 30)
 size = Vector2(64, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vj3ap"]
-size = Vector2(64, 32)
+size = Vector2(64, 34)
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
@@ -35,6 +36,10 @@ one_way_collision = true
 [node name="ContactDamage" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ContactDamage"]
+position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_vj3ap")
+
+[node name="AI" type="Node2D" parent="."]
+script = ExtResource("3_qh04d")
 
 [connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]

@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://m6ux2qjpvwha"]
+
+[ext_resource type="Script" path="res://scripts/laser_gun.gd" id="1_qfbif"]
+[ext_resource type="PackedScene" uid="uid://nam6xdgenv6o" path="res://scenes/laser.tscn" id="2_pwijd"]
+
+[node name="laser_gun" type="Node2D"]
+script = ExtResource("1_qfbif")
+Projectile = ExtResource("2_pwijd")
