@@ -9,6 +9,8 @@ const BOTTOM_LIMIT = 300
 const LEFT_LIMIT = 600
 const RIGHT_LIMIT = 600
 
+const TOP_SPAWN = 500
+
 const TIMER_START = .8
 var timer = TIMER_START
 
@@ -34,4 +36,4 @@ func spawn():
 		newEnemy.global_position = Vector2(CAMERA.get_screen_center_position().x + RIGHT_LIMIT, yPos)
 		newEnemy.velocity.x = -100
 	else:
-		newEnemy.global_position = Vector2(xPos, CAMERA.get_screen_center_position().y - 350)
+		newEnemy.global_position = Vector2(xPos, CAMERA.get_screen_center_position().y - TOP_SPAWN)

@@ -29,6 +29,7 @@ visible = false
 collision_layer = 16
 
 [node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
+visible = false
 position = Vector2(0, -14)
 shape = SubResource("RectangleShape2D_b1x6j")
 one_way_collision = true

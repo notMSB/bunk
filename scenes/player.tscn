@@ -21,7 +21,7 @@ shape = SubResource("RectangleShape2D_pwljv")
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -250)
 drag_vertical_enabled = true
-drag_top_margin = 1.0
+drag_top_margin = 0.8
 drag_bottom_margin = 1.0
 
 [node name="Weapon" type="Node2D" parent="."]
@@ -29,3 +29,5 @@ drag_bottom_margin = 1.0
 [node name="laser_gun" parent="Weapon" instance=ExtResource("3_5i3k8")]
 
 [node name="basic_gun" parent="Weapon" instance=ExtResource("3_dpfgx")]
+
+[node name="Projectiles" type="Node" parent="."]

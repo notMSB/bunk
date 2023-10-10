@@ -1,7 +1,7 @@
 extends Area2D
 
 var direction = Vector2()
-var speed = 500
+var speed = 750
 
 func fire(goalPos, startPos):
 	global_position = startPos

@@ -1,16 +1,79 @@
-[gd_scene load_steps=6 format=3 uid="uid://bqjvptpborfyo"]
+[gd_scene load_steps=9 format=3 uid="uid://bqjvptpborfyo"]
 
 [ext_resource type="PackedScene" uid="uid://0yy4i0l8ajh1" path="res://scenes/player.tscn" id="1_5bqmq"]
+[ext_resource type="Script" path="res://scripts/ui_controller.gd" id="1_5j3ue"]
+[ext_resource type="Texture2D" uid="uid://cqs150rvatyft" path="res://assets/sprites/circle.png" id="1_56y1r"]
 [ext_resource type="Script" path="res://scripts/spawner.gd" id="1_d5fe3"]
 [ext_resource type="Texture2D" uid="uid://c8q25evlvcbfo" path="res://icon.svg" id="2_r4sw2"]
 [ext_resource type="PackedScene" uid="uid://cydvsy2fg6d5e" path="res://scenes/enemy.tscn" id="3_ju45p"]
+[ext_resource type="Script" path="res://scripts/floor.gd" id="4_spiml"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8oyl6"]
-size = Vector2(1147, 95)
+size = Vector2(1200, 95)
 
 [node name="Game" type="Node2D"]
 
-[node name="Projectiles" type="Node2D" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
+offset = Vector2(0, 120)
+transform = Transform2D(1, 0, 0, 1, 0, 120)
+script = ExtResource("1_5j3ue")
+
+[node name="Health" type="Node2D" parent="UI"]
+visible = false
+
+[node name="1" type="Sprite2D" parent="UI/Health"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(548, 635)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_56y1r")
+
+[node name="2" type="Sprite2D" parent="UI/Health"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(578, 635)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_56y1r")
+
+[node name="3" type="Sprite2D" parent="UI/Health"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(608, 635)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_56y1r")
+
+[node name="Consumable" type="Node2D" parent="UI"]
+visible = false
+position = Vector2(-136, 0)
+
+[node name="1" type="Sprite2D" parent="UI/Consumable"]
+modulate = Color(0, 0, 1, 1)
+position = Vector2(1132, 635)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_56y1r")
+
+[node name="Height" type="Node2D" parent="UI"]
+position = Vector2(16, 0)
+
+[node name="Current" type="Label" parent="UI/Height"]
+offset_left = 945.0
+offset_top = 589.0
+offset_right = 1016.0
+offset_bottom = 615.0
+text = "0"
+horizontal_alignment = 1
+
+[node name="High" type="Label" parent="UI/Height"]
+offset_left = 945.0
+offset_top = 565.0
+offset_right = 1016.0
+offset_bottom = 591.0
+text = "0"
+horizontal_alignment = 1
+
+[node name="FuelBar" type="ProgressBar" parent="UI"]
+offset_left = 56.0
+offset_top = 621.0
+offset_right = 319.0
+offset_bottom = 648.0
+value = 100.0
 
 [node name="Spawner" type="Node2D" parent="."]
 script = ExtResource("1_d5fe3")
@@ -23,12 +86,13 @@ position = Vector2(587, 586)
 position = Vector2(64, 688)
 collision_layer = 8
 collision_mask = 7
+script = ExtResource("4_spiml")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-position = Vector2(517.5, -15.5)
+position = Vector2(530, -15.5)
 shape = SubResource("RectangleShape2D_8oyl6")
 
 [node name="Sprite2D" type="Sprite2D" parent="Floor"]
-position = Vector2(515, 0)
-scale = Vector2(9.04688, 1)
+position = Vector2(531, 0)
+scale = Vector2(9.375, 1)
 texture = ExtResource("2_r4sw2")

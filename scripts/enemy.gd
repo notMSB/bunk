@@ -19,7 +19,7 @@ func _ready():
 
 func _physics_process(delta):
 	move_and_slide()
-	if camera and position.y > (camera.get_screen_center_position().y + 320):
+	if camera and position.y > camera.get_screen_center_position().y + 400 and velocity.y >= 0:
 		if isPlatform and velocity.y <= DEFAULT_VELOCITY: velocity.y = 0
 		killTimerSet = true
 		#queue_free()
@@ -51,6 +51,11 @@ func boost(value):
 	boostTimerSet = true
 	velocity.y -= BOOST_MOD * value
 
+func unboost():
+	boostTimerSet = false
+	velocity.y = DEFAULT_VELOCITY
+
 func _on_contact_damage_body_entered(body):
+	print("h")
 	if $ContactDamage.visible and body.collision_layer == 1: #damage player
 		get_tree().reload_current_scene()
