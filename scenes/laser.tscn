@@ -9,7 +9,7 @@ size = Vector2(8, 8)
 [node name="Laser" type="Area2D"]
 scale = Vector2(125, 1)
 collision_layer = 4
-collision_mask = 35
+collision_mask = 3
 script = ExtResource("1_ummpp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

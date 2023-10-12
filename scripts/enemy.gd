@@ -14,12 +14,15 @@ const BOOST_DEFAULT = .2
 var boostTimerSet = false
 var boostTimer = BOOST_DEFAULT
 
+var health = 3
+
 func _ready():
 	velocity.y = DEFAULT_VELOCITY
+	$HPText.text = str(health)
 
 func _physics_process(delta):
 	move_and_slide()
-	if camera and position.y > camera.get_screen_center_position().y + 400 and velocity.y >= 0:
+	if camera and position.y > camera.get_screen_center_position().y + 375 and velocity.y >= 0:
 		if isPlatform and velocity.y <= DEFAULT_VELOCITY: velocity.y = 0
 		killTimerSet = true
 		#queue_free()
@@ -39,6 +42,7 @@ func change():
 	velocity.x = 0
 	velocity.y = DEFAULT_VELOCITY
 	isPlatform = true
+	$HPText.visible = false
 	$AI.queue_free()
 	$Sprite2D.texture = ResourceLoader.load("res://assets/sprites/platform.png")
 	$PlatformBody.visible = true
@@ -55,7 +59,14 @@ func unboost():
 	boostTimerSet = false
 	velocity.y = DEFAULT_VELOCITY
 
+func take_damage(amount):
+	if Global.oneshot: change()
+	else:
+		health -= amount
+		if health <= 0: change()
+		else: $HPText.text = str(health)
+
 func _on_contact_damage_body_entered(body):
-	print("h")
 	if $ContactDamage.visible and body.collision_layer == 1: #damage player
-		get_tree().reload_current_scene()
+		body.die()
+
