@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8mcymji32hy6"]
+
+[ext_resource type="Script" path="res://scripts/rocket_launcher.gd" id="1_dldwx"]
+[ext_resource type="PackedScene" uid="uid://bo3km0llfwgy" path="res://scenes/rocket.tscn" id="2_jbder"]
+
+[node name="rocket_launcher" type="Node2D"]
+script = ExtResource("1_dldwx")
+Projectile = ExtResource("2_jbder")

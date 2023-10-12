@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwboudnyjtnrq"]
+
+[ext_resource type="Script" path="res://scripts/explosion.gd" id="1_tv3jr"]
+[ext_resource type="Texture2D" uid="uid://cia8ftvll1dyb" path="res://assets/sprites/boom.png" id="2_i1vl7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_13iht"]
+
+[node name="Explosion" type="Area2D"]
+z_index = -1
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_tv3jr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_i1vl7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(8, 8)
+shape = SubResource("CircleShape2D_13iht")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
