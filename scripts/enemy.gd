@@ -14,11 +14,11 @@ const BOOST_DEFAULT = .2
 var boostTimerSet = false
 var boostTimer = BOOST_DEFAULT
 
-var health = 3
+@export var health = 3
 
 func _ready():
 	velocity.y = DEFAULT_VELOCITY
-	$HPText.text = str(health)
+	$UI/HPText.text = str(health)
 
 func _physics_process(delta):
 	move_and_slide()
@@ -42,11 +42,20 @@ func change():
 	velocity.x = 0
 	velocity.y = DEFAULT_VELOCITY
 	isPlatform = true
-	$HPText.visible = false
+	$UI/HPText.visible = false
 	$AI.queue_free()
-	$Sprite2D.texture = ResourceLoader.load("res://assets/sprites/platform.png")
+	for sprite in $Sprites.get_children():
+		sprite.texture = ResourceLoader.load("res://assets/sprites/platform.png")
+		if sprite.get_index() == 1: #temp
+			sprite.rotation = 0
+			sprite.position.x = -32
+			sprite.position.y = 0
+			
 	$PlatformBody.visible = true
 	$ContactDamage.visible = false
+	if get_node_or_null("AltShape"): #change collision if platform layout is different
+		$EnemyShape.visible = false
+		$AltShape.visible = true
 	set_collision_layer_value(6, 1)
 	set_collision_layer_value(2, 0)
 	set_collision_mask_value(1, 0)
@@ -64,7 +73,7 @@ func take_damage(amount):
 	else:
 		health -= amount
 		if health <= 0: change()
-		else: $HPText.text = str(health)
+		else: $UI/HPText.text = str(health)
 
 func _on_contact_damage_body_entered(body):
 	if $ContactDamage.visible and body.collision_layer == 1: #damage player

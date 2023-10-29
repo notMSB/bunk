@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqjvptpborfyo"]
+[gd_scene load_steps=10 format=3 uid="uid://bqjvptpborfyo"]
 
 [ext_resource type="PackedScene" uid="uid://0yy4i0l8ajh1" path="res://scenes/player.tscn" id="1_5bqmq"]
 [ext_resource type="Script" path="res://scripts/ui_controller.gd" id="1_5j3ue"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c8q25evlvcbfo" path="res://icon.svg" id="2_r4sw2"]
 [ext_resource type="PackedScene" uid="uid://cydvsy2fg6d5e" path="res://scenes/enemy.tscn" id="3_ju45p"]
 [ext_resource type="Script" path="res://scripts/floor.gd" id="4_spiml"]
+[ext_resource type="PackedScene" uid="uid://c5d10buygwl2h" path="res://scenes/shrimp.tscn" id="5_bbasy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8oyl6"]
 size = Vector2(1200, 95)
@@ -78,6 +79,7 @@ value = 100.0
 [node name="Spawner" type="Node2D" parent="."]
 script = ExtResource("1_d5fe3")
 Enemy = ExtResource("3_ju45p")
+Shrimp = ExtResource("5_bbasy")
 
 [node name="Player" parent="." instance=ExtResource("1_5bqmq")]
 position = Vector2(587, 586)

@@ -14,6 +14,8 @@ const BOTTOM_MOD = 150
 #const BOOSTLIMIT = -200
 #var jumpBoost = 0
 
+var health = 1
+
 const MAX_FUEL = 100
 const FUEL_THRESHOLD = 50
 var fuel = MAX_FUEL
@@ -24,7 +26,7 @@ const COYOTE_TIME = 5
 var currentCoyote = COYOTE_TIME
 
 var weaponCooldown = 0
-var weaponIndex = 2
+var weaponIndex = 0
 
 var currentPlatform = null
 
@@ -46,11 +48,11 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("swap_up"):
 		weaponIndex -= 1
 		if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
-		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
+		weaponCooldown = .1
 	if Input.is_action_just_pressed("swap_down"):
 		weaponIndex += 1
 		if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
-		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
+		weaponCooldown = .1
 	if Input.is_action_just_pressed("down") and is_on_floor(): plat_drop()
 	#if Input.is_action_pressed("down") and is_on_floor():
 	#	jumpBoost -= 2
@@ -83,14 +85,14 @@ func set_platform():
 	for i in get_slide_collision_count():
 		#print(get_slide_collision(i).get_collider().name)
 		var col = get_slide_collision(i).get_collider()
-		if col != null and col.collision_layer == PLATFORM_LAYER:
-			currentPlatform = col.get_parent()
+		if col != null:
+			currentPlatform = col.get_parent() if col.collision_layer == PLATFORM_LAYER else null
 
 func jump():
 	if currentCoyote > 0:
 		currentCoyote = 0
 		change_velocity(JUMP_VELOCITY)
-		if currentPlatform: currentPlatform.boost(JUMP_VELOCITY)
+		if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
 		jumping = true
 	elif fuel >= FUEL_THRESHOLD:
 		change_velocity(JUMP_VELOCITY/2)
@@ -98,6 +100,9 @@ func jump():
 		fuel -= FUEL_THRESHOLD
 		UI.set_fuel(fuel)
 		jumping = true
+
+func take_damage(_damage):
+	die()
 
 func die():
 	var runScore = UI.get_height()

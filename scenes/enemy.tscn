@@ -15,10 +15,12 @@ size = Vector2(66, 38)
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 13
+collision_mask = 5
 script = ExtResource("1_rheqo")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="1" type="Sprite2D" parent="Sprites"]
 texture = ExtResource("2_nbfk6")
 
 [node name="EnemyShape" type="CollisionShape2D" parent="."]
@@ -35,20 +37,24 @@ shape = SubResource("RectangleShape2D_b1x6j")
 one_way_collision = true
 
 [node name="ContactDamage" type="Area2D" parent="."]
+collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ContactDamage"]
+[node name="DamageArea" type="CollisionShape2D" parent="ContactDamage"]
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_vj3ap")
 
 [node name="AI" type="Node2D" parent="."]
 script = ExtResource("3_qh04d")
 
-[node name="HPText" type="Label" parent="."]
+[node name="UI" type="Node2D" parent="."]
+
+[node name="HPText" type="Label" parent="UI"]
 offset_left = -30.0
 offset_top = -12.0
 offset_right = 30.0
-offset_bottom = 11.0
+offset_bottom = 14.0
 text = "0"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]
