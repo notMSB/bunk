@@ -9,7 +9,7 @@
 size = Vector2(94.8742, 31.432)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kojb4"]
-size = Vector2(64, 4)
+size = Vector2(96, 4)
 
 [node name="Shrimp" type="CharacterBody2D"]
 collision_layer = 2
@@ -43,7 +43,7 @@ visible = false
 collision_layer = 16
 
 [node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
-position = Vector2(0, -14)
+position = Vector2(-16, -14)
 shape = SubResource("RectangleShape2D_kojb4")
 one_way_collision = true
 
@@ -58,8 +58,6 @@ polygon = PackedVector2Array(-34.2112, -20.373, -34.2112, 48.5949, 1.38427, 48.5
 [node name="AI" type="Node2D" parent="."]
 script = ExtResource("3_wju0a")
 Bullet = ExtResource("4_x2p14")
-
-[node name="EnemyShapes" type="Node2D" parent="."]
 
 [node name="Projectiles" type="Node" parent="."]
 

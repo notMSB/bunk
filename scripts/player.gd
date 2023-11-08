@@ -53,7 +53,9 @@ func _physics_process(delta):
 		weaponIndex += 1
 		if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
 		weaponCooldown = .1
-	if Input.is_action_just_pressed("down") and is_on_floor(): plat_drop()
+	if Input.is_action_just_pressed("down"):
+		if is_on_floor(): plat_drop()
+		else: velocity.y = max(velocity.y, 1000) #fastfall
 	#if Input.is_action_pressed("down") and is_on_floor():
 	#	jumpBoost -= 2
 	var direction = Input.get_axis("ui_left", "ui_right")
@@ -117,7 +119,7 @@ func launch(boomPos): #from an explosion
 	var direction = (position - boomPos).normalized()
 	velocity = 750 * direction
 	velocity.x *= 1.5
-	currentPlatform = null
+	if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
 
 func change_velocity(value):
 	#if value < -1000:

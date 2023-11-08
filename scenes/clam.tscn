@@ -1,0 +1,88 @@
+[gd_scene load_steps=9 format=3 uid="uid://cvfppjfmmea6a"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_bq47u"]
+[ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_6w3ya"]
+[ext_resource type="Script" path="res://scripts/clam_ai.gd" id="3_olv8h"]
+[ext_resource type="PackedScene" uid="uid://dak8tshl61njw" path="res://scenes/bullet.tscn" id="4_5xpjp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_emwit"]
+size = Vector2(94.8742, 94.5368)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmtni"]
+size = Vector2(97, 33)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kojb4"]
+size = Vector2(96, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_35sxm"]
+size = Vector2(106, 107)
+
+[node name="Clam" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_bq47u")
+health = 5
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="1" type="Sprite2D" parent="Sprites"]
+texture = ExtResource("2_6w3ya")
+
+[node name="2" type="Sprite2D" parent="Sprites"]
+position = Vector2(48, 16)
+rotation = 1.5708
+texture = ExtResource("2_6w3ya")
+
+[node name="3" type="Sprite2D" parent="Sprites"]
+position = Vector2(-16, 48)
+rotation = 1.5708
+texture = ExtResource("2_6w3ya")
+
+[node name="4" type="Sprite2D" parent="Sprites"]
+position = Vector2(32, 64)
+texture = ExtResource("2_6w3ya")
+
+[node name="EnemyShape" type="CollisionShape2D" parent="."]
+position = Vector2(16, 32.0244)
+scale = Vector2(1.01136, 1.01496)
+shape = SubResource("RectangleShape2D_emwit")
+
+[node name="AltShape" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(16.5, 0.5)
+shape = SubResource("RectangleShape2D_mmtni")
+
+[node name="PlatformBody" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 16
+
+[node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
+position = Vector2(16, -14)
+shape = SubResource("RectangleShape2D_kojb4")
+one_way_collision = true
+
+[node name="ContactDamage" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="DamageArea" type="CollisionShape2D" parent="ContactDamage"]
+position = Vector2(16, 31.5)
+shape = SubResource("RectangleShape2D_35sxm")
+
+[node name="AI" type="Node2D" parent="."]
+script = ExtResource("3_olv8h")
+Bullet = ExtResource("4_5xpjp")
+
+[node name="Projectiles" type="Node" parent="."]
+
+[node name="UI" type="Node2D" parent="."]
+position = Vector2(16, 0)
+
+[node name="HPText" type="Label" parent="UI"]
+offset_left = -30.0
+offset_top = -12.0
+offset_right = 30.0
+offset_bottom = 14.0
+text = "2"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]

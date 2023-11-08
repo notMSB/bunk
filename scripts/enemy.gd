@@ -44,17 +44,21 @@ func change():
 	isPlatform = true
 	$UI/HPText.visible = false
 	$AI.queue_free()
+	var spriteCount = $Sprites.get_child_count()
 	for sprite in $Sprites.get_children():
 		sprite.texture = ResourceLoader.load("res://assets/sprites/platform.png")
 		if sprite.get_index() == 1: #temp
 			sprite.rotation = 0
-			sprite.position.x = -32
 			sprite.position.y = 0
-			
+			if spriteCount == 2: sprite.position.x = -32
+			else: sprite.position.x = 32
+		elif sprite.get_index() > 1:
+			sprite.visible = false
+	
 	$PlatformBody.visible = true
 	$ContactDamage.visible = false
 	if get_node_or_null("AltShape"): #change collision if platform layout is different
-		$EnemyShape.visible = false
+		$EnemyShape.set_deferred("disabled", true)
 		$AltShape.visible = true
 	set_collision_layer_value(6, 1)
 	set_collision_layer_value(2, 0)

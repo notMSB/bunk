@@ -4,6 +4,7 @@ extends Node2D
 @onready var CAMERA = get_node("../Player/Camera2D")
 @export var Enemy : PackedScene
 @export var Shrimp : PackedScene
+@export var Clam : PackedScene
 
 const TOP_LIMIT = 0
 const BOTTOM_LIMIT = 300
@@ -28,7 +29,9 @@ func spawn():
 	
 	var enemyRando = randi() % 100
 	var newEnemy
-	if enemyRando < 15:
+	if enemyRando < 5:
+		newEnemy = Clam.instantiate()
+	elif enemyRando < 20:
 		newEnemy = Shrimp.instantiate()
 	else:
 		newEnemy = Enemy.instantiate()

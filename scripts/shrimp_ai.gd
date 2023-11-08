@@ -9,7 +9,6 @@ const COOLDOWN = 1
 var shotCooldown = COOLDOWN
 var flipped = false
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	flip(enemy.global_position.x > player.global_position.x)
 	shotCooldown -= delta
@@ -18,7 +17,7 @@ func _process(delta):
 		shot.get_node("Sprite2D").modulate = Color.RED
 		bulletHolder.add_child(shot)
 		
-		shot.fire(player.global_position, enemy.global_position, 1, 1, .25)
+		shot.fire(player.global_position, enemy.global_position, 1, 1, .4)
 		shotCooldown = COOLDOWN
 
 func flip(playerLeft):
