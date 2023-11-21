@@ -21,7 +21,7 @@ var timer := EARLY_TIMER
 var height : int
 
 enum e {clam, shrimp, crab}
-var enemyOdds := [0, 0, 100]
+var enemyOdds : Array
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
