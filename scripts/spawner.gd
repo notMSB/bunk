@@ -50,13 +50,14 @@ func spawn():
 	var newEnemy : CharacterBody2D
 	
 	enemyRando -= enemyOdds[e.clam]
-	if enemyRando < 0:
+	if enemyRando < 0: #todo: get this in a loop
 		newEnemy = Clam.instantiate()
-	enemyRando -= enemyOdds[e.shrimp]
-	if enemyRando < 0:
-		newEnemy = Shrimp.instantiate()
 	else:
-		newEnemy = Enemy.instantiate()
+		enemyRando -= enemyOdds[e.shrimp]
+		if enemyRando < 0:
+			newEnemy = Shrimp.instantiate()
+		else:
+			newEnemy = Enemy.instantiate()
 	add_child(newEnemy)
 	newEnemy.setup(PLAYER, CAMERA)
 	var rando = randi() % 10
