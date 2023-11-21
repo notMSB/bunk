@@ -7,7 +7,7 @@ var camera : Camera2D
 var isPlatform := false
 
 var killTimerSet := false
-var killTimer := 1
+var killTimer := 1.0
 
 const BOOST_MOD := .5
 const BOOST_DEFAULT := .2
@@ -77,6 +77,7 @@ func multi_platform():
 	for platform in $Platforms.get_children():
 		platform.get_node("Shape").set_deferred("disabled", false)
 		platform.velocity.y = platform.DEFAULT_VELOCITY
+		platform.setup(camera)
 	$Sprites.visible = false
 	$EnemyShape.set_deferred("disabled", true)
 	#$Platforms.visible = true
@@ -99,4 +100,3 @@ func take_damage(amount):
 func _on_contact_damage_body_entered(body):
 	if $ContactDamage.visible and body.collision_layer == 1: #damage player
 		body.die()
-

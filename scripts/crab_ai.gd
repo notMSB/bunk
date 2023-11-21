@@ -1,6 +1,6 @@
 extends Node2D
 
-var player
+var player : CharacterBody2D
 @onready var enemy = get_parent()
 
 var changed = false

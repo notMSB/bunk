@@ -77,6 +77,16 @@ offset_right = 319.0
 offset_bottom = 648.0
 value = 100.0
 
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -5
+
+[node name="Background" type="ColorRect" parent="BackgroundLayer"]
+offset_left = -8.0
+offset_top = -47.0
+offset_right = 1217.0
+offset_bottom = 778.0
+color = Color(0.529412, 0.807843, 0.921569, 1)
+
 [node name="Spawner" type="Node2D" parent="."]
 script = ExtResource("1_d5fe3")
 Enemy = ExtResource("3_ju45p")
