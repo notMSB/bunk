@@ -1,23 +1,23 @@
 extends CharacterBody2D
 
-const DEFAULT_VELOCITY = 50
+const DEFAULT_VELOCITY := 50
 
-var camera
+var camera : Camera2D
 
-var isPlatform = false
+var isPlatform := false
 
-var killTimerSet = false
-var killTimer = 1
+var killTimerSet := false
+var killTimer := 1
 
-const BOOST_MOD = .5
-const BOOST_DEFAULT = .2
-var boostTimerSet = false
-var boostTimer = BOOST_DEFAULT
+const BOOST_MOD := .5
+const BOOST_DEFAULT := .2
+var boostTimerSet := false
+var boostTimer := BOOST_DEFAULT
 
-@export var health = 3
+@export var health := 3
 
 func _ready():
-	velocity.y = DEFAULT_VELOCITY
+	velocity.y = DEFAULT_VELOCITY * 3
 	$UI/HPText.text = str(health)
 
 func _physics_process(delta):
@@ -44,7 +44,19 @@ func change():
 	isPlatform = true
 	$UI/HPText.visible = false
 	$AI.queue_free()
-	var spriteCount = $Sprites.get_child_count()
+	$ContactDamage.visible = false
+	set_collision_layer_value(6, 1)
+	set_collision_layer_value(2, 0)
+	set_collision_mask_value(1, 0)
+	$ContactDamage.visible = false
+	
+	if get_node_or_null("Platforms"): multi_platform()
+	else: single_platform()
+	
+
+func single_platform():
+	$PlatformBody.visible = true
+	var spriteCount := $Sprites.get_child_count()
 	for sprite in $Sprites.get_children():
 		sprite.texture = ResourceLoader.load("res://assets/sprites/platform.png")
 		if sprite.get_index() == 1: #temp
@@ -55,14 +67,19 @@ func change():
 		elif sprite.get_index() > 1:
 			sprite.visible = false
 	
-	$PlatformBody.visible = true
-	$ContactDamage.visible = false
 	if get_node_or_null("AltShape"): #change collision if platform layout is different
 		$EnemyShape.set_deferred("disabled", true)
 		$AltShape.visible = true
-	set_collision_layer_value(6, 1)
-	set_collision_layer_value(2, 0)
-	set_collision_mask_value(1, 0)
+
+func multi_platform():
+	$Platforms.visible = true
+	velocity.y = 0
+	for platform in $Platforms.get_children():
+		platform.get_node("Shape").set_deferred("disabled", false)
+		platform.velocity.y = platform.DEFAULT_VELOCITY
+	$Sprites.visible = false
+	$EnemyShape.set_deferred("disabled", true)
+	#$Platforms.visible = true
 
 func boost(value):
 	boostTimerSet = true

@@ -1,13 +1,13 @@
 extends Node2D
 
-@onready var enemy = get_parent()
-@onready var bulletHolder = get_node("../Projectiles")
+@onready var enemy := get_parent()
+@onready var bulletHolder := get_node("../Projectiles")
 @export var Bullet : PackedScene
 
-var player
-const COOLDOWN = 1
-var shotCooldown = COOLDOWN
-var flipped = false
+var player : CharacterBody2D
+const COOLDOWN := 1.4
+var shotCooldown := COOLDOWN
+var flipped := false
 
 func _process(delta):
 	flip(enemy.global_position.x > player.global_position.x)

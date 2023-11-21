@@ -1,34 +1,34 @@
 extends CharacterBody2D
 
-@onready var UI = get_node("../UI")
+@onready var UI := get_node("../UI")
 
-var scoreModifier = 600
+var scoreModifier := 600
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -625.0
+const SPEED := 300.0
+const JUMP_VELOCITY := -675.0
 
-const PLATFORM_LAYER = 16
+const PLATFORM_LAYER := 16
 
-const BOTTOM_MOD = 150
+const BOTTOM_MOD := 150
 
 #const BOOSTLIMIT = -200
 #var jumpBoost = 0
 
-var health = 1
+var health := 1
 
-const MAX_FUEL = 100
-const FUEL_THRESHOLD = 50
-var fuel = MAX_FUEL
+const MAX_FUEL := 100
+const FUEL_THRESHOLD := 50
+var fuel := MAX_FUEL
 
-var jumping = false
+var jumping := false
 
-const COYOTE_TIME = 5
-var currentCoyote = COYOTE_TIME
+const COYOTE_TIME := 5 #frames
+var currentCoyote := COYOTE_TIME
 
-var weaponCooldown = 0
-var weaponIndex = 0
+var weaponCooldown := .0 #seconds
+var weaponIndex := Global.usedWeapon
 
-var currentPlatform = null
+var currentPlatform : CharacterBody2D = null
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -88,7 +88,12 @@ func set_platform():
 		#print(get_slide_collision(i).get_collider().name)
 		var col = get_slide_collision(i).get_collider()
 		if col != null:
-			currentPlatform = col.get_parent() if col.collision_layer == PLATFORM_LAYER else null
+			if col.collision_layer == PLATFORM_LAYER:
+				if col.get_class() == "CharacterBody2D": #todo: refactor this
+					currentPlatform = col
+				else: currentPlatform = col.get_parent()
+			else:
+				currentPlatform = null
 
 func jump():
 	if currentCoyote > 0:
@@ -97,8 +102,8 @@ func jump():
 		if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
 		jumping = true
 	elif fuel >= FUEL_THRESHOLD:
-		change_velocity(JUMP_VELOCITY/2)
-		velocity.x *= 2
+		change_velocity(JUMP_VELOCITY/1.3)
+		velocity.x *= 1.4
 		fuel -= FUEL_THRESHOLD
 		UI.set_fuel(fuel)
 		jumping = true
@@ -109,6 +114,7 @@ func take_damage(_damage):
 func die():
 	var runScore = UI.get_height()
 	if runScore > Global.score: Global.score = runScore
+	Global.usedWeapon = weaponIndex
 	get_tree().reload_current_scene()
 
 func plat_drop():

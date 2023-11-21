@@ -1,7 +1,7 @@
 extends Area2D
 
-var direction = Vector2()
-var damage
+var direction := Vector2()
+var damage : int
 
 func fire(goalPos, startPos, weaponDamage):
 	damage = weaponDamage

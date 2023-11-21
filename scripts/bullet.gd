@@ -1,11 +1,11 @@
 extends Area2D
 
-var direction = Vector2()
-var speed = 750
-var damage
+var direction := Vector2()
+var speed := 900
+var damage : int
 
-var damageMask
-var ignoreMask
+var damageMask : int
+var ignoreMask : int
 
 func fire(goalPos, startPos, weaponDamage, mask = 2, speedMod = 1):
 	speed = speed * speedMod

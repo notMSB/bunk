@@ -1,21 +1,20 @@
-[gd_scene load_steps=9 format=3 uid="uid://cvfppjfmmea6a"]
+[gd_scene load_steps=10 format=3 uid="uid://cvfppjfmmea6a"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_bq47u"]
 [ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_6w3ya"]
 [ext_resource type="Script" path="res://scripts/clam_ai.gd" id="3_olv8h"]
 [ext_resource type="PackedScene" uid="uid://dak8tshl61njw" path="res://scenes/bullet.tscn" id="4_5xpjp"]
+[ext_resource type="Script" path="res://scripts/platform.gd" id="5_4lawr"]
+[ext_resource type="Texture2D" uid="uid://dgrh82s6htqey" path="res://assets/sprites/platform.png" id="6_1ikq6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_emwit"]
 size = Vector2(94.8742, 94.5368)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmtni"]
-size = Vector2(97, 33)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kojb4"]
-size = Vector2(96, 4)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_35sxm"]
 size = Vector2(106, 107)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w6md3"]
+size = Vector2(97, 33)
 
 [node name="Clam" type="CharacterBody2D"]
 collision_layer = 2
@@ -46,20 +45,6 @@ position = Vector2(16, 32.0244)
 scale = Vector2(1.01136, 1.01496)
 shape = SubResource("RectangleShape2D_emwit")
 
-[node name="AltShape" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(16.5, 0.5)
-shape = SubResource("RectangleShape2D_mmtni")
-
-[node name="PlatformBody" type="StaticBody2D" parent="."]
-visible = false
-collision_layer = 16
-
-[node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
-position = Vector2(16, -14)
-shape = SubResource("RectangleShape2D_kojb4")
-one_way_collision = true
-
 [node name="ContactDamage" type="Area2D" parent="."]
 collision_layer = 2
 
@@ -84,5 +69,40 @@ offset_bottom = 14.0
 text = "2"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="Platforms" type="Node2D" parent="."]
+visible = false
+
+[node name="1" type="CharacterBody2D" parent="Platforms"]
+collision_layer = 48
+collision_mask = 0
+script = ExtResource("5_4lawr")
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/1"]
+position = Vector2(136, 0)
+scale = Vector2(1.5, 1)
+texture = ExtResource("6_1ikq6")
+
+[node name="Shape" type="CollisionShape2D" parent="Platforms/1"]
+position = Vector2(136.5, 0.5)
+shape = SubResource("RectangleShape2D_w6md3")
+disabled = true
+one_way_collision = true
+
+[node name="2" type="CharacterBody2D" parent="Platforms"]
+collision_layer = 48
+collision_mask = 0
+script = ExtResource("5_4lawr")
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/2"]
+position = Vector2(-104, 64)
+scale = Vector2(1.5, 1)
+texture = ExtResource("6_1ikq6")
+
+[node name="Shape" type="CollisionShape2D" parent="Platforms/2"]
+position = Vector2(-103.5, 64.5)
+shape = SubResource("RectangleShape2D_w6md3")
+disabled = true
+one_way_collision = true
 
 [connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]
