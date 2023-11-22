@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bqjvptpborfyo"]
+[gd_scene load_steps=12 format=3 uid="uid://bqjvptpborfyo"]
 
 [ext_resource type="PackedScene" uid="uid://0yy4i0l8ajh1" path="res://scenes/player.tscn" id="1_5bqmq"]
 [ext_resource type="Script" path="res://scripts/ui_controller.gd" id="1_5j3ue"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/floor.gd" id="4_spiml"]
 [ext_resource type="PackedScene" uid="uid://c5d10buygwl2h" path="res://scenes/shrimp.tscn" id="5_bbasy"]
 [ext_resource type="PackedScene" uid="uid://cvfppjfmmea6a" path="res://scenes/clam.tscn" id="6_3daw6"]
+[ext_resource type="PackedScene" uid="uid://duyont48u7aox" path="res://scenes/swarmer.tscn" id="7_6cpvj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8oyl6"]
 size = Vector2(1200, 95)
@@ -92,6 +93,7 @@ script = ExtResource("1_d5fe3")
 Enemy = ExtResource("3_ju45p")
 Shrimp = ExtResource("5_bbasy")
 Clam = ExtResource("6_3daw6")
+Swarmer = ExtResource("7_6cpvj")
 
 [node name="Player" parent="." instance=ExtResource("1_5bqmq")]
 position = Vector2(587, 586)
