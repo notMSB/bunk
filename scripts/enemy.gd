@@ -56,6 +56,7 @@ func change():
 
 func single_platform():
 	$PlatformBody.visible = true
+	$PlatformBody/PlatformShape.set_deferred("disabled", false)
 	var spriteCount := $Sprites.get_child_count()
 	for sprite in $Sprites.get_children():
 		sprite.texture = ResourceLoader.load("res://assets/sprites/platform.png")
@@ -99,4 +100,5 @@ func take_damage(amount):
 
 func _on_contact_damage_body_entered(body):
 	if $ContactDamage.visible and body.collision_layer == 1: #damage player
-		body.die()
+		var left := false if body.position.x > position.x else true
+		body.take_damage(left)

@@ -18,6 +18,9 @@ func get_height() -> int:
 func set_fuel(value):
 	$FuelBar.value = value
 
+func update_health(value):
+	$Health.get_child(value).visible = false
+
 func change_background():
 	var fadeVal : int = get_height() * 235 / 6500
 	var bgRed : float = max(.05, (135 - fadeVal) / 255.0)

@@ -21,7 +21,7 @@ transform = Transform2D(1, 0, 0, 1, 0, 120)
 script = ExtResource("1_5j3ue")
 
 [node name="Health" type="Node2D" parent="UI"]
-visible = false
+position = Vector2(-64, 0)
 
 [node name="1" type="Sprite2D" parent="UI/Health"]
 modulate = Color(1, 0, 0, 1)

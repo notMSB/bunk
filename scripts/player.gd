@@ -14,7 +14,7 @@ const BOTTOM_MOD := 150
 #const BOOSTLIMIT = -200
 #var jumpBoost = 0
 
-var health := 1
+var health := 3
 
 const MAX_FUEL := 100
 const FUEL_THRESHOLD := 50
@@ -24,6 +24,10 @@ var jumping := false
 
 const COYOTE_TIME := 5 #frames
 var currentCoyote := COYOTE_TIME
+
+const INVULN_TIME := 1.0 #seconds
+var currentInvuln := .0
+var invulnerable := false
 
 var weaponCooldown := .0 #seconds
 var weaponIndex := Global.usedWeapon
@@ -81,6 +85,11 @@ func _physics_process(delta):
 		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE)
 		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
 	if Input.is_action_just_pressed("misc"): Global.oneshot = !Global.oneshot
+	if invulnerable:
+		currentInvuln -= delta
+		if currentInvuln <= 0:
+			set_invuln(false)
+			currentInvuln = INVULN_TIME
 	move_and_slide()
 
 func set_platform():
@@ -108,8 +117,16 @@ func jump():
 		UI.set_fuel(fuel)
 		jumping = true
 
-func take_damage(_damage):
-	die()
+func take_damage(goLeft, _damage = 0):
+	health -= 1
+	if health <= 0: die()
+	UI.update_health(health)
+	velocity.x = -1000 if goLeft else 1000
+	set_invuln(true)
+
+func set_invuln(isInvuln):
+	collision_layer = 0 if isInvuln else 1
+	invulnerable = isInvuln
 
 func die():
 	var runScore = UI.get_height()
