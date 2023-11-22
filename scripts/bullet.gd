@@ -15,6 +15,9 @@ func fire(goalPos, startPos, weaponDamage, mask = 2, speedMod = 1):
 	global_position = startPos
 	direction = (goalPos - startPos).normalized()
 
+func rotate_direction(degree):
+	direction = direction.rotated(deg_to_rad(degree))
+
 func _process(delta):
 	position += direction * speed * delta
 

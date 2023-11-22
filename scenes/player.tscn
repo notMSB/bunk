@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://0yy4i0l8ajh1"]
+[gd_scene load_steps=8 format=3 uid="uid://0yy4i0l8ajh1"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_2e5t6"]
 [ext_resource type="Texture2D" uid="uid://cgvmcx23r8ods" path="res://assets/sprites/player.png" id="2_f5gig"]
 [ext_resource type="PackedScene" uid="uid://m6ux2qjpvwha" path="res://scenes/laser_gun.tscn" id="3_5i3k8"]
 [ext_resource type="PackedScene" uid="uid://cd5egnil261mn" path="res://scenes/basic_gun.tscn" id="3_dpfgx"]
 [ext_resource type="PackedScene" uid="uid://c8mcymji32hy6" path="res://scenes/rocket_launcher.tscn" id="5_41iu5"]
+[ext_resource type="PackedScene" uid="uid://c1cujh6mkr13u" path="res://scenes/shotgun.tscn" id="6_g4ar1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pwljv"]
 size = Vector2(32, 64)
@@ -32,5 +33,7 @@ drag_bottom_margin = 1.0
 [node name="laser_gun" parent="Weapon" instance=ExtResource("3_5i3k8")]
 
 [node name="rocket_launcher" parent="Weapon" instance=ExtResource("5_41iu5")]
+
+[node name="shotgun" parent="Weapon" instance=ExtResource("6_g4ar1")]
 
 [node name="Projectiles" type="Node" parent="."]

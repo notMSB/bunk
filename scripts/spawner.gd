@@ -7,8 +7,8 @@ extends Node2D
 @export var Shrimp : PackedScene
 @export var Clam : PackedScene
 
-const TOP_LIMIT := 0
-const BOTTOM_LIMIT := 300
+const TOP_LIMIT := 600
+const BOTTOM_LIMIT := 200
 const LEFT_LIMIT := 600
 const RIGHT_LIMIT := 600
 
@@ -41,7 +41,7 @@ func check_height_table():
 
 func spawn():
 	var xPos : float = CAMERA.get_screen_center_position().x + LEFT_LIMIT - randi() % (LEFT_LIMIT + RIGHT_LIMIT)
-	var yPos : float = CAMERA.get_screen_center_position().y + TOP_LIMIT - randi() % (TOP_LIMIT + BOTTOM_LIMIT)
+	var yPos : float = CAMERA.get_screen_center_position().y - TOP_LIMIT + randi() % (TOP_LIMIT - BOTTOM_LIMIT)
 	
 	var totalOdds := 0
 	for i in enemyOdds: totalOdds += i
