@@ -21,7 +21,6 @@ var timer := EARLY_TIMER
 
 var height : int
 
-enum e {swarmer, clam, shrimp, crab}
 var enemyScenes : Array
 var enemyOdds : Array
 

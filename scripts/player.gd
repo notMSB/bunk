@@ -26,7 +26,7 @@ const COYOTE_TIME := 5 #frames
 var currentCoyote := COYOTE_TIME
 
 const INVULN_TIME := 1.0 #seconds
-var currentInvuln := .0
+var currentInvuln := INVULN_TIME
 var invulnerable := false
 
 var weaponCooldown := .0 #seconds
