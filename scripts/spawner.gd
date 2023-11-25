@@ -16,7 +16,7 @@ const RIGHT_LIMIT := 600
 const TOP_SPAWN := 500
 
 const EARLY_TIMER := 1.0
-const TIMER_START := .8
+const TIMER_START := .75
 var timer := EARLY_TIMER
 
 var height : int
