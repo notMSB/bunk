@@ -14,7 +14,7 @@ const BOOST_DEFAULT := .2
 var boostTimerSet := false
 var boostTimer := BOOST_DEFAULT
 
-@export var health := 3
+@export var health := 4
 
 func _ready():
 	velocity.y = DEFAULT_VELOCITY * 3

@@ -15,7 +15,6 @@ size = Vector2(96, 4)
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_t5iix")
-health = 2
 
 [node name="Sprites" type="Node2D" parent="."]
 

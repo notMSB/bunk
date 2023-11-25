@@ -19,7 +19,7 @@ size = Vector2(97, 33)
 [node name="Clam" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_bq47u")
-health = 5
+health = 8
 
 [node name="Sprites" type="Node2D" parent="."]
 

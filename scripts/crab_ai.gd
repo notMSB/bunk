@@ -12,11 +12,11 @@ var chargeTime := CHARGE_DEFAULT
 func _process(delta):
 	if !changed and  !enemy.killTimerSet and enemy.global_position.distance_to(player.global_position) < 400:
 		var direction = (player.global_position - enemy.global_position).normalized()
-		enemy.velocity = direction * 200
+		enemy.velocity = direction * 180
 		changed = true
 	if changed and recharge:
 		chargeTime -= delta
-		if chargeTime <= 0 and enemy.global_position.distance_to(player.global_position) > 300:
+		if chargeTime <= 0 and enemy.global_position.distance_to(player.global_position) > 350:
 			changed = false
 			chargeTime = CHARGE_DEFAULT
 

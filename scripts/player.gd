@@ -16,6 +16,8 @@ const BOTTOM_MOD := 150
 
 var health := 3
 
+const BASE_KNOCKBACK = 700 #for when the player takes damage
+
 const MAX_FUEL := 100
 const FUEL_THRESHOLD := 50
 var fuel := MAX_FUEL
@@ -121,7 +123,7 @@ func take_damage(goLeft, _damage = 0):
 	health -= 1
 	if health <= 0: die()
 	UI.update_health(health)
-	velocity.x = -1000 if goLeft else 1000
+	velocity.x = BASE_KNOCKBACK * -1 if goLeft else BASE_KNOCKBACK
 	set_invuln(true)
 
 func set_invuln(isInvuln):
