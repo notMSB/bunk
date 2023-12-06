@@ -2,9 +2,9 @@ extends Node2D
 
 @export var Projectile : PackedScene
 
-const PROJECTILES := 7
+const PROJECTILES := 9
 
-var degs := 10.0
+var degs := 13.0
 var drift : float = degs/((PROJECTILES-1)/2.0)
 
 func fire(goalPos, startPos, weaponDamage):

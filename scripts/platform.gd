@@ -26,8 +26,11 @@ func _physics_process(delta):
 		boostTimer = BOOST_DEFAULT
 		velocity.y = DEFAULT_VELOCITY
 
-func setup(cam):
+func setup(cam, player = null):
 	camera = cam
+	velocity.y = DEFAULT_VELOCITY
+	if player != null:
+		get_node("Pickup").setup(player)
 
 func boost(value):
 	boostTimerSet = true

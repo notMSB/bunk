@@ -21,7 +21,7 @@ collision_layer = 2
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_bq47u")
-health = 8
+health = 9
 
 [node name="Sprites" type="Node2D" parent="."]
 

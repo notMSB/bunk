@@ -19,8 +19,13 @@ var health := 3
 const BASE_KNOCKBACK = 700 #for when the player takes damage
 
 const MAX_FUEL := 100
-const FUEL_THRESHOLD := 50
-var fuel := MAX_FUEL
+const FUEL_THRESHOLD := 5
+var fuel := MAX_FUEL * .75
+
+const AIR_JUMPS := 2
+var currentAirJumps := 0
+
+var hasItem := true
 
 var jumping := false
 
@@ -48,9 +53,8 @@ func _physics_process(delta):
 	else:
 		currentCoyote = COYOTE_TIME
 		set_platform() #Set a platform which descends when jumping off
-		if fuel < MAX_FUEL:
-			fuel += 1
-			UI.set_fuel(fuel)
+		currentAirJumps = 0
+		UI.set_fuel(fuel, FUEL_THRESHOLD, currentAirJumps, AIR_JUMPS)
 	if Input.is_action_just_pressed("swap_up"):
 		weaponIndex -= 1
 		if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
@@ -87,6 +91,9 @@ func _physics_process(delta):
 		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE)
 		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
 	if Input.is_action_just_pressed("misc"): Global.oneshot = !Global.oneshot
+	if Input.is_action_just_pressed("item") and hasItem:
+		$Item.get_child(0).use()
+		change_item(false)
 	if invulnerable:
 		currentInvuln -= delta
 		if currentInvuln <= 0:
@@ -99,7 +106,7 @@ func set_platform():
 		#print(get_slide_collision(i).get_collider().name)
 		var col = get_slide_collision(i).get_collider()
 		if col != null:
-			if col.collision_layer == PLATFORM_LAYER:
+			if col.collision_layer == PLATFORM_LAYER or col.collision_layer == PLATFORM_LAYER * 3:
 				if col.get_class() == "CharacterBody2D": #todo: refactor this
 					currentPlatform = col
 				else: currentPlatform = col.get_parent()
@@ -112,19 +119,31 @@ func jump():
 		change_velocity(JUMP_VELOCITY)
 		if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
 		jumping = true
-	elif fuel >= FUEL_THRESHOLD:
+	elif fuel >= FUEL_THRESHOLD and currentAirJumps < AIR_JUMPS:
+		currentAirJumps += 1
 		change_velocity(JUMP_VELOCITY/1.3)
 		velocity.x *= 1.4
-		fuel -= FUEL_THRESHOLD
-		UI.set_fuel(fuel)
+		change_fuel(-1 * FUEL_THRESHOLD)
 		jumping = true
+
+func change_item(change):
+	hasItem = change
+	UI.set_item(hasItem)
+
+func change_fuel(change):
+	fuel += change
+	UI.set_fuel(fuel, FUEL_THRESHOLD, currentAirJumps, AIR_JUMPS)
 
 func take_damage(goLeft, _damage = 0):
 	health -= 1
 	if health <= 0: die()
-	UI.update_health(health)
+	UI.update_health(health, false)
 	velocity.x = BASE_KNOCKBACK * -1 if goLeft else BASE_KNOCKBACK
 	set_invuln(true)
+
+func heal(amount):
+	health = min(health + amount, 3)
+	UI.update_health(health, true)
 
 func set_invuln(isInvuln):
 	collision_layer = 0 if isInvuln else 1

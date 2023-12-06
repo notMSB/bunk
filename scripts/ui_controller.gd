@@ -15,11 +15,18 @@ func set_height(modifier, value):
 func get_height() -> int:
 	return int($Height/Current.text)
 
-func set_fuel(value):
+func set_fuel(value, threshold, jumps, maxJumps):
 	$FuelBar.value = value
+	if value < threshold or jumps >= maxJumps: $FuelBar.modulate = Color(1,0,0,1)
+	elif jumps == maxJumps - 1: $FuelBar.modulate = Color(1,1,0,1)
+	else: $FuelBar.modulate = Color(1,1,1,1)
 
-func update_health(value):
-	$Health.get_child(value).visible = false
+func update_health(value, isHeal):
+	if isHeal: $Health.get_child(value-1).visible = true
+	else: $Health.get_child(value).visible = false
+
+func set_item(hasItem):
+	$Consumable.visible = hasItem
 
 func change_background():
 	var fadeVal : int = get_height() * 235 / 6500

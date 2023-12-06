@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://clrlxmijdtec1"]
+
+[ext_resource type="Script" path="res://scripts/platform.gd" id="1_n3aeh"]
+[ext_resource type="Texture2D" uid="uid://dgrh82s6htqey" path="res://assets/sprites/platform.png" id="2_xanuc"]
+[ext_resource type="Texture2D" uid="uid://d0o0ikjhm0e1f" path="res://assets/sprites/fuel.png" id="3_swtn5"]
+[ext_resource type="Script" path="res://scripts/pickup.gd" id="3_yuy7l"]
+[ext_resource type="Texture2D" uid="uid://cqs150rvatyft" path="res://assets/sprites/circle.png" id="4_683hq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_00e5b"]
+size = Vector2(96, 31)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3gdph"]
+radius = 27.0
+
+[node name="ItemPlatform" type="CharacterBody2D"]
+collision_layer = 48
+collision_mask = 0
+script = ExtResource("1_n3aeh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(136, 0)
+scale = Vector2(1.5, 1)
+texture = ExtResource("2_xanuc")
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+position = Vector2(136, 0.5)
+shape = SubResource("RectangleShape2D_00e5b")
+one_way_collision = true
+one_way_collision_margin = 2.3
+
+[node name="Pickup" type="Area2D" parent="."]
+position = Vector2(0, -1)
+collision_layer = 16
+script = ExtResource("3_yuy7l")
+
+[node name="PickupSprite" type="Sprite2D" parent="Pickup"]
+position = Vector2(137, -42)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("3_swtn5")
+
+[node name="CircleSprite" type="Sprite2D" parent="Pickup"]
+modulate = Color(0.941176, 0.729412, 0, 0.698039)
+position = Vector2(137, -42)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_683hq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pickup"]
+position = Vector2(137, -42)
+shape = SubResource("CircleShape2D_3gdph")
+
+[connection signal="body_entered" from="Pickup" to="Pickup" method="_on_body_entered"]

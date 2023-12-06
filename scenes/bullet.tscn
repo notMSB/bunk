@@ -11,14 +11,21 @@ collision_layer = 4
 collision_mask = 35
 script = ExtResource("1_n2oi5")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Border" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 1)
 texture = ExtResource("1_1e0ew")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("1_1e0ew")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_xhnio")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+visible = false
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

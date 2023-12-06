@@ -34,7 +34,7 @@ func _physics_process(delta):
 		boostTimer = BOOST_DEFAULT
 		velocity.y = DEFAULT_VELOCITY
 
-func setup(p, cam):
+func setup(cam, p):
 	camera = cam
 	$AI.setup(p)
 

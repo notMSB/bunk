@@ -2,7 +2,7 @@ extends Area2D
 
 const MAXLIFETIME = 0.2
 var lifetime = MAXLIFETIME
-var damage
+var damage : int
 var hitBody
 
 func _process(delta):
@@ -16,6 +16,6 @@ func setup(weaponDamage, causeBody):
 func _on_body_entered(body):
 	if body.collision_layer != 1: #ignore player, delete on everything else
 		if body.health > 0: body.take_damage(damage)
-	else:
+	elif hitBody != null:
 		if (body.currentPlatform != null and hitBody == body.currentPlatform) or (body.is_on_floor() and hitBody.name == "Floor"): #the starting floor needs its own case
 			body.launch(position)
