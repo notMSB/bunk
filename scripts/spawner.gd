@@ -10,15 +10,14 @@ extends Node2D
 
 @export var ItemPlatform: PackedScene
 
-const TOP_LIMIT := 600
-const BOTTOM_LIMIT := 200
-const LEFT_LIMIT := 600
-const RIGHT_LIMIT := 600
+const VERT_BASE := 350
+const VERT_MOD := 400
+const HORIZ_MOD := 600
 
 const TOP_SPAWN := 500
 
-const EARLY_TIMER := 1.0
-const TIMER_START := .75
+const EARLY_TIMER := 1.1
+const TIMER_START := 1.0
 var timer := EARLY_TIMER
 
 var height : int
@@ -29,6 +28,9 @@ var platSpawnCounter := 0
 var enemyScenes : Array
 var enemyOdds : Array
 
+const OFFSCREEN_LOOP = 2
+var offscreenSpawns = 0
+
 func _ready():
 	enemyScenes = [Swarmer, Clam, Shrimp, Enemy]
 
@@ -37,55 +39,69 @@ func _process(delta):
 	check_height_table()
 	timer -= delta
 	if timer <= 0:
-		spawn()
+		set_spawns()
 		timer = TIMER_START if height >= 500 else EARLY_TIMER
 
 func check_height_table():
 	if height < 1000: 
 		enemyOdds = [4, 0, 0, 96]
-		platformFrequency = 10
+		platformFrequency = 8
 	elif height < 2500: 
 		enemyOdds = [6, 3, 8, 83]
-		platformFrequency = 15
+		platformFrequency = 12
 	elif height < 4000: 
 		enemyOdds = [8, 5, 10, 78]
-		platformFrequency = 20
+		platformFrequency = 16
 	elif height < 6500: 
 		enemyOdds = [10, 7, 18, 65]
-		platformFrequency = 25
+		platformFrequency = 20
 	else: 
 		enemyOdds = [12, 10, 25, 53]
-		platformFrequency = 30
+		platformFrequency = 24
 
-func spawn():
-	platSpawnCounter +=1
-	var xPos : float = CAMERA.get_screen_center_position().x + LEFT_LIMIT - randi() % (LEFT_LIMIT + RIGHT_LIMIT)
-	var yPos : float = CAMERA.get_screen_center_position().y - TOP_LIMIT + randi() % (TOP_LIMIT - BOTTOM_LIMIT)
+func set_spawns():
+	var screenX : int = ProjectSettings.get_setting("display/window/size/viewport_width")
+	var screenY : int = ProjectSettings.get_setting("display/window/size/viewport_height")
 	
+	spawn(CAMERA.get_screen_center_position(), true)
+	spawn(Vector2(CAMERA.get_screen_center_position().x - screenX, CAMERA.get_screen_center_position().y))
+	spawn(Vector2(CAMERA.get_screen_center_position().x + screenX, CAMERA.get_screen_center_position().y))
+	offscreenSpawns +=1
+	if offscreenSpawns > OFFSCREEN_LOOP: 
+		offscreenSpawns = 0
+		spawn(Vector2(CAMERA.get_screen_center_position().x, CAMERA.get_screen_center_position().y - screenY))
+
+func spawn(center, original = false):
 	var newSpawn : CharacterBody2D
+	var isItem := false
 	
-	if platSpawnCounter >= platformFrequency: 
+	var specificHoriz : int = HORIZ_MOD if original else HORIZ_MOD / 2
+	
+	if original: platSpawnCounter +=1
+	if platSpawnCounter >= platformFrequency and original: 
 		newSpawn = ItemPlatform.instantiate()
 		platSpawnCounter = 0
+		isItem = true
 	else:
 		var totalOdds := 0
 		for i in enemyOdds: totalOdds += i
-		
 		var enemyRando := randi() % totalOdds
-		
 		for i in enemyScenes.size():
 			enemyRando -= enemyOdds[i]
 			if enemyRando < 0:
 				newSpawn = enemyScenes[i].instantiate()
 				break
 	add_child(newSpawn)
-	var rando = randi() % 10
-	if rando == 0:
-		newSpawn.global_position = Vector2(CAMERA.get_screen_center_position().x - LEFT_LIMIT, yPos)
-		newSpawn.velocity.x = 100
-	elif rando == 1:
-		newSpawn.global_position = Vector2(CAMERA.get_screen_center_position().x + RIGHT_LIMIT, yPos)
-		newSpawn.velocity.x = -100
+	if isItem:
+		var yPos : float = center.y - VERT_BASE - randi() % (VERT_MOD)
+		var rando = randi() % 2
+		if rando == 0:
+			newSpawn.global_position = Vector2(center.x - HORIZ_MOD, yPos)
+			newSpawn.velocity.x = 100
+		elif rando == 1:
+			newSpawn.global_position = Vector2(center.x + HORIZ_MOD, yPos)
+			newSpawn.velocity.x = -100
 	else:
-		newSpawn.global_position = Vector2(xPos, CAMERA.get_screen_center_position().y - TOP_SPAWN)
+		var xPos : float = center.x + specificHoriz - randi() % (specificHoriz * 2)
+		newSpawn.global_position = Vector2(xPos, center.y - TOP_SPAWN)
 	newSpawn.setup(CAMERA, PLAYER)

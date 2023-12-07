@@ -4,6 +4,7 @@ extends CanvasLayer
 
 func _ready():
 	$Height/High.text = str(Global.score)
+	if Global.shame: $Height/High.text = str($Height/High.text, "?")
 
 func _process(_delta):
 	change_background()
@@ -18,7 +19,7 @@ func get_height() -> int:
 func set_fuel(value, threshold, jumps, maxJumps):
 	$FuelBar.value = value
 	if value < threshold or jumps >= maxJumps: $FuelBar.modulate = Color(1,0,0,1)
-	elif jumps == maxJumps - 1: $FuelBar.modulate = Color(1,1,0,1)
+	elif value < threshold*2 or jumps == maxJumps - 1: $FuelBar.modulate = Color(1,1,0,1)
 	else: $FuelBar.modulate = Color(1,1,1,1)
 
 func update_health(value, isHeal):

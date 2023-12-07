@@ -43,6 +43,9 @@ var currentPlatform : CharacterBody2D = null
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+func _ready():
+	Global.shame = Global.oneshot
+
 func _physics_process(delta):
 	UI.set_height(scoreModifier, position.y)
 	weaponCooldown = max(weaponCooldown - delta, 0)
@@ -90,7 +93,9 @@ func _physics_process(delta):
 		
 		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE)
 		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
-	if Input.is_action_just_pressed("misc"): Global.oneshot = !Global.oneshot
+	if Input.is_action_just_pressed("misc"): 
+		Global.oneshot = !Global.oneshot
+		Global.shame = true
 	if Input.is_action_just_pressed("item") and hasItem:
 		$Item.get_child(0).use()
 		change_item(false)
@@ -131,7 +136,7 @@ func change_item(change):
 	UI.set_item(hasItem)
 
 func change_fuel(change):
-	fuel += change
+	fuel = min(fuel + change, 100)
 	UI.set_fuel(fuel, FUEL_THRESHOLD, currentAirJumps, AIR_JUMPS)
 
 func take_damage(goLeft, _damage = 0):
