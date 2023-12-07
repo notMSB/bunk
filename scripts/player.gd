@@ -72,7 +72,8 @@ func _physics_process(delta):
 	#if Input.is_action_pressed("down") and is_on_floor():
 	#	jumpBoost -= 2
 	var direction = Input.get_axis("ui_left", "ui_right")
-	var speedVal = max(SPEED, abs(velocity.x)-5)
+	#var speedVal = max(SPEED, abs(velocity.x)-5)
+	var speedVal = max(SPEED, abs(velocity.x)-5) if direction * velocity.x > 0 else SPEED
 	if direction:
 		velocity.x = direction * speedVal
 	else:

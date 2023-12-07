@@ -44,19 +44,19 @@ func _process(delta):
 
 func check_height_table():
 	if height < 1000: 
-		enemyOdds = [4, 0, 0, 96]
+		enemyOdds = [2, 0, 0, 98]
 		platformFrequency = 8
 	elif height < 2500: 
-		enemyOdds = [6, 3, 8, 83]
+		enemyOdds = [4, 3, 8, 85]
 		platformFrequency = 12
 	elif height < 4000: 
-		enemyOdds = [8, 5, 10, 78]
+		enemyOdds = [6, 5, 10, 79]
 		platformFrequency = 16
 	elif height < 6500: 
-		enemyOdds = [10, 7, 18, 65]
+		enemyOdds = [8, 7, 18, 67]
 		platformFrequency = 20
 	else: 
-		enemyOdds = [12, 10, 25, 53]
+		enemyOdds = [10, 10, 25, 55]
 		platformFrequency = 24
 
 func set_spawns():
