@@ -49,7 +49,7 @@ func get_grenade_weight():
 
 func _on_body_entered(_body):
 	match dIndex:
-		d.fuel: player.change_fuel(20)
+		d.fuel: player.change_fuel(25)
 		d.health: player.heal(1)
 		d.grenade: player.change_item(true)
 	queue_free()

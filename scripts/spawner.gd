@@ -48,16 +48,16 @@ func check_height_table():
 		platformFrequency = 8
 	elif height < 2500: 
 		enemyOdds = [4, 3, 8, 85]
-		platformFrequency = 12
+		platformFrequency = 10
 	elif height < 4000: 
 		enemyOdds = [6, 5, 10, 79]
-		platformFrequency = 16
+		platformFrequency = 12
 	elif height < 6500: 
 		enemyOdds = [8, 7, 18, 67]
-		platformFrequency = 20
-	else: 
+		platformFrequency = 14
+	else:
 		enemyOdds = [10, 10, 25, 55]
-		platformFrequency = 24
+		platformFrequency = 16
 
 func set_spawns():
 	var screenX : int = ProjectSettings.get_setting("display/window/size/viewport_width")
