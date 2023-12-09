@@ -16,8 +16,8 @@ const HORIZ_MOD := 600
 
 const TOP_SPAWN := 500
 
-const EARLY_TIMER := 1.1
-const TIMER_START := 1.0
+const EARLY_TIMER := 1.2
+const TIMER_START := 1.1
 var timer := EARLY_TIMER
 
 var height : int
@@ -44,19 +44,19 @@ func _process(delta):
 
 func check_height_table():
 	if height < 1000: 
-		enemyOdds = [2, 0, 0, 98]
+		enemyOdds = [250, 0, 0, 9800]
 		platformFrequency = 8
 	elif height < 2500: 
-		enemyOdds = [4, 3, 8, 85]
+		enemyOdds = [350, 300, 800, 8500]
 		platformFrequency = 10
 	elif height < 4000: 
-		enemyOdds = [6, 5, 10, 79]
+		enemyOdds = [450, 500, 1000, 7900]
 		platformFrequency = 12
 	elif height < 6500: 
-		enemyOdds = [8, 7, 18, 67]
+		enemyOdds = [600, 700, 1800, 6700]
 		platformFrequency = 14
-	else:
-		enemyOdds = [10, 10, 25, 55]
+	else: 
+		enemyOdds = [700, 900, 3000, 5600]
 		platformFrequency = 16
 
 func set_spawns():

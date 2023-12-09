@@ -5,32 +5,28 @@ var player : CharacterBody2D
 enum d {fuel, health, grenade}
 var dIndex : int
 
-var healthWeight := 0
-var fuelWeight := 0
-var grenadeWeight := 0
-
 func setup(p):
 	player = p
-	healthWeight += get_health_weight()
-	fuelWeight += get_fuel_weight()
-	grenadeWeight += get_grenade_weight()
+	p.healthWeight += get_health_weight()
+	p.fuelWeight += get_fuel_weight()
+	p.grenadeWeight += get_grenade_weight()
 	
-	var rando = randi() % (healthWeight + fuelWeight + grenadeWeight)
-	rando -= healthWeight
+	var rando = randi() % (p.healthWeight + p.fuelWeight + p.grenadeWeight)
+	rando -= p.healthWeight
 	if rando < 0: 
 		dIndex = d.health
 		$PickupSprite.texture = preload("res://assets/sprites/health.png")
-		healthWeight = 0
+		p.healthWeight = 0
 		return
-	rando -= fuelWeight
+	rando -= p.fuelWeight
 	if rando < 0: 
 		dIndex = d.fuel
 		$PickupSprite.texture = preload("res://assets/sprites/fuel.png")
-		fuelWeight = 0
+		p.fuelWeight = 0
 		return
 	dIndex = d.grenade
 	$PickupSprite.texture = preload("res://assets/sprites/grenade.png")
-	grenadeWeight = 0
+	p.grenadeWeight = 0
 
 func get_health_weight():
 	if player.health == 1: return 100

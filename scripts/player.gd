@@ -16,6 +16,10 @@ const BOTTOM_MOD := 150
 
 var health := 3
 
+var healthWeight := 0
+var fuelWeight := 0
+var grenadeWeight := 0
+
 const BASE_KNOCKBACK = 700 #for when the player takes damage
 
 const MAX_FUEL := 100
