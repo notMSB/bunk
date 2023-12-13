@@ -7,7 +7,11 @@ var damage : int
 var damageMask : int
 var ignoreMask : int
 
-func fire(goalPos, startPos, weaponDamage, mask = 2, speedMod = 1):
+var pierceTimer : float
+
+func fire(goalPos, startPos, weaponDamage, pierce, mask = 2, speedMod = 1):
+	pierceTimer = pierce
+	if pierceTimer > 0: $Sprite2D.modulate = Color(1,1,0,1)
 	speed = speed * speedMod
 	damageMask = mask
 	ignoreMask = 1 if mask == 2 else 2
@@ -20,11 +24,14 @@ func rotate_direction(degree):
 
 func _process(delta):
 	position += direction * speed * delta
+	if pierceTimer > 0: 
+		pierceTimer -= delta
+		if pierceTimer <= 0: $Sprite2D.modulate = Color(0,0,0,1)
 
 func _on_body_entered(body):
 	if body.collision_layer == damageMask: #damage valid target
 		if body.health > 0: body.take_damage(damage)
-	if body.collision_layer != ignoreMask: #ignore player, delete on everything else
+	if body.collision_layer != ignoreMask and pierceTimer <= 0: #ignore player, delete on everything else
 		queue_free()
 
 func _on_visible_on_screen_notifier_2d_screen_exited():

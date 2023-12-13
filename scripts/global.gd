@@ -1,6 +1,6 @@
 extends Node
 
 var score := 0
-var oneshot := false
+var easy := false
 var usedWeapon := 0
 var shame := false

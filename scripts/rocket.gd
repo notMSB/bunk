@@ -6,7 +6,7 @@ var direction := Vector2()
 var speed := 750
 var damage : int
 
-func fire(goalPos, startPos, weaponDamage):
+func fire(goalPos, startPos, weaponDamage, _pierce):
 	damage = weaponDamage
 	global_position = startPos
 	direction = (goalPos - startPos).normalized()

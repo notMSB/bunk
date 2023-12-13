@@ -37,7 +37,8 @@ func get_fuel_weight():
 	if player.fuel < 10: return 100
 	elif player.fuel < 50: return 60
 	elif player.fuel < 75: return 40
-	else: return 10
+	elif player.fuel < 100: return 10
+	else: return 0
 
 func get_grenade_weight():
 	if player.hasItem == false: return 60

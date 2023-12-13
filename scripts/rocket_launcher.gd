@@ -4,3 +4,4 @@ extends Node2D
 
 const COOLDOWN = .35
 const DAMAGE = 10
+const PIERCE := .0

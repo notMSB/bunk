@@ -19,3 +19,7 @@ func _on_body_entered(body):
 	elif hitBody != null:
 		if (body.currentPlatform != null and hitBody == body.currentPlatform) or (body.is_on_floor() and hitBody.name == "Floor"): #the starting floor needs its own case
 			body.launch(position)
+
+func _on_area_entered(area):
+	if area.collision_layer == 4: #bullet
+		area.queue_free()

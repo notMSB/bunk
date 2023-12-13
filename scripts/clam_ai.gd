@@ -27,7 +27,7 @@ func _process(delta):
 				5: shotDir = Vector2(bulletOrigin.x - 5, bulletOrigin.y)
 				6: shotDir = Vector2(bulletOrigin.x - 5, bulletOrigin.y + 5)
 				7: shotDir = Vector2(bulletOrigin.x - 5, bulletOrigin.y - 5)
-			shot.fire(shotDir, bulletOrigin, 1, 1, .25)
+			shot.fire(shotDir, bulletOrigin, 1, 0, 1, .25)
 		shotCooldown = COOLDOWN
 
 func setup(p):

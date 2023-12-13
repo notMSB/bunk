@@ -23,7 +23,7 @@ var grenadeWeight := 0
 const BASE_KNOCKBACK = 700 #for when the player takes damage
 
 const MAX_FUEL := 100
-const FUEL_THRESHOLD := 5
+var fuelThreshold := 5
 var fuel := MAX_FUEL * .75
 
 const AIR_JUMPS := 2
@@ -48,7 +48,7 @@ var currentPlatform : CharacterBody2D = null
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
-	Global.shame = Global.oneshot
+	Global.shame = Global.easy
 
 func _physics_process(delta):
 	UI.set_height(scoreModifier, position.y)
@@ -61,7 +61,7 @@ func _physics_process(delta):
 		currentCoyote = COYOTE_TIME
 		set_platform() #Set a platform which descends when jumping off
 		currentAirJumps = 0
-		UI.set_fuel(fuel, FUEL_THRESHOLD, currentAirJumps, AIR_JUMPS)
+		UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 	if Input.is_action_just_pressed("swap_up"):
 		weaponIndex -= 1
 		if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
@@ -96,11 +96,12 @@ func _physics_process(delta):
 		var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()
 		$Projectiles.add_child(shot)
 		
-		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE)
+		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE, $Weapon.get_child(weaponIndex).PIERCE)
 		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
 	if Input.is_action_just_pressed("misc"): 
-		Global.oneshot = !Global.oneshot
+		Global.easy = !Global.easy
 		Global.shame = true
+		fuelThreshold = 0 if Global.easy else 5
 	if Input.is_action_just_pressed("item") and hasItem:
 		$Item.get_child(0).use()
 		change_item(false)
@@ -129,11 +130,11 @@ func jump():
 		change_velocity(JUMP_VELOCITY)
 		if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
 		jumping = true
-	elif fuel >= FUEL_THRESHOLD and currentAirJumps < AIR_JUMPS:
+	elif fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
 		currentAirJumps += 1
 		change_velocity(JUMP_VELOCITY/1.3)
 		velocity.x *= 1.4
-		change_fuel(-1 * FUEL_THRESHOLD)
+		change_fuel(-1 * fuelThreshold)
 		jumping = true
 
 func change_item(change):
@@ -142,7 +143,7 @@ func change_item(change):
 
 func change_fuel(change):
 	fuel = min(fuel + change, 100)
-	UI.set_fuel(fuel, FUEL_THRESHOLD, currentAirJumps, AIR_JUMPS)
+	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 
 func take_damage(goLeft, _damage = 0):
 	health -= 1
