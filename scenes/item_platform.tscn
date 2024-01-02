@@ -31,6 +31,7 @@ one_way_collision_margin = 2.3
 [node name="Pickup" type="Area2D" parent="."]
 position = Vector2(0, -1)
 collision_layer = 16
+collision_mask = 64
 script = ExtResource("3_yuy7l")
 
 [node name="PickupSprite" type="Sprite2D" parent="Pickup"]

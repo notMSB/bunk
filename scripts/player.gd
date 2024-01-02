@@ -157,7 +157,7 @@ func heal(amount):
 	UI.update_health(health, true)
 
 func set_invuln(isInvuln):
-	collision_layer = 0 if isInvuln else 1
+	collision_layer -= 1 if isInvuln else -1
 	invulnerable = isInvuln
 
 func die():

@@ -101,6 +101,7 @@ item={
 2d_physics/layer_4="Floor"
 2d_physics/layer_5="Platform"
 2d_physics/layer_6="Blocker"
+2d_physics/layer_7="Pickup Getter"
 
 [physics]
 

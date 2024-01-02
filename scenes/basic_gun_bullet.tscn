@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://b71rbls6nk4pc"]
+
+[ext_resource type="Script" path="res://scripts/basic_gun_bullet.gd" id="1_iwf82"]
+[ext_resource type="PackedScene" uid="uid://dak8tshl61njw" path="res://scenes/bullet.tscn" id="2_bme4t"]
+
+[node name="basic_gun_bullet" type="Node2D"]
+script = ExtResource("1_iwf82")
+Projectile = ExtResource("2_bme4t")

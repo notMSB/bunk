@@ -97,6 +97,6 @@ func take_damage(amount):
 	else: $UI/HPText.text = str(health)
 
 func _on_contact_damage_body_entered(body):
-	if $ContactDamage.visible and body.collision_layer == 1: #damage player
+	if $ContactDamage.visible and body.collision_layer == 65: #damage player
 		var left := false if body.position.x > position.x else true
 		body.take_damage(left)
