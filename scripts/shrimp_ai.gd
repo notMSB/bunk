@@ -17,7 +17,7 @@ func _process(delta):
 		shot.get_node("Sprite2D").modulate = Color.RED
 		bulletHolder.add_child(shot)
 		
-		shot.fire(player.global_position, enemy.global_position, 1, 0, 1, .4,)
+		shot.fire(player.global_position, enemy.global_position, 1, 0, 65, .4,)
 		shotCooldown = COOLDOWN
 
 func flip(playerLeft):

@@ -14,7 +14,7 @@ func setup(weaponDamage, causeBody):
 	hitBody = causeBody
 
 func _on_body_entered(body):
-	if body.collision_layer != 1: #ignore player, delete on everything else
+	if body.collision_layer != 65: #ignore player, delete on everything else
 		if body.health > 0: body.take_damage(damage)
 	elif hitBody != null:
 		if (body.currentPlatform != null and hitBody == body.currentPlatform) or (body.is_on_floor() and hitBody.name == "Floor"): #the starting floor needs its own case

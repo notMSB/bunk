@@ -14,7 +14,7 @@ func fire(goalPos, startPos, weaponDamage, pierce, mask = 2, speedMod = 1):
 	if pierceTimer > 0: $Sprite2D.modulate = Color(1,1,0,1)
 	speed = speed * speedMod
 	damageMask = mask
-	ignoreMask = 1 if mask == 2 else 2
+	ignoreMask = 65 if mask == 2 else 2
 	damage = weaponDamage
 	global_position = startPos
 	direction = (goalPos - startPos).normalized()
