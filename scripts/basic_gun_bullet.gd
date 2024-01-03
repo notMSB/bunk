@@ -10,3 +10,4 @@ func fire(goalPos, startPos, weaponDamage, pierce):
 	shot.fire(goalPos, startPos, weaponDamage, pierce)
 	shot.rotate_direction(randf_range(gun.drift * -1, gun.drift))
 	gun.drift += 1
+	gun.set_reset()
