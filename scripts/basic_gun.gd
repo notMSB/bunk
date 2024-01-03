@@ -18,3 +18,6 @@ func _process(delta):
 
 func set_reset():
 	currentReset = DRIFT_RESET
+
+func increase_drift(amount):
+	drift = min(drift + amount, MAX_DRIFT)

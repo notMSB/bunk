@@ -24,7 +24,7 @@ func _process(delta):
 	position += direction * speed * delta
 
 func _on_body_entered(body):
-	if body.collision_layer != 1: #ignore player, delete on everything else
+	if body.collision_layer != 65: #ignore player, delete on everything else
 		explode(body)
 
 func _on_visible_on_screen_notifier_2d_screen_exited():
