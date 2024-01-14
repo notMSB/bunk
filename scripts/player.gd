@@ -164,7 +164,7 @@ func die():
 	var runScore = UI.get_height()
 	if runScore > Global.score: Global.score = runScore
 	Global.usedWeapon = weaponIndex
-	get_tree().reload_current_scene()
+	get_tree().call_deferred("reload_current_scene")
 
 func plat_drop():
 	position.y += 4

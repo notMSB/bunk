@@ -7,6 +7,7 @@ extends Node2D
 @export var Shrimp : PackedScene
 @export var Clam : PackedScene
 @export var Swarmer : PackedScene
+@export var Boss : PackedScene
 
 @export var ItemPlatform: PackedScene
 
@@ -33,6 +34,7 @@ var offscreenSpawns = 0
 
 func _ready():
 	enemyScenes = [Swarmer, Clam, Shrimp, Enemy]
+	spawn(CAMERA.get_screen_center_position(), true, true)
 
 func _process(delta):
 	height = UI.get_height()
@@ -71,26 +73,28 @@ func set_spawns():
 		offscreenSpawns = 0
 		spawn(Vector2(CAMERA.get_screen_center_position().x, CAMERA.get_screen_center_position().y - screenY))
 
-func spawn(center, original = false):
+func spawn(center, original = false, boss = false):
 	var newSpawn : CharacterBody2D
 	var isItem := false
 	
 	var specificHoriz : int = HORIZ_MOD if original else HORIZ_MOD / 2
 	
-	if original: platSpawnCounter +=1
-	if platSpawnCounter >= platformFrequency and original: 
-		newSpawn = ItemPlatform.instantiate()
-		platSpawnCounter = 0
-		isItem = true
+	if boss: newSpawn = Boss.instantiate()
 	else:
-		var totalOdds := 0
-		for i in enemyOdds: totalOdds += i
-		var enemyRando := randi() % totalOdds
-		for i in enemyScenes.size():
-			enemyRando -= enemyOdds[i]
-			if enemyRando < 0:
-				newSpawn = enemyScenes[i].instantiate()
-				break
+		if original: platSpawnCounter +=1
+		if platSpawnCounter >= platformFrequency and original: 
+			newSpawn = ItemPlatform.instantiate()
+			platSpawnCounter = 0
+			isItem = true
+		else:
+			var totalOdds := 0
+			for i in enemyOdds: totalOdds += i
+			var enemyRando := randi() % totalOdds
+			for i in enemyScenes.size():
+				enemyRando -= enemyOdds[i]
+				if enemyRando < 0:
+					newSpawn = enemyScenes[i].instantiate()
+					break
 	add_child(newSpawn)
 	if isItem:
 		var yPos : float = center.y - VERT_BASE - randi() % (VERT_MOD)

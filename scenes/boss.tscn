@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=3 uid="uid://b86hbuygu7hhp"]
+
+[ext_resource type="Script" path="res://scripts/boss.gd" id="1_tmlrh"]
+[ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_he3l6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v371p"]
+size = Vector2(1092, 337)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1x6j"]
+size = Vector2(64, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vj3ap"]
+size = Vector2(1087, 336)
+
+[node name="Boss" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 5
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_tmlrh")
+health = 500
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="1" type="Sprite2D" parent="Sprites"]
+position = Vector2(509.5, 147)
+scale = Vector2(16.9219, 10.1875)
+texture = ExtResource("2_he3l6")
+
+[node name="EnemyShape" type="CollisionShape2D" parent="."]
+position = Vector2(510, 145.5)
+shape = SubResource("RectangleShape2D_v371p")
+
+[node name="PlatformBody" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 16
+
+[node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
+visible = false
+position = Vector2(0, -14)
+shape = SubResource("RectangleShape2D_b1x6j")
+disabled = true
+one_way_collision = true
+
+[node name="ContactDamage" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="DamageArea" type="CollisionShape2D" parent="ContactDamage"]
+position = Vector2(510.5, 146)
+shape = SubResource("RectangleShape2D_vj3ap")
+
+[node name="AI" type="Node2D" parent="."]
+visible = false
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="HPText" type="Label" parent="UI"]
+offset_left = 480.0
+offset_top = 281.0
+offset_right = 540.0
+offset_bottom = 307.0
+text = "0"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]
