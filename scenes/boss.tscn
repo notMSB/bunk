@@ -7,7 +7,7 @@
 size = Vector2(1092, 337)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b1x6j"]
-size = Vector2(64, 4)
+size = Vector2(1083, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vj3ap"]
 size = Vector2(1087, 336)
@@ -18,7 +18,7 @@ collision_mask = 5
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_tmlrh")
-health = 500
+health = 250
 
 [node name="Sprites" type="Node2D" parent="."]
 
@@ -32,12 +32,10 @@ position = Vector2(510, 145.5)
 shape = SubResource("RectangleShape2D_v371p")
 
 [node name="PlatformBody" type="StaticBody2D" parent="."]
-visible = false
 collision_layer = 16
 
 [node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
-visible = false
-position = Vector2(0, -14)
+position = Vector2(509.5, -14)
 shape = SubResource("RectangleShape2D_b1x6j")
 disabled = true
 one_way_collision = true
@@ -55,6 +53,7 @@ visible = false
 [node name="UI" type="Node2D" parent="."]
 
 [node name="HPText" type="Label" parent="UI"]
+visible = false
 offset_left = 480.0
 offset_top = 281.0
 offset_right = 540.0

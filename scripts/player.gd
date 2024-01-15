@@ -2,8 +2,6 @@ extends CharacterBody2D
 
 @onready var UI := get_node("../UI")
 
-var scoreModifier := 600
-
 const SPEED := 300.0
 const JUMP_VELOCITY := -675.0
 
@@ -51,7 +49,7 @@ func _ready():
 	Global.shame = Global.easy
 
 func _physics_process(delta):
-	UI.set_height(scoreModifier, position.y)
+	UI.set_height(position.y)
 	weaponCooldown = max(weaponCooldown - delta, 0)
 	if position.y > $Camera2D.get_screen_center_position().y - $Camera2D.offset.y + BOTTOM_MOD: die()
 	if !is_on_floor():

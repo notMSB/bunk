@@ -2,6 +2,12 @@ extends CanvasLayer
 
 @onready var Background := get_node("../BackgroundLayer/Background")
 
+var modifier := 600
+
+const PAUSE_INCREMENT := 1500
+var pauseVal := PAUSE_INCREMENT
+var paused := false
+
 func _ready():
 	$Height/High.text = str(Global.score)
 	if Global.shame: $Height/High.text = str($Height/High.text, "?")
@@ -9,9 +15,22 @@ func _ready():
 func _process(_delta):
 	change_background()
 
-func set_height(modifier, value):
-	var heightVal : float = abs(modifier - min(modifier, value))
-	$Height/Current.text = str(floor(heightVal))
+func pause():
+	paused = true
+	$Height/Current.text = str(floor(pauseVal))
+	get_node("../Spawner").spawn_boss()
+
+func unpause(value): #player height on boss kill
+	paused = false
+	modifier = abs(value + pauseVal)
+	pauseVal += PAUSE_INCREMENT
+
+func set_height(value):
+	if !paused:
+		var heightVal : float = abs(modifier - min(modifier, value))
+		if heightVal < pauseVal:
+			$Height/Current.text = str(floor(heightVal))
+		else: pause()
 
 func get_height() -> int:
 	return int($Height/Current.text)

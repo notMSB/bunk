@@ -34,6 +34,8 @@ var offscreenSpawns = 0
 
 func _ready():
 	enemyScenes = [Swarmer, Clam, Shrimp, Enemy]
+
+func spawn_boss():
 	spawn(CAMERA.get_screen_center_position(), true, true)
 
 func _process(delta):
