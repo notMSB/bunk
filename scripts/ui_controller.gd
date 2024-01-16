@@ -4,7 +4,7 @@ extends CanvasLayer
 
 var modifier := 600
 
-const PAUSE_INCREMENT := 1500
+const PAUSE_INCREMENT := 300
 var pauseVal := PAUSE_INCREMENT
 var paused := false
 

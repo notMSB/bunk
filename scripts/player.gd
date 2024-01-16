@@ -22,7 +22,7 @@ const BASE_KNOCKBACK = 700 #for when the player takes damage
 
 const MAX_FUEL := 100
 var fuelThreshold := 5
-var fuel := MAX_FUEL * .75
+var fuel := MAX_FUEL
 
 const AIR_JUMPS := 2
 var currentAirJumps := 0

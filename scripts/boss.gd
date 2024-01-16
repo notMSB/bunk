@@ -1,8 +1,10 @@
 extends "res://scripts/enemy.gd"
 
-@onready var bar = get_node("../../UI/BossBar")
-@onready var barText = get_node("../../UI/BossBar/Text")
-var player
+@onready var bar := get_node("../../UI/BossBar")
+@onready var barText := get_node("../../UI/BossBar/Text")
+var player : CharacterBody2D
+
+var playerY = null
 
 const THRESHOLD := 100
 var nextCheck : int
@@ -36,4 +38,6 @@ func take_damage(amount):
 	barText.text = str(health)
 
 func recalibrate():
+	if playerY: global_position.y += player.global_position.y - playerY
 	global_position.x = player.global_position.x - $EnemyShape.shape.size.x*.5 + player.get_node("CollisionShape2D").shape.size.x
+	playerY = player.global_position.y
