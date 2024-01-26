@@ -9,6 +9,10 @@ var player : CharacterBody2D
 const THRESHOLD := 100
 var nextCheck : int
 
+const BASE_SPEED := .3
+const SPEED_RAMP := .001
+var speed := BASE_SPEED
+
 func _ready():
 	nextCheck = health - THRESHOLD
 	bar.max_value = health
@@ -21,7 +25,10 @@ func _physics_process(_delta):
 	if health <= nextCheck: 
 		position.y += 100
 		nextCheck -= THRESHOLD
-	else: position.y -= 0.3
+		speed = BASE_SPEED
+	else: 
+		position.y -= speed
+		speed += SPEED_RAMP
 
 func setup(_cam, p):
 	player = p
