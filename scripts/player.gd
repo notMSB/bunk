@@ -70,7 +70,7 @@ func _physics_process(delta):
 		weaponCooldown = .1
 	if Input.is_action_just_pressed("down"):
 		if is_on_floor(): plat_drop()
-		else: velocity.y = max(velocity.y, 1000) #fastfall
+		else: velocity.y = max(velocity.y, 600) #fastfall
 	#if Input.is_action_pressed("down") and is_on_floor():
 	#	jumpBoost -= 2
 	var direction = Input.get_axis("ui_left", "ui_right")

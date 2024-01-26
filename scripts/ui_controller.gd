@@ -4,7 +4,7 @@ extends CanvasLayer
 
 var modifier := 600
 
-const PAUSE_INCREMENT := 300
+const PAUSE_INCREMENT := 500
 var pauseVal := PAUSE_INCREMENT
 var paused := false
 
@@ -21,8 +21,9 @@ func pause():
 	get_node("../Spawner").spawn_boss()
 
 func unpause(value): #player height on boss kill
+	#print(value)
 	paused = false
-	modifier = abs(value + pauseVal)
+	modifier = value + pauseVal
 	pauseVal += PAUSE_INCREMENT
 
 func set_height(value):

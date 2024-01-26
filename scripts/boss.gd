@@ -3,14 +3,16 @@ extends "res://scripts/enemy.gd"
 @onready var bar := get_node("../../UI/BossBar")
 @onready var barText := get_node("../../UI/BossBar/Text")
 var player : CharacterBody2D
-
 #var playerY : float
 
 const THRESHOLD := 100
 var nextCheck : int
 
+var spawnOffset : float = 400
+
 const BASE_SPEED := .3
 const SPEED_RAMP := .001
+const MAX_SPEED := .8
 var speed := BASE_SPEED
 
 func _ready():
@@ -22,18 +24,25 @@ func _ready():
 
 func _physics_process(_delta):
 	recalibrate()
-	if health <= nextCheck: 
-		position.y += 100
-		nextCheck -= THRESHOLD
-		speed = BASE_SPEED
-	else: 
-		position.y -= speed
-		speed += SPEED_RAMP
+	if isPlatform: position.y += BASE_SPEED
+	else:
+		var basePos = camera.get_screen_center_position().y + spawnOffset
+		if position.y > basePos: position.y = basePos
+		if health <= nextCheck: 
+			position.y = basePos
+			nextCheck -= THRESHOLD
+			speed = BASE_SPEED
+		else: 
+			position.y -= speed
+			if speed < MAX_SPEED: speed += SPEED_RAMP
 
-func setup(_cam, p):
+func setup(cam, p):
+	camera = cam
 	player = p
+	
+	position.y = camera.get_screen_center_position().y + spawnOffset
+	
 	recalibrate()
-	position.y += 700
 
 func take_damage(amount):
 	health -= amount

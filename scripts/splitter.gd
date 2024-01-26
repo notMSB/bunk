@@ -4,7 +4,7 @@ extends Node2D
 
 const PROJECTILES := 9
 
-var degs := 13.0
+var degs := 16.0
 var drift : float = degs/((PROJECTILES-1)/2.0)
 
 func fire(goalPos, startPos, weaponDamage, pierce):
