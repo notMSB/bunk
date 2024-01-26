@@ -4,7 +4,7 @@ extends "res://scripts/enemy.gd"
 @onready var barText := get_node("../../UI/BossBar/Text")
 var player : CharacterBody2D
 
-var playerY = null
+#var playerY : float
 
 const THRESHOLD := 100
 var nextCheck : int
@@ -19,14 +19,14 @@ func _ready():
 func _physics_process(_delta):
 	recalibrate()
 	if health <= nextCheck: 
-		position.y -= 300
+		position.y += 100
 		nextCheck -= THRESHOLD
-	else: position.y += 0.5
+	else: position.y -= 0.3
 
 func setup(_cam, p):
 	player = p
 	recalibrate()
-	position.y -= 300
+	position.y += 700
 
 func take_damage(amount):
 	health -= amount
@@ -38,6 +38,6 @@ func take_damage(amount):
 	barText.text = str(health)
 
 func recalibrate():
-	if playerY: global_position.y += player.global_position.y - playerY
+	#if playerY: global_position.y += player.global_position.y - playerY
 	global_position.x = player.global_position.x - $EnemyShape.shape.size.x*.5 + player.get_node("CollisionShape2D").shape.size.x
-	playerY = player.global_position.y
+	#playerY = player.global_position.y
