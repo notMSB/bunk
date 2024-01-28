@@ -5,14 +5,14 @@ extends "res://scripts/enemy.gd"
 var player : CharacterBody2D
 #var playerY : float
 
-const THRESHOLD := 100
+const THRESHOLD := 50
 var nextCheck : int
 
 var spawnOffset : float = 400
 
 const BASE_SPEED := .3
-const SPEED_RAMP := .001
-const MAX_SPEED := .8
+const SPEED_RAMP := .002
+const MAX_SPEED := 1.6
 var speed := BASE_SPEED
 
 func _ready():
