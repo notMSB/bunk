@@ -29,19 +29,37 @@ position = Vector2(-64, 0)
 [node name="1" type="Sprite2D" parent="UI/Health"]
 modulate = Color(1, 0, 0, 1)
 position = Vector2(548, 635)
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("1_56y1r")
+
+[node name="Border" type="Sprite2D" parent="UI/Health/1"]
+modulate = Color(0, 0, 0, 1)
+z_index = -10
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("1_56y1r")
 
 [node name="2" type="Sprite2D" parent="UI/Health"]
 modulate = Color(1, 0, 0, 1)
 position = Vector2(578, 635)
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("1_56y1r")
+
+[node name="Border" type="Sprite2D" parent="UI/Health/2"]
+modulate = Color(0, 0, 0, 1)
+z_index = -10
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("1_56y1r")
 
 [node name="3" type="Sprite2D" parent="UI/Health"]
 modulate = Color(1, 0, 0, 1)
 position = Vector2(608, 635)
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("1_56y1r")
+
+[node name="Border" type="Sprite2D" parent="UI/Health/3"]
+modulate = Color(0, 0, 0, 1)
+z_index = -10
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("1_56y1r")
 
 [node name="Consumable" type="Node2D" parent="UI"]

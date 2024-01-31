@@ -19,6 +19,7 @@ var fuelWeight := 0
 var grenadeWeight := 0
 
 const BASE_KNOCKBACK = 700 #for when the player takes damage
+const BIG_KNOCKBACK = -800 #for when the player is hit by the boss or falls off the bottom
 
 const MAX_FUEL := 100
 var fuelThreshold := 5
@@ -51,7 +52,9 @@ func _ready():
 func _physics_process(delta):
 	UI.set_height(position.y)
 	weaponCooldown = max(weaponCooldown - delta, 0)
-	if position.y > $Camera2D.get_screen_center_position().y - $Camera2D.offset.y + BOTTOM_MOD: die()
+	if position.y > $Camera2D.get_screen_center_position().y - $Camera2D.offset.y + BOTTOM_MOD: 
+		take_damage(false, 1, true)
+		change_fuel(-5 * fuelThreshold)
 	if !is_on_floor():
 		change_velocity(velocity.y + gravity * delta)
 		if currentCoyote > 0: currentCoyote -= 1
@@ -143,11 +146,12 @@ func change_fuel(change):
 	fuel = min(fuel + change, 100)
 	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 
-func take_damage(goLeft, _damage = 0):
+func take_damage(goLeft, _damage = 0, bigHit = false):
 	health -= 1
 	if health <= 0: die()
 	UI.update_health(health, false)
-	velocity.x = BASE_KNOCKBACK * -1 if goLeft else BASE_KNOCKBACK
+	if bigHit: change_velocity(BIG_KNOCKBACK)
+	else: velocity.x = BASE_KNOCKBACK * -1 if goLeft else BASE_KNOCKBACK
 	set_invuln(true)
 
 func heal(amount):

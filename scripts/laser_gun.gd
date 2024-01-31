@@ -2,6 +2,6 @@ extends Node2D
 
 @export var Projectile : PackedScene
 
-const COOLDOWN := .45
+const COOLDOWN := .4
 const DAMAGE := 3
 const PIERCE := .0

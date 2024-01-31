@@ -7,4 +7,4 @@ func use():
 	add_child(boom)
 	boom.scale = Vector2(2.5,2.5)
 	boom.position = position
-	boom.setup(10, null)
+	boom.setup(25, null)

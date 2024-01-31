@@ -11,7 +11,7 @@ var nextCheck : int
 var spawnOffset : float = 400
 
 const BASE_SPEED := .3
-const SPEED_RAMP := .002
+const SPEED_RAMP := .001
 const MAX_SPEED := 1.6
 var speed := BASE_SPEED
 
@@ -57,3 +57,8 @@ func recalibrate():
 	#if playerY: global_position.y += player.global_position.y - playerY
 	global_position.x = player.global_position.x - $EnemyShape.shape.size.x*.5 + player.get_node("CollisionShape2D").shape.size.x
 	#playerY = player.global_position.y
+
+func _on_contact_damage_body_entered(body):
+	if $ContactDamage.visible and body.collision_layer == 65: #damage player
+		var left := false if body.position.x > position.x else true
+		body.take_damage(left, 1, true)
