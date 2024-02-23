@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const DEFAULT_VELOCITY := 50
+const DEFAULT_VELOCITY := 60
 
 var camera : Camera2D
 
@@ -18,7 +18,7 @@ var boostTimer := BOOST_DEFAULT
 @export var health := 4
 
 func _ready():
-	velocity.y = DEFAULT_VELOCITY * 3
+	velocity.y = DEFAULT_VELOCITY * 2
 	$UI/HPText.text = str(health)
 
 func _physics_process(delta):

@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 @onready var UI := get_node("../UI")
 
-const SPEED := 300.0
-const JUMP_VELOCITY := -675.0
+const SPEED := 350.0
+const JUMP_VELOCITY := -725.0
 
 const PLATFORM_LAYER := 16
 
@@ -48,6 +48,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
 	Global.shame = Global.easy
+	fuelThreshold = 0 if Global.easy else 5
 
 func _physics_process(delta):
 	UI.set_height(position.y)
@@ -61,6 +62,7 @@ func _physics_process(delta):
 	else:
 		currentCoyote = COYOTE_TIME
 		set_platform() #Set a platform which descends when jumping off
+		if currentPlatform and velocity.y == 0: change_velocity(currentPlatform.velocity.y)
 		currentAirJumps = 0
 		UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 	if Input.is_action_just_pressed("swap_up"):
@@ -133,7 +135,7 @@ func jump():
 		jumping = true
 	elif fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
 		currentAirJumps += 1
-		change_velocity(JUMP_VELOCITY/1.3)
+		change_velocity(JUMP_VELOCITY/1.15)
 		velocity.x *= 1.4
 		change_fuel(-1 * fuelThreshold)
 		jumping = true
@@ -173,6 +175,7 @@ func plat_drop():
 	currentPlatform = null
 
 func launch(boomPos): #from an explosion
+	velocity.y = 0
 	var direction = (position - boomPos).normalized()
 	velocity = 750 * direction
 	velocity.x *= 1.5

@@ -55,7 +55,7 @@ func take_damage(amount):
 
 func recalibrate():
 	#if playerY: global_position.y += player.global_position.y - playerY
-	global_position.x = player.global_position.x - $EnemyShape.shape.size.x*.5 + player.get_node("CollisionShape2D").shape.size.x
+	global_position.x = player.global_position.x - $EnemyShape.shape.size.x*.42 + player.get_node("CollisionShape2D").shape.size.x
 	#playerY = player.global_position.y
 
 func _on_contact_damage_body_entered(body):

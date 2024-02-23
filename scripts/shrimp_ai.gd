@@ -12,7 +12,7 @@ var flipped := false
 func _process(delta):
 	flip(enemy.global_position.x > player.global_position.x)
 	shotCooldown -= delta
-	if shotCooldown <= 0 and !enemy.killTimerSet and enemy.global_position.distance_to(player.global_position) < 500:
+	if shotCooldown <= 0 and !enemy.killTimerSet and enemy.global_position.distance_to(player.global_position) < 550:
 		var shot = Bullet.instantiate()
 		shot.get_node("Sprite2D").modulate = Color.RED
 		bulletHolder.add_child(shot)

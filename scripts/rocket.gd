@@ -3,7 +3,7 @@ extends Node2D
 @export var Explosion : PackedScene
 
 var direction := Vector2()
-var speed := 750
+var speed := 950
 var damage : int
 
 func fire(goalPos, startPos, weaponDamage, _pierce):

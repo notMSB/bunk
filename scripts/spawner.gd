@@ -17,7 +17,7 @@ const HORIZ_MOD := 600
 
 const TOP_SPAWN := 500
 
-const TIMER_LIST := [[0, 1.4], [500, 1.3], [2000, 1.2], [5000, 1.1], [8000, 1.0], [11000, 0.9]]
+const TIMER_LIST := [[0, 1.3], [500, 1.3], [2000, 1.2], [5000, 1.1], [8000, 1.0], [11000, 0.9]]
 var timerIndex := 0
 var timer := TIMER_LIST[0][1]
 
@@ -71,7 +71,7 @@ func check_height_table(): #todo: optimize, should not calculate every frame
 		enemyOdds = [700, 900, 3000, 5600]
 		platformFrequency = 16
 	@warning_ignore("narrowing_conversion")
-	if UI.paused: platformFrequency *= .5
+	if UI.paused: platformFrequency *= .33
 
 func set_spawns():
 	var screenX : int = ProjectSettings.get_setting("display/window/size/viewport_width")

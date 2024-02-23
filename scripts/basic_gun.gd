@@ -4,12 +4,12 @@ extends Node2D
 
 const COOLDOWN := .11
 const DAMAGE := 2
-const PIERCE := .1
+const PIERCE := .2
 
 const DRIFT_RESET := .22
 var currentReset := .0
 
-const MAX_DRIFT := 15.0
+const MAX_DRIFT := 13.5
 var drift := .0
 
 func _process(delta):
