@@ -78,6 +78,22 @@ func _physics_process(delta):
 		else: velocity.y = max(velocity.y, 600) #fastfall
 	#if Input.is_action_pressed("down") and is_on_floor():
 	#	jumpBoost -= 2
+	
+	var mouse_sens = 3000.0
+	var mouseDir : Vector2
+	var movement : Vector2
+	
+	mouseDir.x = Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left")
+	mouseDir.y = Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
+	
+	if abs(mouseDir.x) == 1 and abs(mouseDir.y) == 1:
+		mouseDir = mouseDir.normalized()
+	
+	movement = mouse_sens * mouseDir * delta
+	
+	if (movement): get_viewport().warp_mouse(get_viewport().get_mouse_position() + movement)
+	
+	
 	var direction = Input.get_axis("ui_left", "ui_right")
 	#var speedVal = max(SPEED, abs(velocity.x)-5)
 	var speedVal = max(SPEED, abs(velocity.x)-5) if direction * velocity.x > 0 else SPEED
