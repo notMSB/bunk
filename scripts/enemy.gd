@@ -23,7 +23,7 @@ func _ready():
 
 func _physics_process(delta):
 	move_and_slide()
-	if camera and position.y > camera.get_screen_center_position().y + 375 and velocity.y >= 0:
+	if camera and position.y > camera.get_screen_center_position().y + 450 and velocity.y >= 0:
 		if isPlatform and velocity.y <= DEFAULT_VELOCITY: 
 			velocity.y = 0
 			killTimer = DEFAULT_KILL_TIMER
@@ -104,4 +104,5 @@ func take_damage(amount):
 func _on_contact_damage_body_entered(body):
 	if $ContactDamage.visible and body.collision_layer == 65: #damage player
 		var left := false if body.position.x > position.x else true
-		body.take_damage(left)
+		if body.launching: take_damage(health) #a boosting player damages enemies
+		else: body.take_damage(left)

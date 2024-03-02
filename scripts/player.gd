@@ -7,16 +7,21 @@ const JUMP_VELOCITY := -725.0
 
 const PLATFORM_LAYER := 16
 
-const BOTTOM_MOD := 150
+const BOTTOM_MOD := 200
 
 #const BOOSTLIMIT = -200
 #var jumpBoost = 0
+
+@export var mobile := false
+var launching := false
 
 var health := 3
 
 var healthWeight := 0
 var fuelWeight := 0
 var grenadeWeight := 0
+
+const CROUCH_DIFF := 15 #adjusting player position on crouch/uncrouch to prevent going airborne
 
 const BASE_KNOCKBACK = 700 #for when the player takes damage
 const BIG_KNOCKBACK = -800 #for when the player is hit by the boss or falls off the bottom
@@ -51,6 +56,7 @@ func _ready():
 	fuelThreshold = 0 if Global.easy else 5
 
 func _physics_process(delta):
+	if launching and velocity.y >= 0: launching = false
 	UI.set_height(position.y)
 	weaponCooldown = max(weaponCooldown - delta, 0)
 	if position.y > $Camera2D.get_screen_center_position().y - $Camera2D.offset.y + BOTTOM_MOD: 
@@ -65,70 +71,80 @@ func _physics_process(delta):
 		if currentPlatform and velocity.y == 0: change_velocity(currentPlatform.velocity.y)
 		currentAirJumps = 0
 		UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
-	if Input.is_action_just_pressed("swap_up"):
-		weaponIndex -= 1
-		if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
-		weaponCooldown = .1
-	if Input.is_action_just_pressed("swap_down"):
-		weaponIndex += 1
-		if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
-		weaponCooldown = .1
-	if Input.is_action_just_pressed("down"):
-		if is_on_floor(): plat_drop()
-		else: velocity.y = max(velocity.y, 600) #fastfall
-	#if Input.is_action_pressed("down") and is_on_floor():
-	#	jumpBoost -= 2
-	
-	var mouse_sens = 3000.0
-	var mouseDir : Vector2
-	var movement : Vector2
-	
-	mouseDir.x = Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left")
-	mouseDir.y = Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
-	
-	if abs(mouseDir.x) == 1 and abs(mouseDir.y) == 1:
-		mouseDir = mouseDir.normalized()
-	
-	movement = mouse_sens * mouseDir * delta
-	
-	if (movement): get_viewport().warp_mouse(get_viewport().get_mouse_position() + movement)
-	
-	
-	var direction = Input.get_axis("ui_left", "ui_right")
-	#var speedVal = max(SPEED, abs(velocity.x)-5)
-	var speedVal = max(SPEED, abs(velocity.x)-5) if direction * velocity.x > 0 else SPEED
-	if direction:
-		velocity.x = direction * speedVal
-	else:
-		if is_on_floor():
-			velocity.x = move_toward(velocity.x, 0, SPEED)
+	if !mobile:
+		if Input.is_action_just_pressed("swap_up"):
+			weaponIndex -= 1
+			if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
+			weaponCooldown = .1
+		if Input.is_action_just_pressed("swap_down"):
+			weaponIndex += 1
+			if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
+			weaponCooldown = .1
+		if Input.is_action_just_pressed("down"):
+			scale.y = .5
+			position.y += CROUCH_DIFF
+			if is_on_floor(): plat_drop()
+			else: velocity.y = max(velocity.y, 600) #fastfall
+		#if Input.is_action_pressed("down"):
+
+		if Input.is_action_just_released("down"):
+			scale.y = 1
+			position.y -= CROUCH_DIFF
+		#if Input.is_action_pressed("down") and is_on_floor(): jumpBoost -= 2
+		
+		#Controller support, right stick mouse movement
+		var mouseSens := 3000.0
+		var mouseDir : Vector2
+		var movement : Vector2
+		
+		mouseDir.x = Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left")
+		mouseDir.y = Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
+		
+		if abs(mouseDir.x) == 1 and abs(mouseDir.y) == 1: mouseDir = mouseDir.normalized()
+		movement = mouseSens * mouseDir * delta
+		if movement: get_viewport().warp_mouse(get_viewport().get_mouse_position() + movement)
+		
+		var direction = Input.get_axis("ui_left", "ui_right")
+		#var speedVal = max(SPEED, abs(velocity.x)-5)
+		var speedVal = max(SPEED, abs(velocity.x)-5) if direction * velocity.x > 0 else SPEED
+		if direction:
+			velocity.x = direction * speedVal
 		else:
-			velocity.x = move_toward(velocity.x, 0, 30)
-	if Input.is_action_just_pressed("jump"): jump()
-	if Input.is_action_just_released("jump") and velocity.y < 0 and jumping: 
-		change_velocity(velocity.y * 0.4)
-		jumping = false
-		if currentPlatform != null: 
-			currentPlatform.unboost()
-			currentPlatform = null
+			if is_on_floor():
+				velocity.x = move_toward(velocity.x, 0, SPEED)
+			else:
+				velocity.x = move_toward(velocity.x, 0, 30)
+		if Input.is_action_just_pressed("jump"): jump()
+		if Input.is_action_just_released("jump") and velocity.y < 0 and jumping: 
+			change_velocity(velocity.y * 0.4)
+			jumping = false
+			if currentPlatform != null: 
+				currentPlatform.unboost()
+				currentPlatform = null
+		if Input.is_action_just_pressed("misc"): 
+			Global.easy = !Global.easy
+			Global.shame = true
+			fuelThreshold = 0 if Global.easy else 5
+		if Input.is_action_just_pressed("item") and hasItem:
+			$Item.get_child(0).use()
+			change_item(false)
+	else:
+		if is_on_floor(): velocity.x = 0
 	if Input.is_action_pressed("shoot") and weaponCooldown <= 0:
 		var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()
 		$Projectiles.add_child(shot)
 		
 		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE, $Weapon.get_child(weaponIndex).PIERCE)
 		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
-	if Input.is_action_just_pressed("misc"): 
-		Global.easy = !Global.easy
-		Global.shame = true
-		fuelThreshold = 0 if Global.easy else 5
-	if Input.is_action_just_pressed("item") and hasItem:
-		$Item.get_child(0).use()
-		change_item(false)
+		if mobile:
+			if get_global_mouse_position().y > global_position.y: launching = true
+			if launching or !is_on_floor(): velocity = $Weapon.get_child(weaponIndex).shot_boost(get_global_mouse_position(), global_position, is_on_floor())
+	
 	if invulnerable:
 		currentInvuln -= delta
 		if currentInvuln <= 0:
 			set_invuln(false)
-			currentInvuln = INVULN_TIME
+	
 	move_and_slide()
 
 func set_platform():
@@ -177,6 +193,7 @@ func heal(amount):
 	UI.update_health(health, true)
 
 func set_invuln(isInvuln):
+	if isInvuln: currentInvuln = INVULN_TIME
 	collision_layer -= 1 if isInvuln else -1
 	invulnerable = isInvuln
 
@@ -191,6 +208,7 @@ func plat_drop():
 	currentPlatform = null
 
 func launch(boomPos): #from an explosion
+	launching = true
 	velocity.y = 0
 	var direction = (position - boomPos).normalized()
 	velocity = 750 * direction

@@ -14,7 +14,7 @@ var boostTimer := BOOST_DEFAULT
 
 func _physics_process(delta):
 	move_and_slide()
-	if camera and global_position.y > camera.get_screen_center_position().y + 375 and velocity.y >= 0:
+	if camera and global_position.y > camera.get_screen_center_position().y + 450 and velocity.y >= 0:
 		if velocity.y <= DEFAULT_VELOCITY: velocity.y = 0
 		killTimerSet = true
 		#queue_free()
