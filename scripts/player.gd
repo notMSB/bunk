@@ -15,6 +15,7 @@ const BOTTOM_MOD := 200
 @export var mobile := false
 var launching := false
 var crouched := false
+var fastfalling := false
 
 var health := 3
 
@@ -64,10 +65,11 @@ func _physics_process(delta):
 		take_damage(false, 1, true)
 		change_fuel(-5 * fuelThreshold)
 	if !is_on_floor():
-		if crouched: uncrouch()
+		if crouched and !fastfalling: uncrouch()
 		change_velocity(velocity.y + gravity * delta)
 		if currentCoyote > 0: currentCoyote -= 1
 	else:
+		fastfalling = false
 		currentCoyote = COYOTE_TIME
 		set_platform() #Set a platform which descends when jumping off
 		if currentPlatform and velocity.y == 0: change_velocity(currentPlatform.velocity.y)
@@ -170,12 +172,16 @@ func jump():
 		velocity.x *= 1.4
 		change_fuel(-1 * fuelThreshold)
 		jumping = true
+		fastfalling = false
 
 func crouch():
 	scale.y = .5
-	position.y += CROUCH_DIFF
 	crouched = true
-	if !is_on_floor(): velocity.y = max(velocity.y, 600) #fastfall
+	if !is_on_floor(): 
+		velocity.y = max(velocity.y, 600) #fastfall
+		fastfalling = true
+		position.y -= CROUCH_DIFF
+	else: position.y += CROUCH_DIFF
 
 func uncrouch(adjust = true):
 	crouched = false
