@@ -153,7 +153,9 @@ func set_platform():
 
 func jump():
 	if crouched:
-		if is_on_floor(): plat_drop()
+		if is_on_floor(): 
+			plat_drop()
+			return
 		uncrouch(false)
 	else:
 		if currentCoyote > 0:
@@ -161,12 +163,13 @@ func jump():
 			change_velocity(JUMP_VELOCITY)
 			if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
 			jumping = true
-		elif fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
-			currentAirJumps += 1
-			change_velocity(JUMP_VELOCITY/1.15)
-			velocity.x *= 1.4
-			change_fuel(-1 * fuelThreshold)
-			jumping = true
+			return
+	if fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
+		currentAirJumps += 1
+		change_velocity(JUMP_VELOCITY/1.15)
+		velocity.x *= 1.4
+		change_fuel(-1 * fuelThreshold)
+		jumping = true
 
 func crouch():
 	crouched = true
