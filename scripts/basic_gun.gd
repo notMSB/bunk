@@ -12,6 +12,9 @@ var currentReset := .0
 const MAX_DRIFT := 13.5
 var drift := .0
 
+func get_pierce():
+	return PIERCE
+
 func _process(delta):
 	currentReset -= delta
 	if currentReset <= 0: drift = 0

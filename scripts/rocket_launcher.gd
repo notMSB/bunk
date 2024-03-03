@@ -5,6 +5,11 @@ extends Node2D
 const COOLDOWN = .35
 const DAMAGE = 10
 const PIERCE := .0
+const ALT_PIERCE := .05
+
+func get_pierce():
+	if get_parent().get_parent().crouched: return ALT_PIERCE
+	return PIERCE
 
 func shot_boost(mousePos, playerPos, grounded):
 	var force = 500 if grounded else 400

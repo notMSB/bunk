@@ -14,6 +14,7 @@ const BOTTOM_MOD := 200
 
 @export var mobile := false
 var launching := false
+var crouched := false
 
 var health := 3
 
@@ -80,17 +81,8 @@ func _physics_process(delta):
 			weaponIndex += 1
 			if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
 			weaponCooldown = .1
-		if Input.is_action_just_pressed("down"):
-			scale.y = .5
-			position.y += CROUCH_DIFF
-			if is_on_floor(): plat_drop()
-			else: velocity.y = max(velocity.y, 600) #fastfall
-		#if Input.is_action_pressed("down"):
-
-		if Input.is_action_just_released("down"):
-			scale.y = 1
-			position.y -= CROUCH_DIFF
-		#if Input.is_action_pressed("down") and is_on_floor(): jumpBoost -= 2
+		if Input.is_action_just_pressed("down") and !crouched: crouch()
+		if Input.is_action_just_released("down") and crouched: uncrouch()
 		
 		#Controller support, right stick mouse movement
 		var mouseSens := 3000.0
@@ -134,7 +126,7 @@ func _physics_process(delta):
 		var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()
 		$Projectiles.add_child(shot)
 		
-		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE, $Weapon.get_child(weaponIndex).PIERCE)
+		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE, $Weapon.get_child(weaponIndex).get_pierce())
 		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
 		if mobile:
 			if get_global_mouse_position().y > global_position.y: launching = true
@@ -160,17 +152,32 @@ func set_platform():
 				currentPlatform = null
 
 func jump():
-	if currentCoyote > 0:
-		currentCoyote = 0
-		change_velocity(JUMP_VELOCITY)
-		if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
-		jumping = true
-	elif fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
-		currentAirJumps += 1
-		change_velocity(JUMP_VELOCITY/1.15)
-		velocity.x *= 1.4
-		change_fuel(-1 * fuelThreshold)
-		jumping = true
+	if crouched:
+		if is_on_floor(): plat_drop()
+		uncrouch(false)
+	else:
+		if currentCoyote > 0:
+			currentCoyote = 0
+			change_velocity(JUMP_VELOCITY)
+			if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
+			jumping = true
+		elif fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
+			currentAirJumps += 1
+			change_velocity(JUMP_VELOCITY/1.15)
+			velocity.x *= 1.4
+			change_fuel(-1 * fuelThreshold)
+			jumping = true
+
+func crouch():
+	crouched = true
+	scale.y = .5
+	position.y += CROUCH_DIFF
+	if !is_on_floor(): velocity.y = max(velocity.y, 600) #fastfall
+
+func uncrouch(adjust = true):
+	crouched = false
+	scale.y = 1
+	if adjust: position.y -= CROUCH_DIFF
 
 func change_item(change):
 	hasItem = change
@@ -193,9 +200,10 @@ func heal(amount):
 	UI.update_health(health, true)
 
 func set_invuln(isInvuln):
-	if isInvuln: currentInvuln = INVULN_TIME
-	collision_layer -= 1 if isInvuln else -1
-	invulnerable = isInvuln
+	if invulnerable and isInvuln: currentInvuln = INVULN_TIME
+	else:
+		collision_layer -= 1 if isInvuln else -1
+		invulnerable = isInvuln
 
 func die():
 	var runScore = UI.get_height()
@@ -204,6 +212,7 @@ func die():
 	get_tree().call_deferred("reload_current_scene")
 
 func plat_drop():
+	uncrouch()
 	position.y += 4
 	currentPlatform = null
 
