@@ -22,7 +22,7 @@ var healthWeight := 0
 var fuelWeight := 0
 var grenadeWeight := 0
 
-const CROUCH_DIFF := 15 #adjusting player position on crouch/uncrouch to prevent going airborne
+const CROUCH_DIFF := 17 #adjusting player position on crouch/uncrouch to prevent going airborne
 
 const BASE_KNOCKBACK = 700 #for when the player takes damage
 const BIG_KNOCKBACK = -800 #for when the player is hit by the boss or falls off the bottom
@@ -64,6 +64,7 @@ func _physics_process(delta):
 		take_damage(false, 1, true)
 		change_fuel(-5 * fuelThreshold)
 	if !is_on_floor():
+		if crouched: uncrouch()
 		change_velocity(velocity.y + gravity * delta)
 		if currentCoyote > 0: currentCoyote -= 1
 	else:
@@ -156,7 +157,6 @@ func jump():
 		if is_on_floor(): 
 			plat_drop()
 			return
-		uncrouch(false)
 	else:
 		if currentCoyote > 0:
 			currentCoyote = 0
@@ -172,9 +172,9 @@ func jump():
 		jumping = true
 
 func crouch():
-	crouched = true
 	scale.y = .5
 	position.y += CROUCH_DIFF
+	crouched = true
 	if !is_on_floor(): velocity.y = max(velocity.y, 600) #fastfall
 
 func uncrouch(adjust = true):
@@ -215,7 +215,6 @@ func die():
 	get_tree().call_deferred("reload_current_scene")
 
 func plat_drop():
-	uncrouch()
 	position.y += 4
 	currentPlatform = null
 
