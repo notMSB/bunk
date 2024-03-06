@@ -13,6 +13,12 @@ const BOTTOM_MOD := 200
 #var jumpBoost = 0
 
 @export var mobile := false
+var startingLaunchPos := Vector2(0,0)
+var currentLaunchPos := Vector2(0,0)
+const MINIMUM_LAUNCH := 30
+const MAXIMUM_LAUNCH := 400
+const LAUNCH_MULTIPLIER := 3
+
 var launching := false
 var crouched := false
 var fastfalling := false
@@ -58,7 +64,6 @@ func _ready():
 	fuelThreshold = 0 if Global.easy else 5
 
 func _physics_process(delta):
-	if launching and velocity.y >= 0: launching = false
 	UI.set_height(position.y)
 	weaponCooldown = max(weaponCooldown - delta, 0)
 	if position.y > $Camera2D.get_screen_center_position().y - $Camera2D.offset.y + BOTTOM_MOD: 
@@ -75,65 +80,9 @@ func _physics_process(delta):
 		if currentPlatform and velocity.y == 0: change_velocity(currentPlatform.velocity.y)
 		currentAirJumps = 0
 		UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
-	if !mobile:
-		if Input.is_action_just_pressed("swap_up"):
-			weaponIndex -= 1
-			if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
-			weaponCooldown = .1
-		if Input.is_action_just_pressed("swap_down"):
-			weaponIndex += 1
-			if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
-			weaponCooldown = .1
-		if Input.is_action_just_pressed("down") and !crouched: crouch()
-		if Input.is_action_just_released("down") and crouched: uncrouch()
-		
-		#Controller support, right stick mouse movement
-		var mouseSens := 3000.0
-		var mouseDir : Vector2
-		var movement : Vector2
-		
-		mouseDir.x = Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left")
-		mouseDir.y = Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
-		
-		if abs(mouseDir.x) == 1 and abs(mouseDir.y) == 1: mouseDir = mouseDir.normalized()
-		movement = mouseSens * mouseDir * delta
-		if movement: get_viewport().warp_mouse(get_viewport().get_mouse_position() + movement)
-		
-		var direction = Input.get_axis("ui_left", "ui_right")
-		#var speedVal = max(SPEED, abs(velocity.x)-5)
-		var speedVal = max(SPEED, abs(velocity.x)-5) if direction * velocity.x > 0 else SPEED
-		if direction:
-			velocity.x = direction * speedVal
-		else:
-			if is_on_floor():
-				velocity.x = move_toward(velocity.x, 0, SPEED)
-			else:
-				velocity.x = move_toward(velocity.x, 0, 30)
-		if Input.is_action_just_pressed("jump"): jump()
-		if Input.is_action_just_released("jump") and velocity.y < 0 and jumping: 
-			change_velocity(velocity.y * 0.4)
-			jumping = false
-			if currentPlatform != null: 
-				currentPlatform.unboost()
-				currentPlatform = null
-		if Input.is_action_just_pressed("misc"): 
-			Global.easy = !Global.easy
-			Global.shame = true
-			fuelThreshold = 0 if Global.easy else 5
-		if Input.is_action_just_pressed("item") and hasItem:
-			$Item.get_child(0).use()
-			change_item(false)
-	else:
-		if is_on_floor(): velocity.x = 0
-	if Input.is_action_pressed("shoot") and weaponCooldown <= 0:
-		var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()
-		$Projectiles.add_child(shot)
-		
-		shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE, $Weapon.get_child(weaponIndex).get_pierce())
-		weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
-		if mobile:
-			if get_global_mouse_position().y > global_position.y: launching = true
-			if launching or !is_on_floor(): velocity = $Weapon.get_child(weaponIndex).shot_boost(get_global_mouse_position(), global_position, is_on_floor())
+	
+	if !mobile: classic_process(delta)
+	else: mobile_process()
 	
 	if invulnerable:
 		currentInvuln -= delta
@@ -141,6 +90,86 @@ func _physics_process(delta):
 			set_invuln(false)
 	
 	move_and_slide()
+
+func classic_process(delta):
+	if launching and velocity.y >= 0: launching = false
+	if Input.is_action_just_pressed("swap_up"):
+			weaponIndex -= 1
+			if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
+			weaponCooldown = .1
+	if Input.is_action_just_pressed("swap_down"):
+		weaponIndex += 1
+		if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
+		weaponCooldown = .1
+	if Input.is_action_just_pressed("down") and !crouched: crouch()
+	if Input.is_action_just_released("down") and crouched: uncrouch()
+	
+	#Controller support, right stick mouse movement
+	var mouseSens := 3000.0
+	var mouseDir : Vector2
+	var movement : Vector2
+	
+	mouseDir.x = Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left")
+	mouseDir.y = Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
+	
+	if abs(mouseDir.x) == 1 and abs(mouseDir.y) == 1: mouseDir = mouseDir.normalized()
+	movement = mouseSens * mouseDir * delta
+	if movement: get_viewport().warp_mouse(get_viewport().get_mouse_position() + movement)
+	
+	var direction = Input.get_axis("ui_left", "ui_right")
+	#var speedVal = max(SPEED, abs(velocity.x)-5)
+	var speedVal = max(SPEED, abs(velocity.x)-5) if direction * velocity.x > 0 else SPEED
+	if direction:
+		velocity.x = direction * speedVal
+	else:
+		if is_on_floor():
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+		else:
+			velocity.x = move_toward(velocity.x, 0, 30)
+	if Input.is_action_just_pressed("jump"): jump()
+	if Input.is_action_just_released("jump") and velocity.y < 0 and jumping: 
+		change_velocity(velocity.y * 0.4)
+		jumping = false
+		if currentPlatform != null: 
+			currentPlatform.unboost()
+			currentPlatform = null
+	if Input.is_action_just_pressed("misc"): 
+		Global.easy = !Global.easy
+		Global.shame = true
+		fuelThreshold = 0 if Global.easy else 5
+	if Input.is_action_just_pressed("item") and hasItem:
+		$Item.get_child(0).use()
+		change_item(false)
+	if Input.is_action_pressed("shoot") and weaponCooldown <= 0:
+		fire_weapon()
+
+func mobile_process():
+	if is_on_floor():
+		velocity.x = 0
+		if launching: launching = false
+	if Input.is_action_just_pressed("shoot"):
+		startingLaunchPos = get_global_mouse_position()
+		currentLaunchPos = startingLaunchPos
+	elif Input.is_action_pressed("shoot"):
+		currentLaunchPos = get_global_mouse_position()
+		var direction = (currentLaunchPos - startingLaunchPos).normalized()
+		$Line.rotation = direction.angle() - Vector2.DOWN.angle()
+		var length = min(startingLaunchPos.distance_to(currentLaunchPos), MAXIMUM_LAUNCH)
+		$Line.scale.y = length / 8.0 #length of the sprite used for the line currently
+	if Input.is_action_just_released("shoot") and weaponCooldown <= 0:
+		fire_weapon()
+		
+		var force = min(startingLaunchPos.distance_to(currentLaunchPos), MAXIMUM_LAUNCH)
+		if force > MINIMUM_LAUNCH: #minimum drag distance for launch
+			launching = true
+			velocity = $Weapon.get_child(weaponIndex).shot_boost(get_global_mouse_position(), global_position, force * LAUNCH_MULTIPLIER)
+
+func fire_weapon():
+	var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()
+	$Projectiles.add_child(shot)
+	
+	shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE, $Weapon.get_child(weaponIndex).get_pierce())
+	weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
 
 func set_platform():
 	for i in get_slide_collision_count():

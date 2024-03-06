@@ -11,7 +11,6 @@ func get_pierce():
 	if get_parent().get_parent().crouched: return ALT_PIERCE
 	return PIERCE
 
-func shot_boost(mousePos, playerPos, grounded):
-	var force = 500 if grounded else 400
+func shot_boost(mousePos, playerPos, force):
 	var direction = (playerPos - mousePos).normalized()
 	return Vector2(force, force) * direction

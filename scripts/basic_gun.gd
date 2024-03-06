@@ -25,6 +25,6 @@ func set_reset():
 func increase_drift(amount):
 	drift = min(drift + amount, MAX_DRIFT)
 
-func shot_boost(mousePos, playerPos):
+func shot_boost(mousePos, playerPos, force):
 	var direction = (playerPos - mousePos).normalized()
-	return Vector2(500, 500) * direction
+	return Vector2(force, force) * direction

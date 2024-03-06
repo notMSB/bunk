@@ -103,6 +103,6 @@ func take_damage(amount):
 
 func _on_contact_damage_body_entered(body):
 	if $ContactDamage.visible and body.collision_layer == 65: #damage player
-		var left := false if body.position.x > position.x else true
+		var knockbackDir := false if body.position.x > position.x else true
 		if body.launching: take_damage(health) #a boosting player damages enemies
-		else: body.take_damage(left)
+		else: body.take_damage(knockbackDir)
