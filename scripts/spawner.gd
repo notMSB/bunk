@@ -16,6 +16,7 @@ const VERT_MOD := 400
 const HORIZ_MOD := 600
 
 const TOP_SPAWN := 500
+var topSpawnMod = TOP_SPAWN
 
 const TIMER_LIST := [[0, 1.3], [500, 1.3], [2000, 1.2], [5000, 1.1], [8000, 1.0], [11000, 0.9]]
 var timerIndex := 0
@@ -34,6 +35,7 @@ var offscreenSpawns = 0
 
 func _ready():
 	enemyScenes = [Swarmer, Clam, Shrimp, Enemy]
+	topSpawnMod = TOP_SPAWN / CAMERA.zoom.y
 
 func spawn_boss():
 	spawn(CAMERA.get_screen_center_position(), true, true)
@@ -74,8 +76,8 @@ func check_height_table(): #todo: optimize, should not calculate every frame
 	if UI.paused: platformFrequency *= .33
 
 func set_spawns():
-	var screenX : int = ProjectSettings.get_setting("display/window/size/viewport_width")
-	var screenY : int = ProjectSettings.get_setting("display/window/size/viewport_height")
+	var screenX : int = ProjectSettings.get_setting("display/window/size/viewport_width") / CAMERA.zoom.x
+	var screenY : int = ProjectSettings.get_setting("display/window/size/viewport_height") / CAMERA.zoom.y
 	
 	spawn(CAMERA.get_screen_center_position(), true)
 	spawn(Vector2(CAMERA.get_screen_center_position().x - screenX, CAMERA.get_screen_center_position().y))
@@ -109,7 +111,7 @@ func spawn(center, original = false, boss = false):
 					break
 	add_child(newSpawn)
 	if isItem:
-		var yPos : float = center.y - VERT_BASE - randi() % (VERT_MOD)
+		var yPos : float = center.y - (VERT_BASE / CAMERA.zoom.y) - randi() % (VERT_MOD)
 		var rando = randi() % 2
 		if rando == 0:
 			newSpawn.global_position = Vector2(center.x - HORIZ_MOD, yPos)
@@ -119,5 +121,6 @@ func spawn(center, original = false, boss = false):
 			newSpawn.velocity.x = -100
 	else:
 		var xPos : float = center.x + specificHoriz - randi() % (specificHoriz * 2)
-		newSpawn.global_position = Vector2(xPos, center.y - TOP_SPAWN)
+		newSpawn.global_position = Vector2(xPos, center.y - topSpawnMod)
+	if PLAYER.mobile: newSpawn.scale *= 2
 	newSpawn.setup(CAMERA, PLAYER)

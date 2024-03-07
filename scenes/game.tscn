@@ -96,6 +96,15 @@ offset_top = 621.0
 offset_right = 319.0
 offset_bottom = 648.0
 value = 75.0
+show_percentage = false
+
+[node name="Text" type="Label" parent="UI/FuelBar"]
+layout_mode = 0
+offset_right = 261.0
+offset_bottom = 23.0
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BossBar" type="ProgressBar" parent="UI"]
 visible = false

@@ -8,6 +8,8 @@ var player : CharacterBody2D
 const COOLDOWN := 1.4
 var shotCooldown := COOLDOWN
 var flipped := false
+var xScale := 1
+var yScale := 1
 
 func _process(delta):
 	flip(enemy.global_position.x > player.global_position.x)
@@ -22,15 +24,17 @@ func _process(delta):
 
 func flip(playerLeft):
 	if playerLeft and !flipped:
-		enemy.scale = Vector2(-1, 1)
+		enemy.scale = Vector2(-1 * xScale, yScale)
 		flipped = true
-		enemy.get_node("UI").scale = Vector2(-1, 1)
+		enemy.get_node("UI").scale = Vector2(-1 * xScale, yScale)
 	elif !playerLeft and flipped:
-		enemy.scale = Vector2(-1, -1)
+		enemy.scale = Vector2(- 1 * xScale, -1 * yScale)
 		flipped = false
-		enemy.get_node("UI").scale = Vector2(1, 1)
+		enemy.get_node("UI").scale = Vector2(xScale, yScale)
 	#else:
 	#	enemy.scale = Vector2(1, 1)
 
 func setup(p):
+	xScale = enemy.scale.x
+	yScale = enemy.scale.y
 	player = p

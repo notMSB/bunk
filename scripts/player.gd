@@ -7,7 +7,7 @@ const JUMP_VELOCITY := -725.0
 
 const PLATFORM_LAYER := 16
 
-const BOTTOM_MOD := 200
+const BOTTOM_MOD := 125
 
 #const BOOSTLIMIT = -200
 #var jumpBoost = 0
@@ -16,8 +16,9 @@ const BOTTOM_MOD := 200
 var startingLaunchPos := Vector2(0,0)
 var currentLaunchPos := Vector2(0,0)
 const MINIMUM_LAUNCH := 30
-const MAXIMUM_LAUNCH := 400
+const MAXIMUM_LAUNCH := 300
 const LAUNCH_MULTIPLIER := 3
+var fuelTick := false
 
 var launching := false
 var crouched := false
@@ -66,7 +67,7 @@ func _ready():
 func _physics_process(delta):
 	UI.set_height(position.y)
 	weaponCooldown = max(weaponCooldown - delta, 0)
-	if position.y > $Camera2D.get_screen_center_position().y - $Camera2D.offset.y + BOTTOM_MOD: 
+	if position.y > $Camera2D.get_screen_center_position().y - (($Camera2D.offset.y - BOTTOM_MOD) / $Camera2D.zoom.y): 
 		take_damage(false, 1, true)
 		change_fuel(-5 * fuelThreshold)
 	if !is_on_floor():
@@ -77,7 +78,8 @@ func _physics_process(delta):
 		fastfalling = false
 		currentCoyote = COYOTE_TIME
 		set_platform() #Set a platform which descends when jumping off
-		if currentPlatform and velocity.y == 0: change_velocity(currentPlatform.velocity.y)
+		if is_instance_valid(currentPlatform):
+			if velocity.y == 0: change_velocity(currentPlatform.velocity.y)
 		currentAirJumps = 0
 		UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 	
@@ -144,6 +146,13 @@ func classic_process(delta):
 		fire_weapon()
 
 func mobile_process():
+	if fuelTick == false: fuelTick = true
+	elif fuel > 100: 
+		change_fuel(-1)
+		fuelTick = false
+	elif fuel < 100 and is_on_floor():
+		change_fuel(1)
+		fuelTick = false
 	if is_on_floor():
 		velocity.x = 0
 		if launching: launching = false
@@ -156,13 +165,14 @@ func mobile_process():
 		$Line.rotation = direction.angle() - Vector2.DOWN.angle()
 		var length = min(startingLaunchPos.distance_to(currentLaunchPos), MAXIMUM_LAUNCH)
 		$Line.scale.y = length / 8.0 #length of the sprite used for the line currently
-	if Input.is_action_just_released("shoot") and weaponCooldown <= 0:
+	if Input.is_action_just_released("shoot") and weaponCooldown <= 50:
 		fire_weapon()
-		
 		var force = min(startingLaunchPos.distance_to(currentLaunchPos), MAXIMUM_LAUNCH)
+		if fuel * 10 < force: force = fuel * 10
 		if force > MINIMUM_LAUNCH: #minimum drag distance for launch
+			change_fuel(ceil(-1 * force / 10))
 			launching = true
-			velocity = $Weapon.get_child(weaponIndex).shot_boost(get_global_mouse_position(), global_position, force * LAUNCH_MULTIPLIER)
+			velocity = $Weapon.get_child(weaponIndex).shot_boost(currentLaunchPos, startingLaunchPos, force * LAUNCH_MULTIPLIER)
 
 func fire_weapon():
 	var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()
@@ -222,7 +232,8 @@ func change_item(change):
 	UI.set_item(hasItem)
 
 func change_fuel(change):
-	fuel = min(fuel + change, 100)
+	if mobile: fuel = max(fuel + change, 0)
+	else: fuel = clamp(fuel + change, 0, 100)
 	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 
 func take_damage(goLeft, _damage = 0, bigHit = false):

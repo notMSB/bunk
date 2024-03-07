@@ -37,7 +37,10 @@ func get_height() -> int:
 	return int($Height/Current.text)
 
 func set_fuel(value, threshold, jumps, maxJumps):
+	if value > 100: $FuelBar.max_value = value
+	elif $FuelBar.max_value > 100: $FuelBar.max_value = 100
 	$FuelBar.value = value
+	$FuelBar/Text.text = str(value)
 	if value < threshold or jumps >= maxJumps: $FuelBar.modulate = Color(1,0,0,1)
 	elif value < threshold*2 or jumps == maxJumps - 1: $FuelBar.modulate = Color(1,1,0,1)
 	else: $FuelBar.modulate = Color(1,1,1,1)

@@ -4,7 +4,7 @@ extends Node2D
 
 func use():
 	var boom = Explosion.instantiate()
-	add_child(boom)
+	call_deferred("add_child", boom)
 	boom.scale = Vector2(2.5,2.5)
 	boom.position = position
 	boom.setup(25, null)

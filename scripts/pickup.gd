@@ -34,19 +34,27 @@ func get_health_weight():
 	else: return 15
 
 func get_fuel_weight():
+	if player.mobile: return 100
 	if player.fuel < 10: return 100
-	elif player.fuel < 50: return 60
-	elif player.fuel < 75: return 40
-	elif player.fuel < 100: return 10
-	else: return 0
+	if player.fuel < 50: return 60
+	if player.fuel < 75: return 40
+	if player.fuel < 100: return 10
+	return 0
 
 func get_grenade_weight():
+	if player.mobile: return 50
 	if player.hasItem == false: return 60
 	else: return 20
 
 func _on_body_entered(_body):
-	match dIndex:
-		d.fuel: player.change_fuel(25)
-		d.health: player.heal(1)
-		d.grenade: player.change_item(true)
+	if player.mobile:
+		match dIndex:
+			d.fuel: player.change_fuel(100)
+			d.health: player.heal(1)
+			d.grenade: player.get_node("Item").get_child(0).use()
+	else:
+		match dIndex:
+			d.fuel: player.change_fuel(25)
+			d.health: player.heal(1)
+			d.grenade: player.change_item(true)
 	queue_free()
