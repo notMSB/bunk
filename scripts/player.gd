@@ -15,8 +15,8 @@ const BOTTOM_MOD := 125
 @export var mobile := false
 var startingLaunchPos := Vector2(0,0)
 var currentLaunchPos := Vector2(0,0)
-const MINIMUM_LAUNCH := 30
-const MAXIMUM_LAUNCH := 300
+const MINIMUM_LAUNCH := 20
+const MAXIMUM_LAUNCH := 250
 const LAUNCH_MULTIPLIER := 3
 var fuelTick := false
 
@@ -61,6 +61,7 @@ var currentPlatform : CharacterBody2D = null
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
+	if mobile: $Camera2D.zoom = Vector2(1,1)
 	Global.shame = Global.easy
 	fuelThreshold = 0 if Global.easy else 5
 
@@ -162,17 +163,22 @@ func mobile_process():
 	elif Input.is_action_pressed("shoot"):
 		currentLaunchPos = get_global_mouse_position()
 		var direction = (currentLaunchPos - startingLaunchPos).normalized()
+		$Line.visible = true
 		$Line.rotation = direction.angle() - Vector2.DOWN.angle()
 		var length = min(startingLaunchPos.distance_to(currentLaunchPos), MAXIMUM_LAUNCH)
 		$Line.scale.y = length / 8.0 #length of the sprite used for the line currently
-	if Input.is_action_just_released("shoot") and weaponCooldown <= 50:
-		fire_weapon()
-		var force = min(startingLaunchPos.distance_to(currentLaunchPos), MAXIMUM_LAUNCH)
-		if fuel * 10 < force: force = fuel * 10
-		if force > MINIMUM_LAUNCH: #minimum drag distance for launch
-			change_fuel(ceil(-1 * force / 10))
-			launching = true
-			velocity = $Weapon.get_child(weaponIndex).shot_boost(currentLaunchPos, startingLaunchPos, force * LAUNCH_MULTIPLIER)
+	if Input.is_action_just_released("shoot"): 
+		$Line.visible = false
+		if weaponCooldown <= 0:
+			fire_weapon()
+			var force = min(startingLaunchPos.distance_to(currentLaunchPos), MAXIMUM_LAUNCH)
+			if fuel * 10 < force: 
+				force = fuel * 10
+				if force == 0: velocity.x = 0
+			if force > MINIMUM_LAUNCH: #minimum drag distance for launch
+				change_fuel(ceil(-1 * force / 10))
+				launching = true
+				velocity = $Weapon.get_child(weaponIndex).shot_boost(currentLaunchPos, startingLaunchPos, force * LAUNCH_MULTIPLIER)
 
 func fire_weapon():
 	var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()

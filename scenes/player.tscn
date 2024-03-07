@@ -50,5 +50,6 @@ script = ExtResource("7_bquw6")
 Explosion = ExtResource("8_2i5iv")
 
 [node name="Line" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("9_d85gv")
 centered = false
