@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const DEFAULT_VELOCITY := 60
 
+var player : CharacterBody2D
 var camera : Camera2D
 
 var isPlatform := false
@@ -41,6 +42,7 @@ func _physics_process(delta):
 
 func setup(cam, p):
 	camera = cam
+	player = p
 	$AI.setup(p)
 
 func change():
@@ -54,10 +56,10 @@ func change():
 	set_collision_layer_value(2, 0)
 	set_collision_mask_value(1, 0)
 	$ContactDamage.visible = false
+	if Global.useMobile: scale.x *= 2
 	
 	if get_node_or_null("Platforms"): multi_platform()
 	else: single_platform()
-	
 
 func single_platform():
 	$PlatformBody.visible = true

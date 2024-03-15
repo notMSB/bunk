@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://i7bg5w3r2cbx"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_gws6m"]
+
+[node name="Menu" type="Node2D"]
+script = ExtResource("1_gws6m")
+
+[node name="Classic" type="Button" parent="."]
+offset_left = 404.0
+offset_top = 118.0
+offset_right = 632.0
+offset_bottom = 246.0
+text = "Classic"
+
+[node name="Mobile" type="Button" parent="."]
+offset_left = 404.0
+offset_top = 375.0
+offset_right = 632.0
+offset_bottom = 503.0
+text = "Mobile"
+
+[connection signal="pressed" from="Classic" to="." method="_on_classic_pressed"]
+[connection signal="pressed" from="Mobile" to="." method="_on_mobile_pressed"]

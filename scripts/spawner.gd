@@ -98,6 +98,7 @@ func spawn(center, original = false, boss = false):
 		if original: platSpawnCounter +=1
 		if platSpawnCounter >= platformFrequency and original: 
 			newSpawn = ItemPlatform.instantiate()
+			if PLAYER.mobile: newSpawn.scale.x *= 2
 			platSpawnCounter = 0
 			isItem = true
 		else:
@@ -122,5 +123,5 @@ func spawn(center, original = false, boss = false):
 	else:
 		var xPos : float = center.x + specificHoriz - randi() % (specificHoriz * 2)
 		newSpawn.global_position = Vector2(xPos, center.y - topSpawnMod)
-	if PLAYER.mobile: newSpawn.scale *= 2
+	#if PLAYER.mobile: newSpawn.scale *= 2
 	newSpawn.setup(CAMERA, PLAYER)

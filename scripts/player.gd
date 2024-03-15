@@ -12,7 +12,7 @@ const BOTTOM_MOD := 125
 #const BOOSTLIMIT = -200
 #var jumpBoost = 0
 
-@export var mobile := false
+var mobile : bool = Global.useMobile
 var startingLaunchPos := Vector2(0,0)
 var currentLaunchPos := Vector2(0,0)
 const MINIMUM_LAUNCH := 20

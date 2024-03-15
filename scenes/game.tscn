@@ -144,7 +144,6 @@ ItemPlatform = ExtResource("8_abx8m")
 
 [node name="Player" parent="." instance=ExtResource("1_5bqmq")]
 position = Vector2(587, 586)
-mobile = true
 
 [node name="Floor" type="StaticBody2D" parent="."]
 z_index = 1

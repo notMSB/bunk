@@ -2,7 +2,6 @@ extends "res://scripts/enemy.gd"
 
 @onready var bar := get_node("../../UI/BossBar")
 @onready var barText := get_node("../../UI/BossBar/Text")
-var player : CharacterBody2D
 #var playerY : float
 
 const THRESHOLD := 50
