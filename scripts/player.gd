@@ -62,8 +62,10 @@ var grenadeWeight := 0
 
 const CROUCH_DIFF := 17 #adjusting player position on crouch/uncrouch to prevent going airborne
 
-const BASE_KNOCKBACK = 700 #for when the player takes damage
-const BIG_KNOCKBACK = -800 #for when the player is hit by the boss or falls off the bottom
+const BASE_KNOCKBACK_X 	= 700 #for when the player takes damage
+const BASE_KNOCKBACK_Y 	= 1150 #700 #for when the player takes damage
+const BIG_KNOCKBACK_X 	= 800 #for when the player is hit by the boss or falls off the bottom
+const BIG_KNOCKBACK_Y 	= -1300 #800 #for when the player is hit by the boss or falls off the bottom
 
 const MAX_FUEL := 100
 var fuelThreshold := 5
@@ -437,8 +439,8 @@ func take_damage(goLeft, _damage = 0, bigHit = false):
 	health -= 1
 	if health <= 0: die()
 	UI.update_health(health, false)
-	if bigHit: change_velocity(BIG_KNOCKBACK)
-	else: velocity.x = BASE_KNOCKBACK * -1 if goLeft else BASE_KNOCKBACK
+	if bigHit: change_velocity(BIG_KNOCKBACK_Y)
+	else: velocity.x = -BASE_KNOCKBACK_X if goLeft else BASE_KNOCKBACK_X
 	set_invuln(true)
 
 func heal(amount):
