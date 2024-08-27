@@ -42,7 +42,11 @@ func spawn_boss():
 
 func _process(delta):
 	height = UI.get_height()
+	
+	# Update spawning parameters
 	check_height_table()
+	
+	# Spawn enemies every so often using a timer
 	timer -= delta
 	if timer <= 0:
 		set_spawns()
@@ -76,12 +80,20 @@ func check_height_table(): #todo: optimize, should not calculate every frame
 	if UI.paused: platformFrequency *= .33
 
 func set_spawns():
+	
+	# Get screen position
 	var screenX : int = ProjectSettings.get_setting("display/window/size/viewport_width") / CAMERA.zoom.x
 	var screenY : int = ProjectSettings.get_setting("display/window/size/viewport_height") / CAMERA.zoom.y
 	
+	
+	# handle Spawning of item pickup
 	spawn(CAMERA.get_screen_center_position(), true)
+	
+	# Spawn enemies
 	spawn(Vector2(CAMERA.get_screen_center_position().x - screenX, CAMERA.get_screen_center_position().y))
 	spawn(Vector2(CAMERA.get_screen_center_position().x + screenX, CAMERA.get_screen_center_position().y))
+	
+	# Spawn enemies off screen
 	offscreenSpawns +=1
 	if offscreenSpawns > OFFSCREEN_LOOP: 
 		offscreenSpawns = 0
@@ -93,24 +105,35 @@ func spawn(center, original = false, boss = false):
 	
 	var specificHoriz : int = HORIZ_MOD if original else HORIZ_MOD / 2
 	
+	# spawn Boss
 	if boss: newSpawn = Boss.instantiate()
 	else:
 		if original: platSpawnCounter +=1
+		
+		# spawn item platform
 		if platSpawnCounter >= platformFrequency and original: 
 			newSpawn = ItemPlatform.instantiate()
 			if PLAYER.mobile: newSpawn.scale.x *= 2
 			platSpawnCounter = 0
 			isItem = true
+		# Spawn enemy
 		else:
+			# Figure out what enemy to spawn based on spawning chances of each enemy
 			var totalOdds := 0
 			for i in enemyOdds: totalOdds += i
 			var enemyRando := randi() % totalOdds
 			for i in enemyScenes.size():
 				enemyRando -= enemyOdds[i]
+				
+				# Actually spawn enemy
 				if enemyRando < 0:
 					newSpawn = enemyScenes[i].instantiate()
 					break
+	
+	
 	add_child(newSpawn)
+	
+	# Set up item spawn post-creation
 	if isItem:
 		var yPos : float = center.y - (VERT_BASE / CAMERA.zoom.y) - randi() % (VERT_MOD)
 		var rando = randi() % 2

@@ -14,6 +14,8 @@ const SPEED_RAMP := .001
 const MAX_SPEED := 1.6
 var speed := BASE_SPEED
 
+
+
 func _ready():
 	nextCheck = health - THRESHOLD
 	bar.max_value = health
@@ -49,6 +51,19 @@ func take_damage(amount):
 		change()
 		bar.visible = false
 		get_node("../../UI").unpause(player.position.y)
+		
+		# Spawn weapon pickup
+		var _pickup = load("res://scenes/weapon_pickup.tscn").instantiate()
+		#self.get_parent().add_child(_pickup)
+		
+		# Had some problems spawning the item pickup on the platform...
+		# It would spawn, but would start sliding around for some reason. 
+		# Setting velocity to 0 didn't fix it. Not sure what's going on.
+		# So I just reparented to the spawner controller and spawned it above the platform. 
+		# This is likely to cause problems later as it might fall through or not be reliable. 
+		self.get_parent().add_child(_pickup)	# Set parent to spawner, not platform
+		_pickup.position = self.get_node("Item Spawn Position").global_position
+		
 	bar.value = health
 	barText.text = str(health)
 

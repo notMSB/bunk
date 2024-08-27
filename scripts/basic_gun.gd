@@ -2,9 +2,14 @@ extends Node2D
 
 @export var Projectile : PackedScene
 
+const NAME = "Pistol"
 const COOLDOWN := .11
 const DAMAGE := 2
+const RELOAD_TIME := 1.25
+const MAGAZINE_SIZE := 18
 const PIERCE := .2
+const ITEM_SPRITE := "res://assets/sprites/pistol.png"
+const AMMO_ASCII := "i"
 
 const DRIFT_RESET := .22
 var currentReset := .0

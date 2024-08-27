@@ -58,3 +58,43 @@ func change_background():
 	var bgBlue : float = max(.12, (206 - fadeVal) / 255.0)
 	var bgGreen : float = max(.2, (235 - fadeVal) / 255.0)
 	Background.color = Color(bgRed, bgBlue, bgGreen, 1)
+
+func update_weapons():
+	
+	# Update weapon info
+	for _w in Global.player.weapon_slot.size():
+		var _weapon_id = Global.player.weapon_slot[_w]
+		
+		# Update current weapon name
+		if _w == 0:
+			$"Weapon slots".get_child(_w).get_node("Weapon Name").text = Global.player.get_node("Weapon").get_child(_weapon_id).NAME
+			pass
+		
+		# Change weapon sprite
+		if _weapon_id >= 0:
+			$"Weapon slots".get_child(_w).get_node("Sprite2D").texture = load(Global.player.get_node("Weapon").get_child(_weapon_id).ITEM_SPRITE)
+			pass
+		# Reset sprite
+		else:
+			$"Weapon slots".get_child(_w).get_node("Sprite2D").texture = null
+			pass
+		
+		pass
+	
+	pass
+
+func update_ammo():
+	
+	# reset first
+	$Ammo.text = ""
+	
+	# Show a string of characters to represent ammo
+	for _ammo in Global.player.weapon_ammo:
+		$Ammo.text += str(Global.player.get_node("Weapon").get_child(Global.player.weapon_slot[0]).AMMO_ASCII)
+		pass
+	
+	# Show max ammo capacity
+	$Ammo.text += " / " + str(Global.player.weapon_ammo_max)
+	
+	
+	pass

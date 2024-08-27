@@ -59,6 +59,7 @@ var health := 3
 var healthWeight := 0
 var fuelWeight := 0
 var grenadeWeight := 0
+var weaponWeight := 0
 
 const CROUCH_DIFF := 17 #adjusting player position on crouch/uncrouch to prevent going airborne
 
@@ -78,12 +79,17 @@ const INVULN_TIME := 1.0 #seconds
 var currentInvuln := INVULN_TIME
 var invulnerable := false
 
+# Weapons
 var weaponCooldown 				:= 0.1 # Current cooldown on weapon seconds
 var weapon_slot					= [0, 1]	# Weapon id's stored here. Slot 0 is the current weapon.
 var weapon_pickup_instance = null
+var weapon_reload_timer = 0
+@onready var weapon_ammo_max = $Weapon.get_child(weapon_slot[0]).MAGAZINE_SIZE
+@onready var weapon_ammo = weapon_ammo_max
 #var weapon_slot_current_index 	:= 0
 @onready var weapons_total 		= $Weapon.get_child_count()
 var currentPlatform 			: CharacterBody2D = null
+const weapon_swap_cooldown := 0.2
 
 
 var _collisions = null
@@ -93,17 +99,13 @@ func _ready():
 	if mobile: $Camera2D.zoom = Vector2(1,1)
 	Global.shame = Global.easy
 	fuelThreshold = 0 if Global.easy else 5
+	UI.update_weapons()
+	UI.update_ammo()
 
 func _physics_process(delta):
 	
 	UI.set_height(position.y)
 	
-	
-	if weaponCooldown > 0:
-		weaponCooldown = max(weaponCooldown - delta, 0)
-		
-		if weaponCooldown == 0:
-			pass
 	
 	# Player is off screen
 	if position.y > $Camera2D.get_screen_center_position().y - (($Camera2D.offset.y - BOTTOM_MOD) / $Camera2D.zoom.y): 
@@ -178,12 +180,36 @@ func _physics_process(delta):
 func classic_process(delta):
 	if launching and velocity.y >= 0: launching = false
 	
+	
+	if weaponCooldown > 0:
+		weaponCooldown = max(weaponCooldown - delta, 0)
+		
+		if weaponCooldown == 0:
+			
+			# reload after cooldown
+			if weapon_ammo <= 0:
+				reload_weapon()
+			
+			pass
+	
+	if weapon_reload_timer > 0:
+		weapon_reload_timer = max(0, weapon_reload_timer - delta)
+		
+		if weapon_reload_timer == 0:
+			reload_weapon_complete()
+			pass
+	
+	
 	# Get collision objects
 	#_collisions = $"Pickup Area".get_overlapping_bodies()
 	
 	# Cycle current weapon
 	if Input.is_action_just_pressed("cycle held weapon") && can_cycle_weapon_slot():
 		cycle_weapon_slot()
+	
+	# Reload
+	if Input.is_action_just_pressed("reload") && weapon_ammo < weapon_ammo_max && weapon_reload_timer == 0:
+		reload_weapon()
 	
 	# Check collision with weapon pickup in level
 	elif Input.is_action_just_pressed("exchange weapon") && weapon_pickup_instance != null:
@@ -193,7 +219,7 @@ func classic_process(delta):
 		exchange_weapon_slot(0, _new_weapon_id)
 		
 		# destroy pickup instance
-		weapon_pickup_instance.queue_free()
+		weapon_pickup_instance.picked_up()
 		weapon_pickup_instance = null;
 	
 	# Crouching
@@ -239,8 +265,11 @@ func classic_process(delta):
 	
 	
 	# Shooting
-	if Input.is_action_pressed("shoot") and weaponCooldown <= 0:
+	if Input.is_action_pressed("shoot") and weaponCooldown <= 0 && weapon_ammo > 0 && weapon_reload_timer == 0:
 		fire_weapon()
+	
+	
+	
 
 func mobile_process():
 	if fuelTick == false: fuelTick = true
@@ -374,10 +403,26 @@ func fire_weapon():
 	
 	shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weapon_slot[0]).DAMAGE, $Weapon.get_child(weapon_slot[0]).get_pierce())
 	weaponCooldown = $Weapon.get_child(weapon_slot[0]).COOLDOWN
+	weapon_ammo -= 1
+	UI.update_ammo()
 
 func reload_weapon():
 	
+	var _text = Global.spawn_notif_text("Reloading...", self)
+	_text.set_style_fast_tiny()
+	weapon_reload_timer = $Weapon.get_child(weapon_slot[0]).RELOAD_TIME
 	
+	pass
+
+func reload_weapon_complete(show_message = true):
+	
+	if show_message:
+		var _text = Global.spawn_notif_text("Ka chunk", self)
+		_text.set_style_fast_tiny()
+	
+	weapon_reload_timer = 0
+	weapon_ammo = weapon_ammo_max
+	UI.update_ammo()
 	
 	pass
 
@@ -394,7 +439,17 @@ func cycle_weapon_slot():
 	weapon_slot.append(_current_weapon)
 	
 	# Set short delay before it can be used
-	weaponCooldown = .1
+	weaponCooldown = weapon_swap_cooldown
+	weapon_ammo_max = $Weapon.get_child(weapon_slot[0]).MAGAZINE_SIZE
+	
+	var _text = Global.spawn_notif_text("" + $Weapon.get_child(weapon_slot[0]).NAME, self)
+	_text.set_style_fast_tiny()
+	
+	UI.update_weapons()
+	
+	# automatically reload weapon when switching
+	# encourages use of multiple weapons and keeps code clean and simple
+	reload_weapon_complete(false)
 	
 	pass
 
@@ -403,6 +458,11 @@ func exchange_weapon_slot(_weapon_slot_to_exchange, _new_weapon_id):
 	#  swap out current weapon for weapon on ground
 	weapon_slot[_weapon_slot_to_exchange] = _new_weapon_id
 	weaponCooldown = .1
+	weapon_ammo_max = $Weapon.get_child(weapon_slot[0]).MAGAZINE_SIZE
+	UI.update_weapons()
+	
+	# Ensure weapon is loaded
+	reload_weapon_complete(false)
 	
 	pass
 
@@ -485,6 +545,10 @@ func change_fuel(change):
 	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 
 func take_damage(goLeft, _damage = 0, bigHit = false):
+	
+	var _text = Global.spawn_notif_text("Ow!", self)
+	_text.set_style_fast_tiny()
+	
 	health -= 1
 	if health <= 0: die()
 	UI.update_health(health, false)

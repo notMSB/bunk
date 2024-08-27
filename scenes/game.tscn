@@ -24,6 +24,74 @@ offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
 script = ExtResource("1_5j3ue")
 
+[node name="Ammo" type="Label" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -124.0
+offset_top = -240.0
+offset_right = -72.0
+offset_bottom = -217.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "20 / 30"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Weapon slots" type="Node2D" parent="UI"]
+position = Vector2(1005, 582)
+
+[node name="Current Weapon" type="ColorRect" parent="UI/Weapon slots"]
+offset_left = -50.0
+offset_top = -70.0
+offset_right = 14.0
+offset_bottom = -6.0
+color = Color(0.54902, 0.54902, 0.54902, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/Weapon slots/Current Weapon"]
+position = Vector2(32, 32)
+
+[node name="Weapon Name" type="Label" parent="UI/Weapon slots/Current Weapon"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -119.0
+offset_top = 41.0
+offset_right = -67.0
+offset_bottom = 64.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "Pistol"
+horizontal_alignment = 2
+
+[node name="Slot 2" type="ColorRect" parent="UI/Weapon slots"]
+offset_left = -18.0
+offset_top = -107.0
+offset_right = 14.0
+offset_bottom = -75.0
+color = Color(0.54902, 0.54902, 0.54902, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/Weapon slots/Slot 2"]
+position = Vector2(16, 16)
+scale = Vector2(0.5, 0.5)
+
+[node name="Swap Weapon" type="Label" parent="UI/Weapon slots"]
+offset_left = -116.0
+offset_top = -5.0
+offset_right = 14.0
+offset_bottom = 44.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "E: Swap Weapon"
+
 [node name="Health" type="Node2D" parent="UI"]
 position = Vector2(-64, 0)
 
@@ -68,7 +136,7 @@ position = Vector2(-136, 0)
 
 [node name="1" type="Sprite2D" parent="UI/Consumable"]
 modulate = Color(0, 0, 1, 1)
-position = Vector2(1132, 635)
+position = Vector2(1132, 620)
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("1_56y1r")
 
@@ -77,17 +145,17 @@ position = Vector2(16, 0)
 
 [node name="Current" type="Label" parent="UI/Height"]
 offset_left = 945.0
-offset_top = 589.0
+offset_top = -89.0
 offset_right = 1016.0
-offset_bottom = 615.0
+offset_bottom = -63.0
 text = "0"
 horizontal_alignment = 1
 
 [node name="High" type="Label" parent="UI/Height"]
 offset_left = 945.0
-offset_top = 565.0
+offset_top = -113.0
 offset_right = 1016.0
-offset_bottom = 591.0
+offset_bottom = -87.0
 text = "0"
 horizontal_alignment = 1
 
@@ -143,7 +211,13 @@ Swarmer = ExtResource("7_6cpvj")
 Boss = ExtResource("8_6bkhq")
 ItemPlatform = ExtResource("8_abx8m")
 
+[node name="Weapon Pickup2" parent="." instance=ExtResource("10_2dprp")]
+position = Vector2(785, 339)
+weapon_id = 2
+
 [node name="Weapon Pickup" parent="." instance=ExtResource("10_2dprp")]
+position = Vector2(353, 346)
+weapon_id = 3
 
 [node name="Player" parent="." instance=ExtResource("1_5bqmq")]
 position = Vector2(587, 586)
