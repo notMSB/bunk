@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://dtye7djac6ju4"]
+
+[ext_resource type="Script" path="res://scripts/Weapon Pickup.gd" id="1_igmb1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ltnvp"]
+size = Vector2(72, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i6f1i"]
+size = Vector2(64, 64)
+
+[sub_resource type="Gradient" id="Gradient_ftgjm"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 0.45098, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_buwvy"]
+gradient = SubResource("Gradient_ftgjm")
+fill = 2
+
+[node name="Weapon Pickup" type="CharacterBody2D"]
+position = Vector2(590, 319)
+collision_layer = 129
+collision_mask = 136
+script = ExtResource("1_igmb1")
+
+[node name="WeaponPickupArea" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 192
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponPickupArea"]
+shape = SubResource("RectangleShape2D_ltnvp")
+
+[node name="WorldCollision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_i6f1i")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1.90735e-06, -2.38419e-07)
+texture = SubResource("GradientTexture2D_buwvy")
+
+[node name="Weapon Name" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -27.0
+offset_right = 26.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Lazer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="WeaponPickupArea" to="." method="_on_weapon_pickup_area_body_entered"]
+[connection signal="body_exited" from="WeaponPickupArea" to="." method="_on_weapon_pickup_area_body_exited"]

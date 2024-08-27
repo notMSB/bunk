@@ -78,13 +78,18 @@ const INVULN_TIME := 1.0 #seconds
 var currentInvuln := INVULN_TIME
 var invulnerable := false
 
-var weaponCooldown := .0 #seconds
-var weaponIndex := Global.usedWeapon
+var weaponCooldown 				:= 0.1 # Current cooldown on weapon seconds
+var weapon_slot					= [0, 1]	# Weapon id's stored here. Slot 0 is the current weapon.
+var weapon_pickup_instance = null
+#var weapon_slot_current_index 	:= 0
+@onready var weapons_total 		= $Weapon.get_child_count()
+var currentPlatform 			: CharacterBody2D = null
 
-var currentPlatform : CharacterBody2D = null
 
+var _collisions = null
 
 func _ready():
+	Global.player = self
 	if mobile: $Camera2D.zoom = Vector2(1,1)
 	Global.shame = Global.easy
 	fuelThreshold = 0 if Global.easy else 5
@@ -92,7 +97,13 @@ func _ready():
 func _physics_process(delta):
 	
 	UI.set_height(position.y)
-	weaponCooldown = max(weaponCooldown - delta, 0)
+	
+	
+	if weaponCooldown > 0:
+		weaponCooldown = max(weaponCooldown - delta, 0)
+		
+		if weaponCooldown == 0:
+			pass
 	
 	# Player is off screen
 	if position.y > $Camera2D.get_screen_center_position().y - (($Camera2D.offset.y - BOTTOM_MOD) / $Camera2D.zoom.y): 
@@ -167,19 +178,27 @@ func _physics_process(delta):
 func classic_process(delta):
 	if launching and velocity.y >= 0: launching = false
 	
-	# Weapon swapping
-	if Input.is_action_just_pressed("swap_up"):
-			weaponIndex -= 1
-			if weaponIndex < 0: weaponIndex = $Weapon.get_child_count()-1
-			weaponCooldown = .1
-	if Input.is_action_just_pressed("swap_down"):
-		weaponIndex += 1
-		if weaponIndex == $Weapon.get_child_count(): weaponIndex = 0
-		weaponCooldown = .1
+	# Get collision objects
+	#_collisions = $"Pickup Area".get_overlapping_bodies()
+	
+	# Cycle current weapon
+	if Input.is_action_just_pressed("cycle held weapon") && can_cycle_weapon_slot():
+		cycle_weapon_slot()
+	
+	# Check collision with weapon pickup in level
+	elif Input.is_action_just_pressed("exchange weapon") && weapon_pickup_instance != null:
+		
+		# exchange currently equipped weapon
+		var _new_weapon_id = weapon_pickup_instance.weapon_id
+		exchange_weapon_slot(0, _new_weapon_id)
+		
+		# destroy pickup instance
+		weapon_pickup_instance.queue_free()
+		weapon_pickup_instance = null;
 	
 	# Crouching
 	if Input.is_action_just_pressed("down") and !crouched: crouch()
-	if Input.is_action_just_released("down") and crouched: uncrouch()
+	elif Input.is_action_just_released("down") and crouched: uncrouch()
 	
 	# Moving
 	move_player_horizontal(delta)
@@ -259,7 +278,7 @@ func mobile_process():
 			if force > MINIMUM_LAUNCH: #minimum drag distance for launch
 				change_fuel(ceil(-1 * force / 10))
 				launching = true
-				velocity = $Weapon.get_child(weaponIndex).shot_boost(currentLaunchPos, startingLaunchPos, force * LAUNCH_MULTIPLIER)
+				velocity = $Weapon.get_child(weapon_slot[0]).shot_boost(currentLaunchPos, startingLaunchPos, force * LAUNCH_MULTIPLIER)
 
 func move_player_horizontal(delta):
 	
@@ -348,14 +367,44 @@ func move_player_horizontal(delta):
 			#velocity.x = move_toward(velocity.x, 0, move_speed_decel_floor)
 		#else:
 			#velocity.x = move_toward(velocity.x, 0, move_speed_decel_air)
-	
 
 func fire_weapon():
-	var shot = $Weapon.get_child(weaponIndex).Projectile.instantiate()
+	var shot = $Weapon.get_child(weapon_slot[0]).Projectile.instantiate()
 	$Projectiles.add_child(shot)
 	
-	shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weaponIndex).DAMAGE, $Weapon.get_child(weaponIndex).get_pierce())
-	weaponCooldown = $Weapon.get_child(weaponIndex).COOLDOWN
+	shot.fire(get_global_mouse_position(), global_position, $Weapon.get_child(weapon_slot[0]).DAMAGE, $Weapon.get_child(weapon_slot[0]).get_pierce())
+	weaponCooldown = $Weapon.get_child(weapon_slot[0]).COOLDOWN
+
+func reload_weapon():
+	
+	
+	
+	pass
+
+func can_cycle_weapon_slot():	# Checks whether we can change weapons
+	return weapon_slot[1] != null
+
+func cycle_weapon_slot():
+	
+	# Equips weapon in next slot
+	
+	# Move equipped weapon to back of list.
+	# This will also automatically set the next weapon as the selected weapon
+	var _current_weapon = weapon_slot.pop_front()
+	weapon_slot.append(_current_weapon)
+	
+	# Set short delay before it can be used
+	weaponCooldown = .1
+	
+	pass
+
+func exchange_weapon_slot(_weapon_slot_to_exchange, _new_weapon_id):
+	
+	#  swap out current weapon for weapon on ground
+	weapon_slot[_weapon_slot_to_exchange] = _new_weapon_id
+	weaponCooldown = .1
+	
+	pass
 
 func set_platform():
 	for i in get_slide_collision_count():
@@ -456,7 +505,7 @@ func set_invuln(isInvuln):
 func die():
 	var runScore = UI.get_height()
 	if runScore > Global.score: Global.score = runScore
-	Global.usedWeapon = weaponIndex
+	#Global.usedWeapon = weaponIndex
 	get_tree().call_deferred("reload_current_scene")
 
 func plat_drop():
