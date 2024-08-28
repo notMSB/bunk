@@ -42,6 +42,8 @@ var platSpawnCounter := 0
 
 # Get all wave assets in "enemy waves" folder to be used later
 var enemyWavesArray = Global.getFilePathsByExtension("res://Enemy Waves/", "tscn")
+var enemyWavesRandomYSpawnMax = -768/2	# Max height enemies will randomly set their spawn position to
+var enemyWavesRandomXSpawnMax = 1024/2	# Max distance enemies will randomly set their spawn position to from centre
 var enemyOdds : Array	# Should be the same number of entries of waves. Dictates how likely a specific wave can be chosen
 
 # Data for each wave
@@ -49,23 +51,23 @@ var enemyOdds : Array	# Should be the same number of entries of waves. Dictates 
 var enemyWavesData = {
 	0 : {
 			wave_delay_next			= 1.0	# Delay applied when this wave spawns for the next wave. This allows customization of spawn times
-		,	randomize_horizontally 	= true	# Randomize positions of all elements horizontally
-		,	randomize_vertically 	= true	# Randomize positions of all elements vertically
-	}
-	, 1 : {
+		,	randomize_horizontally 	= false	# Randomize positions of all elements horizontally
+		,	randomize_vertically 	= false	# Randomize positions of all elements vertically
+	},
+	1 : {
 			wave_delay_next 		= 2.0
 		,	randomize_horizontally 	= false
 		,	randomize_vertically 	= true
-	}
-	, 2 : {
+	},
+	2 : {
 			wave_delay_next 		= 3.0
 		,	randomize_horizontally 	= true
 		,	randomize_vertically 	= false
-	}
-	, 3 : {
+	},
+	3 : {
 			wave_delay_next 		= 4.0
-		,	randomize_horizontally 	= false
-		,	randomize_vertically 	= false
+		,	randomize_horizontally 	= true
+		,	randomize_vertically 	= true
 	}
 }
 
@@ -221,15 +223,36 @@ func spawn(center, original = false, boss = false):
 		# Spawn wave at top centre of screen
 		newSpawn.global_position = Vector2(center.x, center.y - topSpawnMod)
 		
-		# Set up each enemy in the wave
+		# Set up each instance in the wave
 		for _e in newSpawn.get_child_count():
-			var _wave_instance = newSpawn.get_child(_e)
+			# Get first instance, as we reparent each one
+			var _wave_instance = newSpawn.get_child(0)
+			
+			# Randomize positions of instances in the wave if able
+			if(enemyWavesData[enemy_wave_spawn_index].randomize_horizontally):
+				_wave_instance.position.x = randf_range(enemyWavesRandomXSpawnMax, -enemyWavesRandomXSpawnMax)
+				pass
+			
+			if(enemyWavesData[enemy_wave_spawn_index].randomize_vertically):
+				_wave_instance.position.y = randf_range(enemyWavesRandomYSpawnMax, 0)
+				pass
+			
+			# Put instance to spawner instance
+			#var _old_position = _wave_instance.global_position
+			_wave_instance.reparent(self, true)
+			#_wave_instance.global_position = _old_position
+			
+			# Set up instance after repositioning/moving to spawner
 			_wave_instance.setup(CAMERA, PLAYER)
+			
 			pass
 		
 		# Delay next wave by this wave's time
 		# Multiplies the delay by default timer delay, so it scales with height
 		timer_new_delay = enemyWavesData[enemy_wave_spawn_index].wave_delay_next * get_timer()
+		
+		# Clean up leftover "wave" instance as it's no longer needed
+		newSpawn.queue_free()
 		pass
 	
 	#if PLAYER.mobile: newSpawn.scale *= 2
