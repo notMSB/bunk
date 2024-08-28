@@ -15,7 +15,7 @@ position = Vector2(-478, -54)
 position = Vector2(475, -56)
 
 [node name="Swarmer" parent="." instance=ExtResource("7_rtp1u")]
-position = Vector2(276, 192)
+position = Vector2(238, -19)
 
 [node name="Clam" parent="." instance=ExtResource("6_p3i71")]
-position = Vector2(-14, -32)
+position = Vector2(-18, -89)
