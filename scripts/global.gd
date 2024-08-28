@@ -32,3 +32,51 @@ func spawn_notif_text(_message, _caller, _y_offset = 48):
 	return _text
 	
 	pass
+
+func getFilePathsByExtension(directoryPath: String, extension: String, recursive: bool = true) -> Array:
+	
+	#	https://www.reddit.com/r/godot/comments/k1t53k/getting_tscn_children_from_levels_folder/
+	
+	# returns one array containing all elements found within a folder. 
+	# Entries are just paths to that element.
+	# Does not create sub arrays, only the one array with all elements. 
+	
+	# Usage: 
+	#var directoryPath = "res://path/to/Levels"
+	#var extension = "tscn"
+	#var foundPaths = getFilePathsByExtension(directoryPath, extension)
+	
+	
+	#var dir := Directory.new()
+	
+	var dir := DirAccess.open(directoryPath)
+	#if dir != OK:
+	if dir == null:
+		printerr("Warning: could not open directory: ", directoryPath)
+		return []
+		
+	#if dir.list_dir_begin(true, true) != OK:
+		#printerr("Warning: could not list contents of: ", directoryPath)
+		#return []
+	dir.list_dir_begin()
+	
+	
+	var filePaths := []
+	var fileName := dir.get_next()
+	
+	while fileName != "":
+		if dir.current_is_dir():
+			if recursive:
+				var dirPath = dir.get_current_dir() + "/" + fileName
+				filePaths += getFilePathsByExtension(dirPath, extension, recursive)
+		else:
+			if fileName.get_extension() == extension:
+				var filePath = dir.get_current_dir() + "/" + fileName
+				filePaths.append(filePath)
+		
+		fileName = dir.get_next()
+	
+	# Not necessary, calling get_next() and getting an empty string automatically ends it. 
+	#dir.list_dir_emd()
+	
+	return filePaths

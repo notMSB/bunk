@@ -12,7 +12,7 @@ var flipped := false
 func _process(delta):
 	shotCooldown -= delta
 	if shotCooldown <= 0 and !enemy.killTimerSet and enemy.global_position.distance_to(player.global_position) < 600:
-		var bulletOrigin = enemy.position + Vector2(16, 32) #set all bullets to spawn from the middle
+		var bulletOrigin = enemy.global_position + Vector2(16, 32) #set all bullets to spawn from the middle
 		for i in 8:
 			var shot := Bullet.instantiate()
 			shot.get_node("Sprite2D").modulate = Color.RED
