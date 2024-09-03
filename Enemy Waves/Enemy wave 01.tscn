@@ -1,21 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cie7ojdyc0fiq"]
+[gd_scene load_steps=2 format=3 uid="uid://cie7ojdyc0fiq"]
 
-[ext_resource type="PackedScene" uid="uid://cydvsy2fg6d5e" path="res://scenes/enemy.tscn" id="4_7jnht"]
-[ext_resource type="PackedScene" uid="uid://c5d10buygwl2h" path="res://scenes/shrimp.tscn" id="5_6u4qk"]
-[ext_resource type="PackedScene" uid="uid://cvfppjfmmea6a" path="res://scenes/clam.tscn" id="6_p3i71"]
 [ext_resource type="PackedScene" uid="uid://duyont48u7aox" path="res://scenes/swarmer.tscn" id="7_rtp1u"]
 
 [node name="Enemy Wave" type="Node2D"]
 position = Vector2(512, 768)
 
-[node name="Enemy" parent="." instance=ExtResource("4_7jnht")]
-position = Vector2(-478, -54)
-
-[node name="Shrimp" parent="." instance=ExtResource("5_6u4qk")]
-position = Vector2(475, -56)
-
 [node name="Swarmer" parent="." instance=ExtResource("7_rtp1u")]
 position = Vector2(238, -19)
-
-[node name="Clam" parent="." instance=ExtResource("6_p3i71")]
-position = Vector2(-18, -89)

@@ -32,3 +32,7 @@ func _process(delta):
 
 func setup(p):
 	player = p
+
+func on_enemy_damaged():
+	
+	pass

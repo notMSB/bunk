@@ -55,6 +55,7 @@ var launching := false
 var crouched := false
 
 var health := 3
+var dead := false
 
 var healthWeight := 0
 var fuelWeight := 0
@@ -178,6 +179,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 func classic_process(delta):
+	
 	if launching and velocity.y >= 0: launching = false
 	
 	
@@ -267,9 +269,6 @@ func classic_process(delta):
 	# Shooting
 	if Input.is_action_pressed("shoot") and weaponCooldown <= 0 && weapon_ammo > 0 && weapon_reload_timer == 0:
 		fire_weapon()
-	
-	
-	
 
 func mobile_process():
 	if fuelTick == false: fuelTick = true
@@ -546,6 +545,8 @@ func change_fuel(change):
 
 func take_damage(goLeft, _damage = 0, bigHit = false):
 	
+	if dead: return
+	
 	var _text = Global.spawn_notif_text("Ow!", self)
 	_text.set_style_fast_tiny()
 	
@@ -567,10 +568,17 @@ func set_invuln(isInvuln):
 		invulnerable = isInvuln
 
 func die():
-	var runScore = UI.get_height()
-	if runScore > Global.score: Global.score = runScore
-	#Global.usedWeapon = weaponIndex
-	get_tree().call_deferred("reload_current_scene")
+	
+	dead = true
+	
+	# Hides player from view, but allows code to still happen
+	# Very likely to introduce bugs with enemies and such if not accounted for. 
+	hide()
+	set_process(false)
+	set_physics_process(false)
+	
+	Global.game_over()
+	
 
 func plat_drop():
 	position.y += 4

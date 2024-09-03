@@ -1,6 +1,7 @@
 extends Node
 
-var score 		:= 0
+var runScore := 0
+var highScore 		:= 0
 var easy 		:= false
 #var usedWeapon 	:= 3
 var shame 		:= false
@@ -11,6 +12,21 @@ var player = null
 # Weapon system
 
 
+
+func game_over():
+	
+	# Called once the current game/ends and the player has died
+	
+	# set highScore
+	runScore = player.UI.get_height()
+	if runScore > Global.highScore: Global.highScore = runScore
+	
+	# Spawn game over menu
+	var _inst = load("res://scenes/Game Over.tscn").instantiate()
+	get_tree().root.add_child(_inst)
+	#_inst.position = 
+	
+	pass
 
 func spawn_notif_text(_message, _caller, _y_offset = 48):
 	
@@ -80,3 +96,4 @@ func getFilePathsByExtension(directoryPath: String, extension: String, recursive
 	#dir.list_dir_emd()
 	
 	return filePaths
+

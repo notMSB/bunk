@@ -102,6 +102,10 @@ func take_damage(amount):
 	health -= amount
 	if health <= 0: change()
 	else: $UI/HPText.text = str(health)
+	
+	# Call AI function
+	if $AI.has_method("on_enemy_damaged"):	$AI.on_enemy_damaged()
+	
 
 func _on_contact_damage_body_entered(body):
 	if $ContactDamage.visible and body.collision_layer == 65: #damage player

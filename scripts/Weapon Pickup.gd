@@ -35,14 +35,18 @@ func _physics_process(delta):
 		pass
 	
 	#velocity.x = 0
+	#velocity.x -= get_floor_velocity().x
 	
 	move_and_slide()
 
 func generate_new_weapon():
 	
-	# Pick a random weapon when spawned
 	var rng = RandomNumberGenerator.new()
-	weapon_id = rng.randi_range(0, Global.player.weapons_total - 1)
+	
+	# Pick a random weapon when spawned
+	# Be sure to pick a weapon that the player is not equipped with
+	while weapon_id == -1 || Global.player.weapon_slot.has(weapon_id):
+		weapon_id = rng.randi_range(0, Global.player.weapons_total - 1)
 	
 	update_draw()
 

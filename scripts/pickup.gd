@@ -43,7 +43,7 @@ func setup(p):
 		# So I just reparented to the spawner controller and spawned it above the platform. 
 		# This is likely to cause problems later as it might fall through or not be reliable. 
 		self.get_parent().get_parent().add_child(_pickup)	# Set parent to spawner, not platform
-		_pickup.position.y = get_parent().position.y - 45
+		_pickup.position.y = get_parent().position.y - 32 # 45
 		_pickup.position.x = get_parent().position.x
 		queue_free()
 		return

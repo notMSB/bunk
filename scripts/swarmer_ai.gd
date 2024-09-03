@@ -17,3 +17,7 @@ func setup(p, offset = 0):
 	else:
 		var reposition := direction.rotated(deg_to_rad(90))
 		enemy.position += 100 * reposition * offset
+
+func on_enemy_damaged():
+	
+	pass

@@ -50,24 +50,28 @@ var enemyOdds : Array	# Should be the same number of entries of waves. Dictates 
 # Can b
 var enemyWavesData = {
 	0 : {
-			wave_delay_next			= 1.0	# Delay applied when this wave spawns for the next wave. This allows customization of spawn times
-		,	randomize_horizontally 	= false	# Randomize positions of all elements horizontally
-		,	randomize_vertically 	= false	# Randomize positions of all elements vertically
+			wave_delay_next			= 1.0		# Delay applied when this wave spawns for the next wave. This allows customization of spawn times
+		,	randomize_horizontally 	= true		# Randomize positions of all elements horizontally
+		,	randomize_vertically 	= true		# Randomize positions of all elements vertically
+		,	item_platform_increment_weight = 1	# How much to increment the item platform frequency. Usually will match the number of enemies in the wave.
 	},
 	1 : {
-			wave_delay_next 		= 2.0
-		,	randomize_horizontally 	= false
+			wave_delay_next 		= 4.0
+		,	randomize_horizontally 	= true
 		,	randomize_vertically 	= true
+		,	item_platform_increment_weight 	= 4
 	},
 	2 : {
 			wave_delay_next 		= 3.0
 		,	randomize_horizontally 	= true
-		,	randomize_vertically 	= false
+		,	randomize_vertically 	= true
+		,	item_platform_increment_weight 	= 3
 	},
 	3 : {
-			wave_delay_next 		= 4.0
+			wave_delay_next 		= 1.0
 		,	randomize_horizontally 	= true
 		,	randomize_vertically 	= true
+		,	item_platform_increment_weight 	= 1
 	}
 }
 
@@ -147,13 +151,15 @@ func spawn(center, original = false, boss = false):
 	var isItem := false
 	var timer_new_delay := 1.0
 	var enemy_wave_spawn_index := -1
+	var enemy_wave_item_platform_increment_weight = 1
 	
 	var specificHoriz : int = HORIZ_MOD if original else HORIZ_MOD / 2
 	
 	# spawn Boss
 	if boss: newSpawn = Boss.instantiate();
 	else:
-		if original: platSpawnCounter +=1
+		# Now incremented after enemy waves are spawned
+		#if original: platSpawnCounter +=1
 		
 		# spawn item platform
 		if platSpawnCounter >= platformFrequency and original: 
@@ -242,6 +248,7 @@ func spawn(center, original = false, boss = false):
 			_wave_instance.reparent(self, true)
 			#_wave_instance.global_position = _old_position
 			
+			
 			# Set up instance after repositioning/moving to spawner
 			_wave_instance.setup(CAMERA, PLAYER)
 			
@@ -251,6 +258,10 @@ func spawn(center, original = false, boss = false):
 		# Multiplies the delay by default timer delay, so it scales with height
 		timer_new_delay = enemyWavesData[enemy_wave_spawn_index].wave_delay_next * get_timer()
 		
+		# Increment item platform spawn counter
+		enemy_wave_item_platform_increment_weight = enemyWavesData[enemy_wave_spawn_index].item_platform_increment_weight
+		
+		
 		# Clean up leftover "wave" instance as it's no longer needed
 		newSpawn.queue_free()
 		pass
@@ -258,3 +269,6 @@ func spawn(center, original = false, boss = false):
 	#if PLAYER.mobile: newSpawn.scale *= 2
 	#timer = get_timer()
 	timer = timer_new_delay
+	
+	# Increment item platform spawn counter by weight added from waves
+	if original: platSpawnCounter += enemy_wave_item_platform_increment_weight

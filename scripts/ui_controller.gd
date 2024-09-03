@@ -9,7 +9,7 @@ var pauseVal := PAUSE_INCREMENT
 var paused := false
 
 func _ready():
-	$Height/High.text = str(Global.score)
+	$Height/High.text = str(Global.highScore)
 	if Global.shame: $Height/High.text = str($Height/High.text, "?")
 
 func _process(_delta):
