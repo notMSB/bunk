@@ -93,6 +93,9 @@ var currentPlatform 			: CharacterBody2D = null
 const weapon_swap_cooldown := 0.2
 
 
+# aiming
+var controller_reticle_radius := 300
+
 var _collisions = null
 
 func _ready():
@@ -102,6 +105,11 @@ func _ready():
 	fuelThreshold = 0 if Global.easy else 5
 	UI.update_weapons()
 	UI.update_ammo()
+	
+	# Toggle targeting reticle
+	if Global.using_keyboard:	$"Target Reticle".hide()
+	else:						$"Target Reticle".show()
+	
 
 func _physics_process(delta):
 	
@@ -264,6 +272,9 @@ func classic_process(delta):
 		$Item.get_child(0).use()
 		change_item(false)
 	
+	
+	# 360 degree aiming using controller/reticle
+	if !Global.using_keyboard:	aim_using_joystick()
 	
 	
 	# Shooting
@@ -583,6 +594,23 @@ func die():
 func plat_drop():
 	position.y += 4
 	currentPlatform = null
+
+func aim_using_joystick():
+	
+	# Get aim direction
+	var _aim_angle = Vector2(
+			Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left"), 
+			Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
+		).normalized()
+	
+	# Stop processing if there's no input
+	if _aim_angle.length() < 1: return
+	
+	# Set reticle position
+	var _aim_position = (_aim_angle * controller_reticle_radius)
+	get_viewport().warp_mouse(get_global_transform_with_canvas().origin + _aim_position)
+	if $"Target Reticle".visible: $"Target Reticle".position = _aim_position
+	
 
 func launch(boomPos): #from an explosion
 	launching = true

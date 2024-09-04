@@ -6,6 +6,7 @@ var easy 		:= false
 #var usedWeapon 	:= 3
 var shame 		:= false
 var useMobile 	= null
+var using_keyboard = true
 
 # Player object
 var player = null
@@ -96,4 +97,20 @@ func getFilePathsByExtension(directoryPath: String, extension: String, recursive
 	#dir.list_dir_emd()
 	
 	return filePaths
+
+
+func _input(event: InputEvent) -> void:
+	# Switch to controller input
+	if event.is_pressed() && using_keyboard && (event is InputEventJoypadButton or event is InputEventJoypadMotion):
+		using_keyboard = false
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		
+		if is_instance_valid(player):	player.get_node("Target Reticle").show()
+		
+	# Switch to keyboard input
+	elif event.is_pressed() && !using_keyboard && (event is InputEventKey or event is InputEventMouse or event is InputEventMouseMotion):
+		using_keyboard = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		
+		if is_instance_valid(player):	player.get_node("Target Reticle").hide()
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://0yy4i0l8ajh1"]
+[gd_scene load_steps=13 format=3 uid="uid://0yy4i0l8ajh1"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_2e5t6"]
 [ext_resource type="Texture2D" uid="uid://cgvmcx23r8ods" path="res://assets/sprites/player.png" id="2_f5gig"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/grenade.gd" id="7_bquw6"]
 [ext_resource type="PackedScene" uid="uid://dwboudnyjtnrq" path="res://scenes/explosion.tscn" id="8_2i5iv"]
 [ext_resource type="Texture2D" uid="uid://2vxf00blm6y4" path="res://assets/sprites/bullet.png" id="9_d85gv"]
+[ext_resource type="Texture2D" uid="uid://ia1jkdtvaa1d" path="res://assets/sprites/18554.png" id="10_pntjh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fcr74"]
 size = Vector2(32, 64)
@@ -63,3 +64,7 @@ Explosion = ExtResource("8_2i5iv")
 visible = false
 texture = ExtResource("9_d85gv")
 centered = false
+
+[node name="Target Reticle" type="Sprite2D" parent="."]
+scale = Vector2(0.171601, 0.171601)
+texture = ExtResource("10_pntjh")
