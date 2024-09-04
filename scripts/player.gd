@@ -599,10 +599,17 @@ func plat_drop():
 func aim_using_joystick(delta):
 	
 	# Get aim direction
-	var _aim_angle = Vector2(
-			Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left"), 
-			Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
-		).normalized()
+	#var _aim_angle = Vector2(
+			#Input.get_action_strength("rs_right") - Input.get_action_strength("rs_left"), 
+			#Input.get_action_strength("rs_down") - Input.get_action_strength("rs_up")
+		#).normalized()
+	
+	var _aim_angle = Input.get_vector(
+		"rs_left", 
+		"rs_right",
+		"rs_up",
+		"rs_down"
+		)
 	
 	# Stop processing if there's no input
 	if _aim_angle.length() < 1: return
