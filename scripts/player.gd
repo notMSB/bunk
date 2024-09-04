@@ -95,6 +95,7 @@ const weapon_swap_cooldown := 0.2
 
 # aiming
 var controller_reticle_radius := 300
+var controller_aim_lerp_speed = 25
 
 var _collisions = null
 
@@ -274,7 +275,7 @@ func classic_process(delta):
 	
 	
 	# 360 degree aiming using controller/reticle
-	if !Global.using_keyboard:	aim_using_joystick()
+	if !Global.using_keyboard:	aim_using_joystick(delta)
 	
 	
 	# Shooting
@@ -595,7 +596,7 @@ func plat_drop():
 	position.y += 4
 	currentPlatform = null
 
-func aim_using_joystick():
+func aim_using_joystick(delta):
 	
 	# Get aim direction
 	var _aim_angle = Vector2(
@@ -608,8 +609,8 @@ func aim_using_joystick():
 	
 	# Set reticle position
 	var _aim_position = (_aim_angle * controller_reticle_radius)
-	get_viewport().warp_mouse(get_global_transform_with_canvas().origin + _aim_position)
-	if $"Target Reticle".visible: $"Target Reticle".position = _aim_position
+	get_viewport().warp_mouse(lerp(get_global_transform_with_canvas().origin, get_global_transform_with_canvas().origin + _aim_position, controller_aim_lerp_speed * delta))
+	if $"Target Reticle".visible: $"Target Reticle".position = lerp($"Target Reticle".position, _aim_position, controller_aim_lerp_speed * delta)
 	
 
 func launch(boomPos): #from an explosion
