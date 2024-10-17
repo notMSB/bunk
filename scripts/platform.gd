@@ -30,7 +30,7 @@ func setup(cam, player = null):
 	camera = cam
 	velocity.y = DEFAULT_VELOCITY
 	if player != null:
-		get_node("Pickup").setup(player)
+		get_node("Pickup").setup(player, get_node("Pickup").SPAWN_SOURCE.Platform)
 
 func boost(value):
 	boostTimerSet = true

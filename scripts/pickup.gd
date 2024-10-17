@@ -1,38 +1,52 @@
 extends Area2D
 
-var player : CharacterBody2D
+@onready var player : CharacterBody2D = Global.player
 
-enum d {fuel, health, grenade, weapon}
-var dIndex : int
+enum PICKUP {fuel, health, grenade, weapon}
+var pickup_index : int
 
-func setup(p):
-	player = p
-	p.healthWeight += get_health_weight()
-	p.fuelWeight += get_fuel_weight()
-	p.grenadeWeight += get_grenade_weight()
-	p.weaponWeight += get_weapon_weight()
+enum SPAWN_SOURCE {
+	Platform,
+	Enemy
+}
+
+var healthWeight 	= 0
+var fuelWeight 		= 0
+var weaponWeight 	= 0
+var gadgetWeight 	= 0
+var reward_source := SPAWN_SOURCE.Platform
+
+func setup(_player, _spawn_source = SPAWN_SOURCE.Platform):
+	# Set player object
+	player = _player
+	reward_source = _spawn_source
+	
+	healthWeight 	+= get_health_weight()
+	fuelWeight 		+= get_fuel_weight()
+	weaponWeight 	+= get_weapon_weight()
+	gadgetWeight 	+= get_gadget_weight()
 	
 	# Get random number
-	var rando = randi() % (p.healthWeight + p.fuelWeight + p.grenadeWeight + p.weaponWeight)
+	var rando = randi() % (healthWeight + fuelWeight + gadgetWeight + weaponWeight)
 	
 	# Figure out what was picked by subtracting weights to find the range it was in
-	rando -= p.healthWeight
-	if rando < 0: 
-		dIndex = d.health
+	rando -= healthWeight
+	if rando <= 0 && healthWeight > 0: 
+		pickup_index = PICKUP.health
 		$PickupSprite.texture = preload("res://assets/sprites/health.png")
-		p.healthWeight = 0
+		healthWeight = 0
 		return
-	rando -= p.fuelWeight
-	if rando < 0: 
-		dIndex = d.fuel
+	rando -= fuelWeight
+	if rando <= 0 && fuelWeight > 0: 
+		pickup_index = PICKUP.fuel
 		$PickupSprite.texture = preload("res://assets/sprites/fuel.png")
-		p.fuelWeight = 0
+		fuelWeight = 0
 		return
 	
-	rando -= p.weaponWeight
-	if rando < 0:
-		dIndex = d.weapon
-		p.weaponWeight = 0
+	rando -= weaponWeight
+	if rando <= 0 && weaponWeight > 0:
+		pickup_index = PICKUP.weapon
+		weaponWeight = 0
 		# Spawn special weapon pickup
 		# It is it's own object so it's handled differently. Players can choose to pick it up, as a button is required
 		var _pickup = load("res://scenes/weapon_pickup.tscn").instantiate()
@@ -49,19 +63,27 @@ func setup(p):
 		return
 	
 	# Default to a grenade item
-	rando -= p.grenadeWeight
-	if rando < 0:
-		dIndex = d.grenade
+	rando -= gadgetWeight
+	if rando <= 0 && gadgetWeight > 0:
+		pickup_index = PICKUP.grenade
 		$PickupSprite.texture = preload("res://assets/sprites/grenade.png")
-		p.grenadeWeight = 0
+		gadgetWeight = 0
 		return
 
 func get_health_weight():
+	
+	# for enemies, don't spawn
+	if(reward_source == SPAWN_SOURCE.Enemy): return 0
+	
 	if player.health == 1: return 100
 	elif player.health == 2: return 60
 	else: return 15
 
 func get_fuel_weight():
+	
+	# for enemies, don't spawn
+	if(reward_source == SPAWN_SOURCE.Enemy): return 0
+	
 	if player.mobile: return 100
 	if player.fuel < 10: return 100
 	if player.fuel < 50: return 60
@@ -69,26 +91,29 @@ func get_fuel_weight():
 	if player.fuel < 100: return 10
 	return 0
 
-func get_grenade_weight():
+func get_gadget_weight():
+	
+	# for platforms, don't spawn
+	if(reward_source == SPAWN_SOURCE.Platform): return 0
+	
 	if player.mobile: return 50
 	if player.hasItem == false: return 60
 	else: return 20
 
 func get_weapon_weight():
-	
 	return 3
-	
-	pass
 
 func _on_body_entered(_body):
+	if player == null: return
+	
 	if player.mobile:
-		match dIndex:
-			d.fuel: player.change_fuel(100); 		var _text = Global.spawn_notif_text("Fuel!", self); _text.set_style_fast_tiny()
-			d.health: player.heal(1); 				var _text = Global.spawn_notif_text("Health!", self); _text.set_style_fast_tiny()
-			d.grenade: player.get_node("Item").get_child(0).use(); 	var _text = Global.spawn_notif_text("Grenade!", self); _text.set_style_fast_tiny()
+		match pickup_index:
+			PICKUP.fuel: player.change_fuel(100); 		var _text = Global.spawn_notif_text("Fuel!", self); _text.set_style_fast_tiny()
+			PICKUP.health: player.heal(1); 				var _text = Global.spawn_notif_text("Health!", self); _text.set_style_fast_tiny()
+			PICKUP.grenade: player.get_node("Item").get_child(0).use(); 	var _text = Global.spawn_notif_text("Grenade!", self); _text.set_style_fast_tiny()
 	else:
-		match dIndex:
-			d.fuel: player.change_fuel(25); 		var _text = Global.spawn_notif_text("Fuel!", self); _text.set_style_fast_tiny()
-			d.health: player.heal(1); 				var _text = Global.spawn_notif_text("Health!", self); _text.set_style_fast_tiny()
-			d.grenade: player.change_item(true); 	var _text = Global.spawn_notif_text("Grenade!", self); _text.set_style_fast_tiny()
+		match pickup_index:
+			PICKUP.fuel: player.change_fuel(25); 		var _text = Global.spawn_notif_text("Fuel!", self); _text.set_style_fast_tiny()
+			PICKUP.health: player.heal(1); 				var _text = Global.spawn_notif_text("Health!", self); _text.set_style_fast_tiny()
+			PICKUP.grenade: player.change_item(true); 	var _text = Global.spawn_notif_text("Grenade!", self); _text.set_style_fast_tiny()
 	queue_free()

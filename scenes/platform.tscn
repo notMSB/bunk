@@ -1,42 +1,41 @@
-[gd_scene load_steps=6 format=3 uid="uid://b86hbuygu7hhp"]
+[gd_scene load_steps=7 format=3 uid="uid://72qkskcwtyry"]
 
-[ext_resource type="Script" path="res://scripts/boss.gd" id="1_tmlrh"]
-[ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_he3l6"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_fotjd"]
+[ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_d0ss0"]
+[ext_resource type="Script" path="res://scripts/crab_ai.gd" id="3_6jg76"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v371p"]
-size = Vector2(1569, 337)
+size = Vector2(62, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b1x6j"]
-size = Vector2(1083, 4)
+size = Vector2(64, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vj3ap"]
-size = Vector2(1567, 336)
+size = Vector2(66, 38)
 
-[node name="Boss" type="CharacterBody2D"]
-position = Vector2(0, 9)
+[node name="Platform" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 5
 motion_mode = 1
 wall_min_slide_angle = 0.0
-script = ExtResource("1_tmlrh")
-health = 150
+script = ExtResource("1_fotjd")
+platform_only = true
 
 [node name="Sprites" type="Node2D" parent="."]
 
 [node name="1" type="Sprite2D" parent="Sprites"]
-position = Vector2(-1, 147)
-scale = Vector2(24.2812, 10.1875)
-texture = ExtResource("2_he3l6")
+texture = ExtResource("2_d0ss0")
 
 [node name="EnemyShape" type="CollisionShape2D" parent="."]
-position = Vector2(-2, 145.5)
 shape = SubResource("RectangleShape2D_v371p")
 
 [node name="PlatformBody" type="StaticBody2D" parent="."]
+visible = false
 collision_layer = 16
 
 [node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
-position = Vector2(0, -38)
+visible = false
+position = Vector2(0, -14)
 shape = SubResource("RectangleShape2D_b1x6j")
 disabled = true
 one_way_collision = true
@@ -45,26 +44,21 @@ one_way_collision = true
 collision_layer = 2
 
 [node name="DamageArea" type="CollisionShape2D" parent="ContactDamage"]
-position = Vector2(-1, 146)
+position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_vj3ap")
 
 [node name="AI" type="Node2D" parent="."]
-visible = false
+script = ExtResource("3_6jg76")
 
 [node name="UI" type="Node2D" parent="."]
-position = Vector2(0, -14)
 
 [node name="HPText" type="Label" parent="UI"]
-visible = false
-offset_left = 480.0
-offset_top = 281.0
-offset_right = 540.0
-offset_bottom = 307.0
+offset_left = -30.0
+offset_top = -12.0
+offset_right = 30.0
+offset_bottom = 14.0
 text = "0"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
-
-[node name="Item Spawn Position" type="Node2D" parent="."]
-position = Vector2(0, -124)
 
 [connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]

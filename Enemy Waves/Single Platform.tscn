@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://e142lngt2voh"]
+
+[ext_resource type="PackedScene" uid="uid://72qkskcwtyry" path="res://scenes/platform.tscn" id="1_b7suu"]
+
+[node name="Wave" type="Node2D"]
+position = Vector2(512, 768)
+
+[node name="Platform" parent="." instance=ExtResource("1_b7suu")]
+position = Vector2(-478, -28)

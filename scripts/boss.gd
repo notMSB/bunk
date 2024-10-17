@@ -70,7 +70,7 @@ func take_damage(amount):
 
 func recalibrate():
 	#if playerY: global_position.y += player.global_position.y - playerY
-	global_position.x = player.global_position.x - $EnemyShape.shape.size.x*.42 + player.get_node("CollisionShape2D").shape.size.x
+	global_position.x = player.global_position.x #- $EnemyShape.shape.size.x*.42 + player.get_node("CollisionShape2D").shape.size.x
 	#playerY = player.global_position.y
 	if weapon_pickup != null && is_instance_valid(weapon_pickup):
 		weapon_pickup.position.x = get_node("Item Spawn Position").position.x

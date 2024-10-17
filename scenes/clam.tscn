@@ -18,6 +18,7 @@ size = Vector2(97, 33)
 
 [node name="Clam" type="CharacterBody2D"]
 collision_layer = 2
+collision_mask = 5
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_bq47u")
@@ -76,33 +77,29 @@ metadata/_edit_use_anchors_ = true
 visible = false
 
 [node name="1" type="CharacterBody2D" parent="Platforms"]
-collision_layer = 48
-collision_mask = 0
+position = Vector2(136, 0)
+collision_layer = 24
 script = ExtResource("5_4lawr")
 
 [node name="Sprite2D" type="Sprite2D" parent="Platforms/1"]
-position = Vector2(136, 0)
 scale = Vector2(1.5, 1)
 texture = ExtResource("6_1ikq6")
 
 [node name="Shape" type="CollisionShape2D" parent="Platforms/1"]
-position = Vector2(136.5, 0.5)
 shape = SubResource("RectangleShape2D_w6md3")
 disabled = true
 one_way_collision = true
 
 [node name="2" type="CharacterBody2D" parent="Platforms"]
-collision_layer = 48
-collision_mask = 0
+position = Vector2(-104, 64)
+collision_layer = 24
 script = ExtResource("5_4lawr")
 
 [node name="Sprite2D" type="Sprite2D" parent="Platforms/2"]
-position = Vector2(-104, 64)
 scale = Vector2(1.5, 1)
 texture = ExtResource("6_1ikq6")
 
 [node name="Shape" type="CollisionShape2D" parent="Platforms/2"]
-position = Vector2(-103.5, 64.5)
 shape = SubResource("RectangleShape2D_w6md3")
 disabled = true
 one_way_collision = true

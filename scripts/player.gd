@@ -57,11 +57,6 @@ var crouched := false
 var health := 3
 var dead := false
 
-var healthWeight := 0
-var fuelWeight := 0
-var grenadeWeight := 0
-var weaponWeight := 0
-
 const CROUCH_DIFF := 17 #adjusting player position on crouch/uncrouch to prevent going airborne
 
 const BASE_KNOCKBACK_X 	= 700 #for when the player takes damage
@@ -77,7 +72,7 @@ var fuel := MAX_FUEL
 var hasItem := true
 
 const INVULN_TIME := 1.0 #seconds
-var currentInvuln := INVULN_TIME
+var invulnerable_timer := INVULN_TIME
 var invulnerable := false
 
 # Weapons
@@ -119,7 +114,7 @@ func _physics_process(delta):
 	
 	# Player is off screen
 	if position.y > $Camera2D.get_screen_center_position().y - (($Camera2D.offset.y - BOTTOM_MOD) / $Camera2D.zoom.y): 
-		take_damage(false, 1, true)
+		take_damage(false, 1, true, true)
 		change_fuel(-5 * fuelThreshold)
 	
 	# Apply gravity
@@ -181,8 +176,8 @@ func _physics_process(delta):
 	else: mobile_process()
 	
 	if invulnerable:
-		currentInvuln -= delta
-		if currentInvuln <= 0:
+		invulnerable_timer -= delta
+		if invulnerable_timer <= 0:
 			set_invuln(false)
 	
 	move_and_slide()
@@ -555,29 +550,34 @@ func change_fuel(change):
 	else: fuel = clamp(fuel + change, 0, 100)
 	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 
-func take_damage(goLeft, _damage = 0, bigHit = false):
+func take_damage(goLeft, _damage = 0, bigHit = false, override_invulnerability = false):
 	
-	if dead: return
+	# Always perform knockback, even if damage isn't taken
+	if bigHit: change_velocity(BIG_KNOCKBACK_Y)
+	else: velocity.x = -BASE_KNOCKBACK_X if goLeft else BASE_KNOCKBACK_X
 	
+	# early out for damage
+	if dead || (invulnerable && !override_invulnerability): return
+	
+	# Take damage
 	var _text = Global.spawn_notif_text("Ow!", self)
 	_text.set_style_fast_tiny()
-	
 	health -= 1
 	if health <= 0: die()
 	UI.update_health(health, false)
-	if bigHit: change_velocity(BIG_KNOCKBACK_Y)
-	else: velocity.x = -BASE_KNOCKBACK_X if goLeft else BASE_KNOCKBACK_X
 	set_invuln(true)
 
 func heal(amount):
 	health = min(health + amount, 3)
 	UI.update_health(health, true)
 
-func set_invuln(isInvuln):
-	if invulnerable and isInvuln: currentInvuln = INVULN_TIME
+func set_invuln(new_invulnerability):
+	# refresh invulnerability
+	if invulnerable and new_invulnerability: invulnerable_timer = INVULN_TIME
+	# Set/reset invulnerability
 	else:
-		collision_layer -= 1 if isInvuln else -1
-		invulnerable = isInvuln
+		collision_layer -= 1 if new_invulnerability else -1
+		invulnerable = new_invulnerability
 
 func die():
 	

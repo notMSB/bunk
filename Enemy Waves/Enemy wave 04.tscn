@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cydvsy2fg6d5e" path="res://scenes/enemy.tscn" id="1_iiy6y"]
 
-[node name="Enemy Wave" type="Node2D"]
+[node name="Wave" type="Node2D"]
 position = Vector2(512, 768)
 
 [node name="Enemy" parent="." instance=ExtResource("1_iiy6y")]

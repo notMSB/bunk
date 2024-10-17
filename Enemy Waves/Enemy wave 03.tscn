@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c5d10buygwl2h" path="res://scenes/shrimp.tscn" id="2_7ytwf"]
 [ext_resource type="PackedScene" uid="uid://duyont48u7aox" path="res://scenes/swarmer.tscn" id="3_nrbqr"]
 
-[node name="Enemy Wave" type="Node2D"]
+[node name="Wave" type="Node2D"]
 position = Vector2(512, 768)
 
 [node name="Enemy" parent="." instance=ExtResource("1_6i2lp")]
