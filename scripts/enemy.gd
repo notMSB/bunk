@@ -18,7 +18,15 @@ var boostTimer := BOOST_DEFAULT
 
 @export var health := 4
 @export var damage := 1
-@export var pickup_spawn_chance := 1.0
+@export var pickup_spawn_chance = [
+		# array of spawn chances for pickups. Can be overwritten per enemy. 
+		# first element: max elevation for chance
+		# second element: drop chance from 0-1
+		[1000, 0.90] # 0.10
+	,	[2500, 0.092]
+	,	[4000, 0.083]
+	,	[6500, 0.075]
+]
 @export var platform_only := false
 
 func _ready():
@@ -89,7 +97,13 @@ func single_platform():
 		$AltShape.visible = true
 	
 	# Chance to spawn pickups
-	if !platform_only && randf() <= pickup_spawn_chance:
+	var _pickup_chance = 0
+	for i in pickup_spawn_chance.size():
+		if Global.UI.get_height() < pickup_spawn_chance[i][0]:
+			_pickup_chance = pickup_spawn_chance[i][1]
+			break;
+	
+	if !platform_only && randf() <= _pickup_chance:
 		
 		# Spawn pickup
 		var _pickup_instance = load("res://scenes/pickup.tscn").instantiate()
@@ -114,7 +128,14 @@ func multi_platform():
 	#$Platforms.visible = true
 	
 	# Chance to spawn pickups
-	if !platform_only && randf() <= pickup_spawn_chance:
+	var _pickup_chance = 0
+	for i in pickup_spawn_chance.size():
+		if Global.UI.get_height() < pickup_spawn_chance[i][0]:
+			_pickup_chance = pickup_spawn_chance[i][1]
+			break;
+	
+	# Chance to spawn pickups
+	if !platform_only && randf() <= _pickup_chance:
 		var chosen_platform = $Platforms.get_child(randi_range(0, $Platforms.get_child_count()-1))
 		
 		# Spawn pickup

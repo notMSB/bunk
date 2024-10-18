@@ -10,6 +10,14 @@ var ignoreMask : int
 var pierceTimer := .0
 var canPierce := true
 
+func _ready():
+	Global.player.get_node("Item/grenade").enemy_projectiles_destroyed.connect(projectiles_destroyed) 
+	pass
+
+func projectiles_destroyed():
+	queue_free()
+	pass
+
 func fire(goalPos, startPos, weaponDamage, pierce, mask = 2, speedMod = 1):
 	if pierce != 0: #0 pierce is infinite pierce
 		pierceTimer = pierce

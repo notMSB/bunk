@@ -35,6 +35,14 @@ var fastfalling := false
 var short_jumping = false
 const CROUCH_FASTFALL_SPEED 			:= 600.0
 
+var superjumping = false
+var superjump_fuel_threshold = 80
+var superjump_height_start = 0
+var superjump_height_end = 0
+var superjump_distance_max = 500
+var superjump_velocity = -500
+var superjump_velocity_end = -1000
+
 
 const PLATFORM_LAYER := 16
 
@@ -70,6 +78,7 @@ var fuel := MAX_FUEL
 
 
 var hasItem := true
+var gadget_current = Global.PICKUP.grenade
 
 const INVULN_TIME := 1.0 #seconds
 var invulnerable_timer := INVULN_TIME
@@ -117,13 +126,15 @@ func _physics_process(delta):
 		take_damage(false, 1, true, true)
 		change_fuel(-5 * fuelThreshold)
 	
+	if superjumping: superjump_step();
+	
 	# Apply gravity
 	if !is_on_floor():
 		if crouched and !fastfalling: 
 			uncrouch()
 		
 		
-		if jump_alarm == 0:
+		if jump_alarm == 0 && !superjumping:
 			
 			# Apply decel to slow down when starting to fall
 			if(velocity.y < 0):
@@ -176,6 +187,9 @@ func _physics_process(delta):
 	else: mobile_process()
 	
 	if invulnerable:
+		# Allow invuln to continue when superjumping
+		if superjumping: pass
+		
 		invulnerable_timer -= delta
 		if invulnerable_timer <= 0:
 			set_invuln(false)
@@ -266,7 +280,7 @@ func classic_process(delta):
 	# Use items
 	if Input.is_action_just_pressed("item") and hasItem:
 		$Item.get_child(0).use()
-		change_item(false)
+		change_item(-1)
 	
 	
 	# 360 degree aiming using controller/reticle
@@ -541,14 +555,21 @@ func uncrouch(adjust = true):
 	scale.y = 1
 	if adjust: position.y -= CROUCH_DIFF
 
-func change_item(change):
-	hasItem = change
-	UI.set_item(hasItem)
+func change_item(item_id):
+	hasItem = false if item_id == -1 else true
+	gadget_current = item_id
+	UI.set_item(item_id)
 
 func change_fuel(change):
+	
+	var _fuel_old = fuel
+	
 	if mobile: fuel = max(fuel + change, 0)
 	else: fuel = clamp(fuel + change, 0, 100)
 	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
+	
+	if change > 0 && _fuel_old >= superjump_fuel_threshold:
+		superjump_start()
 
 func take_damage(goLeft, _damage = 0, bigHit = false, override_invulnerability = false):
 	
@@ -576,7 +597,7 @@ func set_invuln(new_invulnerability):
 	if invulnerable and new_invulnerability: invulnerable_timer = INVULN_TIME
 	# Set/reset invulnerability
 	else:
-		collision_layer -= 1 if new_invulnerability else -1
+		#collision_layer -= 1 if new_invulnerability else -1
 		invulnerable = new_invulnerability
 
 func die():
@@ -634,3 +655,70 @@ func change_velocity(value):
 	#	
 	#	print(value)
 	velocity.y = value
+
+func superjump_start():
+	
+	# set state
+	superjumping = true
+	set_invuln(true)
+	jump_alarm = 0
+	jumping = false
+	short_jumping = false
+	
+	# record distance to stop
+	superjump_height_start = UI.get_height()
+	superjump_height_end = superjump_height_start + superjump_distance_max
+	
+	var _text = Global.spawn_notif_text("Super Jump!", self)
+	_text.set_style_fast_tiny()
+	
+	# trail of "weeeeee!" start
+	_text = Global.spawn_notif_text("W", self)
+	_text.set_style_fast_tiny()
+	
+	pass
+
+func superjump_step():
+	
+	set_invuln(true)
+	
+	# set speed
+	#velocity.x = 0
+	velocity.y = superjump_velocity
+	
+	# set speed
+	#velocity.x = 0
+	velocity.y = superjump_velocity_end
+	
+	# trail of "e"'s
+	var _text = Global.spawn_notif_text("e", self)
+	_text.set_style_fast_tiny()
+	
+	# end check
+	if UI.get_height() >= superjump_height_end: superjump_end()
+	
+	pass
+
+func superjump_end():
+	
+	# set state
+	superjumping = false
+	set_invuln(true)
+	
+	# set speed
+	#velocity.x = 0
+	velocity.y = superjump_velocity_end
+	
+	# trail of "e"'s end
+	var _text = Global.spawn_notif_text("!", self)
+	_text.set_style_fast_tiny()
+	
+	# Spawn platform under player's feet
+	var _platform = load("res://scenes/platform.tscn").instantiate()
+	var _platform_padding_y = 0
+	get_node("../Spawner").add_child(_platform)
+	_platform.global_position.x = global_position.x
+	_platform.global_position.y = global_position.y + $CollisionShape2D.shape.size.y/2 + _platform.get_node("EnemyShape").shape.size.y/2 + _platform_padding_y
+	_platform.setup($Camera2D, self)
+	
+	pass

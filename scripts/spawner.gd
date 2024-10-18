@@ -19,18 +19,9 @@ const TOP_SPAWN := 500
 var topSpawnMod = TOP_SPAWN
 
 # Spawn rate of waves. 
-# first entry: height minimum for entry
-# Second entry: spawn time between waves. 
-const TIMER_LIST := [
-		[0, 		1.3]
-	,	[500, 		1.3] 
-	,	[2000, 		1.2] 
-	,	[5000, 		1.1] 
-	,	[8000, 		1.0] 
-	,	[11000, 	0.9]
-]
+var TIMER_LIST = Global.elevation_threshold_data.timer_list
 var timerIndex := 0
-var timer := TIMER_LIST[0][1]
+var timer = TIMER_LIST[0][1]
 
 var height : int
 
@@ -123,28 +114,28 @@ func get_timer():
 		return TIMER_LIST[timerIndex][1]
 
 func check_height_table(): #todo: optimize, should not calculate every frame
-	if height < 1000: 
+	if height < Global.elevation_threshold_data.enemy_spawn_threshold[0]: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[0])
 		
 		platformFrequency = 8
-	elif height < 2500: 
+	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[1]: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[1])
 		
 		platformFrequency = 10
-	elif height < 4000: 
+	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[2]: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[2])
 		
 		platformFrequency = 12
-	elif height < 6500: 
+	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[3]: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():

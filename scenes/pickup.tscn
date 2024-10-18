@@ -12,16 +12,27 @@ collision_layer = 16
 collision_mask = 64
 script = ExtResource("1_uh7d2")
 
-[node name="PickupSprite" type="Sprite2D" parent="."]
-scale = Vector2(0.35, 0.35)
-texture = ExtResource("2_ooitc")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_3gdph")
 
 [node name="CircleSprite" type="Sprite2D" parent="."]
 modulate = Color(0.941176, 0.729412, 0, 0.698039)
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_d8f4d")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_3gdph")
+[node name="PickupSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("2_ooitc")
+
+[node name="DisplayName" type="Label" parent="."]
+offset_left = -41.0
+offset_top = -25.0
+offset_right = 41.0
+offset_bottom = 23.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
