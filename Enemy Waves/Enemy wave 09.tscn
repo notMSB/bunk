@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8hjpln13dlbe"]
+
+[ext_resource type="PackedScene" uid="uid://cydvsy2fg6d5e" path="res://scenes/enemy.tscn" id="1_kyufs"]
+[ext_resource type="PackedScene" uid="uid://c5d10buygwl2h" path="res://scenes/shrimp.tscn" id="2_loyj6"]
+
+[node name="Enemy Wave" type="Node2D"]
+position = Vector2(512, 768)
+
+[node name="Enemy" parent="." instance=ExtResource("1_kyufs")]
+position = Vector2(-12, -35)
+
+[node name="Enemy2" parent="." instance=ExtResource("1_kyufs")]
+position = Vector2(-7, -238)
+
+[node name="Enemy3" parent="." instance=ExtResource("1_kyufs")]
+position = Vector2(-11, -421)
+
+[node name="Shrimp" parent="." instance=ExtResource("2_loyj6")]
+position = Vector2(4, -656)

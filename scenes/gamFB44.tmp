@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bqjvptpborfyo"]
+[gd_scene load_steps=19 format=3 uid="uid://bqjvptpborfyo"]
 
 [ext_resource type="PackedScene" uid="uid://0yy4i0l8ajh1" path="res://scenes/player.tscn" id="1_5bqmq"]
 [ext_resource type="Script" path="res://scripts/ui_controller.gd" id="1_5j3ue"]
@@ -12,7 +12,20 @@
 [ext_resource type="PackedScene" uid="uid://duyont48u7aox" path="res://scenes/swarmer.tscn" id="7_6cpvj"]
 [ext_resource type="PackedScene" uid="uid://b86hbuygu7hhp" path="res://scenes/boss.tscn" id="8_6bkhq"]
 [ext_resource type="PackedScene" uid="uid://clrlxmijdtec1" path="res://scenes/item_platform.tscn" id="8_abx8m"]
-[ext_resource type="PackedScene" uid="uid://dtye7djac6ju4" path="res://scenes/weapon_pickup.tscn" id="10_2dprp"]
+[ext_resource type="Script" path="res://scenes/Weapon Pickup.gd" id="13_yfdwb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ltnvp"]
+size = Vector2(72, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i6f1i"]
+size = Vector2(64, 64)
+
+[sub_resource type="Gradient" id="Gradient_ftgjm"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 0.45098, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_buwvy"]
+gradient = SubResource("Gradient_ftgjm")
+fill = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8oyl6"]
 size = Vector2(1200, 95)
@@ -23,74 +36,6 @@ size = Vector2(1200, 95)
 offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
 script = ExtResource("1_5j3ue")
-
-[node name="Ammo" type="Label" parent="UI"]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -124.0
-offset_top = -240.0
-offset_right = -72.0
-offset_bottom = -217.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-text = "20 / 30"
-horizontal_alignment = 2
-vertical_alignment = 2
-
-[node name="Weapon slots" type="Node2D" parent="UI"]
-position = Vector2(1005, 582)
-
-[node name="Current Weapon" type="ColorRect" parent="UI/Weapon slots"]
-offset_left = -50.0
-offset_top = -70.0
-offset_right = 14.0
-offset_bottom = -6.0
-color = Color(0.54902, 0.54902, 0.54902, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="UI/Weapon slots/Current Weapon"]
-position = Vector2(32, 32)
-
-[node name="Weapon Name" type="Label" parent="UI/Weapon slots/Current Weapon"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -119.0
-offset_top = 41.0
-offset_right = -67.0
-offset_bottom = 64.0
-grow_horizontal = 0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-text = "Pistol"
-horizontal_alignment = 2
-
-[node name="Slot 2" type="ColorRect" parent="UI/Weapon slots"]
-offset_left = -18.0
-offset_top = -107.0
-offset_right = 14.0
-offset_bottom = -75.0
-color = Color(0.54902, 0.54902, 0.54902, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="UI/Weapon slots/Slot 2"]
-position = Vector2(16, 16)
-scale = Vector2(0.5, 0.5)
-
-[node name="Swap Weapon" type="Label" parent="UI/Weapon slots"]
-offset_left = -116.0
-offset_top = -5.0
-offset_right = 14.0
-offset_bottom = 44.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-text = "E: Swap Weapon"
 
 [node name="Health" type="Node2D" parent="UI"]
 position = Vector2(-64, 0)
@@ -136,7 +81,7 @@ position = Vector2(-136, 0)
 
 [node name="1" type="Sprite2D" parent="UI/Consumable"]
 modulate = Color(0, 0, 1, 1)
-position = Vector2(1132, 620)
+position = Vector2(1132, 635)
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("1_56y1r")
 
@@ -145,17 +90,17 @@ position = Vector2(16, 0)
 
 [node name="Current" type="Label" parent="UI/Height"]
 offset_left = 945.0
-offset_top = -89.0
+offset_top = 589.0
 offset_right = 1016.0
-offset_bottom = -63.0
+offset_bottom = 615.0
 text = "0"
 horizontal_alignment = 1
 
 [node name="High" type="Label" parent="UI/Height"]
 offset_left = 945.0
-offset_top = -113.0
+offset_top = 565.0
 offset_right = 1016.0
-offset_bottom = -87.0
+offset_bottom = 591.0
 text = "0"
 horizontal_alignment = 1
 
@@ -211,13 +156,39 @@ Swarmer = ExtResource("7_6cpvj")
 Boss = ExtResource("8_6bkhq")
 ItemPlatform = ExtResource("8_abx8m")
 
-[node name="Weapon Pickup2" parent="." instance=ExtResource("10_2dprp")]
-position = Vector2(785, 339)
-weapon_id = 2
+[node name="Weapon Pickup" type="CharacterBody2D" parent="."]
+position = Vector2(420, 511)
+collision_mask = 8
+script = ExtResource("13_yfdwb")
 
-[node name="Weapon Pickup" parent="." instance=ExtResource("10_2dprp")]
-position = Vector2(353, 346)
-weapon_id = 3
+[node name="WeaponPickupArea" type="Area2D" parent="Weapon Pickup"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Weapon Pickup/WeaponPickupArea"]
+shape = SubResource("RectangleShape2D_ltnvp")
+
+[node name="WorldCollision" type="CollisionShape2D" parent="Weapon Pickup"]
+shape = SubResource("RectangleShape2D_i6f1i")
+
+[node name="Sprite2D" type="Sprite2D" parent="Weapon Pickup"]
+position = Vector2(1.90735e-06, -2.38419e-07)
+texture = SubResource("GradientTexture2D_buwvy")
+
+[node name="Weapon Name" type="Label" parent="Weapon Pickup"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -27.0
+offset_right = 26.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Lazer"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("1_5bqmq")]
 position = Vector2(587, 586)
@@ -237,3 +208,6 @@ shape = SubResource("RectangleShape2D_8oyl6")
 position = Vector2(531, 0)
 scale = Vector2(9.375, 1)
 texture = ExtResource("2_r4sw2")
+
+[connection signal="body_entered" from="Weapon Pickup/WeaponPickupArea" to="Player" method="_on_weapon_pickup_area_body_entered"]
+[connection signal="body_exited" from="Weapon Pickup/WeaponPickupArea" to="Player" method="_on_weapon_pickup_area_body_exited"]

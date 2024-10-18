@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwaj0p0np5c2u"]
+
+[ext_resource type="PackedScene" uid="uid://cydvsy2fg6d5e" path="res://scenes/enemy.tscn" id="2_ubm0l"]
+[ext_resource type="PackedScene" uid="uid://cvfppjfmmea6a" path="res://scenes/clam.tscn" id="4_p1hvk"]
+
+[node name="Enemy Wave" type="Node2D"]
+position = Vector2(512, 768)
+
+[node name="Clam" parent="." instance=ExtResource("4_p1hvk")]
+position = Vector2(-230, -447)
+
+[node name="Clam2" parent="." instance=ExtResource("4_p1hvk")]
+position = Vector2(210, -261)
+
+[node name="Enemy" parent="." instance=ExtResource("2_ubm0l")]
+position = Vector2(299, -705)
+
+[node name="Enemy2" parent="." instance=ExtResource("2_ubm0l")]
+position = Vector2(-83, -564)
+
+[node name="Enemy3" parent="." instance=ExtResource("2_ubm0l")]
+position = Vector2(100, -426)
+
+[node name="Enemy4" parent="." instance=ExtResource("2_ubm0l")]
+position = Vector2(-31, -271)
+
+[node name="Enemy5" parent="." instance=ExtResource("2_ubm0l")]
+position = Vector2(-207, -116)

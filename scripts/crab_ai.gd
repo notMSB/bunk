@@ -5,12 +5,20 @@ var player : CharacterBody2D
 
 var changed := false
 var recharge = false
+var seeking_player = false
+var seek_player_trigger_distance := 400.0
 
 const CHARGE_DEFAULT := 5
 var chargeTime := CHARGE_DEFAULT
 
 func _process(delta):
-	if !changed and  !enemy.killTimerSet and enemy.global_position.distance_to(player.global_position) < 400:
+	
+	# Decide when to seek player
+	if !seeking_player && enemy.global_position.distance_to(player.global_position) < seek_player_trigger_distance:
+		seeking_player = true
+		pass
+	
+	if !changed and  !enemy.killTimerSet and seeking_player:
 		var direction = (player.global_position - enemy.global_position).normalized()
 		enemy.velocity = direction * 180
 		changed = true
@@ -23,3 +31,7 @@ func _process(delta):
 func setup(p):
 	player = p
 	if p.UI.get_height() > 1500: recharge = true
+
+func on_enemy_damaged():
+	seeking_player = true;
+	pass

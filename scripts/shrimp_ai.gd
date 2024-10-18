@@ -38,3 +38,7 @@ func setup(p):
 	xScale = enemy.scale.x
 	yScale = enemy.scale.y
 	player = p
+
+func on_enemy_damaged():
+	
+	pass
