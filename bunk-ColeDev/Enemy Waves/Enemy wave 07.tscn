@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpgjlcphjv32v"]
+
+[ext_resource type="PackedScene" uid="uid://duyont48u7aox" path="res://scenes/swarmer.tscn" id="2_catn5"]
+
+[node name="Enemy Wave" type="Node2D"]
+position = Vector2(512, 768)
+
+[node name="Swarmer" parent="." instance=ExtResource("2_catn5")]
+position = Vector2(1976, -440)
+
+[node name="Swarmer2" parent="." instance=ExtResource("2_catn5")]
+position = Vector2(-1677, -558)
+
+[node name="Swarmer3" parent="." instance=ExtResource("2_catn5")]
+position = Vector2(-2430, -628)
+
+[node name="Swarmer4" parent="." instance=ExtResource("2_catn5")]
+position = Vector2(-1440, -889)

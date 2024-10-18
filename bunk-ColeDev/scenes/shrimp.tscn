@@ -1,0 +1,76 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5d10buygwl2h"]
+
+[ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="1_qnh16"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_t5iix"]
+[ext_resource type="Script" path="res://scripts/shrimp_ai.gd" id="3_wju0a"]
+[ext_resource type="PackedScene" uid="uid://dak8tshl61njw" path="res://scenes/bullet.tscn" id="4_x2p14"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_emwit"]
+size = Vector2(94.8742, 31.432)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kojb4"]
+size = Vector2(96, 4)
+
+[node name="Shrimp" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_t5iix")
+health = 3
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="1" type="Sprite2D" parent="Sprites"]
+texture = ExtResource("1_qnh16")
+
+[node name="2" type="Sprite2D" parent="Sprites"]
+position = Vector2(-16, 16)
+rotation = 1.5708
+texture = ExtResource("1_qnh16")
+
+[node name="EnemyShape" type="CollisionPolygon2D" parent="."]
+position = Vector2(0.599998, 0.677906)
+scale = Vector2(1.01136, 1.01496)
+polygon = PackedVector2Array(-32.2337, -16.432, -32.2337, 46.6244, -0.593257, 46.6244, -0.593257, 15.0962, 31.0472, 15.0962, 31.0472, -16.432)
+
+[node name="AltShape" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(-16.0239, -0.0488122)
+scale = Vector2(1.01136, 1.01496)
+shape = SubResource("RectangleShape2D_emwit")
+
+[node name="PlatformBody" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 16
+
+[node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
+position = Vector2(-16, -14)
+shape = SubResource("RectangleShape2D_kojb4")
+disabled = true
+one_way_collision = true
+
+[node name="ContactDamage" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="DamageArea" type="CollisionPolygon2D" parent="ContactDamage"]
+position = Vector2(0.599998, 0.677906)
+scale = Vector2(1.01136, 1.01496)
+polygon = PackedVector2Array(-34.2112, -20.373, -34.2112, 48.5949, 1.38427, 48.5949, 1.38427, 17.0667, 33.0247, 17.0667, 33.0247, -20.373)
+
+[node name="AI" type="Node2D" parent="."]
+script = ExtResource("3_wju0a")
+Bullet = ExtResource("4_x2p14")
+
+[node name="Projectiles" type="Node" parent="."]
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="HPText" type="Label" parent="UI"]
+offset_left = -30.0
+offset_top = -12.0
+offset_right = 30.0
+offset_bottom = 14.0
+text = "2"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]

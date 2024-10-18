@@ -1,0 +1,213 @@
+[gd_scene load_steps=19 format=3 uid="uid://bqjvptpborfyo"]
+
+[ext_resource type="PackedScene" uid="uid://0yy4i0l8ajh1" path="res://scenes/player.tscn" id="1_5bqmq"]
+[ext_resource type="Script" path="res://scripts/ui_controller.gd" id="1_5j3ue"]
+[ext_resource type="Texture2D" uid="uid://cqs150rvatyft" path="res://assets/sprites/circle.png" id="1_56y1r"]
+[ext_resource type="Script" path="res://scripts/spawner.gd" id="1_d5fe3"]
+[ext_resource type="Texture2D" uid="uid://c8q25evlvcbfo" path="res://icon.svg" id="2_r4sw2"]
+[ext_resource type="PackedScene" uid="uid://cydvsy2fg6d5e" path="res://scenes/enemy.tscn" id="3_ju45p"]
+[ext_resource type="Script" path="res://scripts/floor.gd" id="4_spiml"]
+[ext_resource type="PackedScene" uid="uid://c5d10buygwl2h" path="res://scenes/shrimp.tscn" id="5_bbasy"]
+[ext_resource type="PackedScene" uid="uid://cvfppjfmmea6a" path="res://scenes/clam.tscn" id="6_3daw6"]
+[ext_resource type="PackedScene" uid="uid://duyont48u7aox" path="res://scenes/swarmer.tscn" id="7_6cpvj"]
+[ext_resource type="PackedScene" uid="uid://b86hbuygu7hhp" path="res://scenes/boss.tscn" id="8_6bkhq"]
+[ext_resource type="PackedScene" uid="uid://clrlxmijdtec1" path="res://scenes/item_platform.tscn" id="8_abx8m"]
+[ext_resource type="Script" path="res://scenes/Weapon Pickup.gd" id="13_yfdwb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ltnvp"]
+size = Vector2(72, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i6f1i"]
+size = Vector2(64, 64)
+
+[sub_resource type="Gradient" id="Gradient_ftgjm"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 0.45098, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_buwvy"]
+gradient = SubResource("Gradient_ftgjm")
+fill = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8oyl6"]
+size = Vector2(1200, 95)
+
+[node name="Game" type="Node2D"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+offset = Vector2(0, 120)
+transform = Transform2D(1, 0, 0, 1, 0, 120)
+script = ExtResource("1_5j3ue")
+
+[node name="Health" type="Node2D" parent="UI"]
+position = Vector2(-64, 0)
+
+[node name="1" type="Sprite2D" parent="UI/Health"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(548, 635)
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("1_56y1r")
+
+[node name="Border" type="Sprite2D" parent="UI/Health/1"]
+modulate = Color(0, 0, 0, 1)
+z_index = -10
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("1_56y1r")
+
+[node name="2" type="Sprite2D" parent="UI/Health"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(578, 635)
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("1_56y1r")
+
+[node name="Border" type="Sprite2D" parent="UI/Health/2"]
+modulate = Color(0, 0, 0, 1)
+z_index = -10
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("1_56y1r")
+
+[node name="3" type="Sprite2D" parent="UI/Health"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(608, 635)
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("1_56y1r")
+
+[node name="Border" type="Sprite2D" parent="UI/Health/3"]
+modulate = Color(0, 0, 0, 1)
+z_index = -10
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("1_56y1r")
+
+[node name="Consumable" type="Node2D" parent="UI"]
+position = Vector2(-136, 0)
+
+[node name="1" type="Sprite2D" parent="UI/Consumable"]
+modulate = Color(0, 0, 1, 1)
+position = Vector2(1132, 635)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_56y1r")
+
+[node name="Height" type="Node2D" parent="UI"]
+position = Vector2(16, 0)
+
+[node name="Current" type="Label" parent="UI/Height"]
+offset_left = 945.0
+offset_top = 589.0
+offset_right = 1016.0
+offset_bottom = 615.0
+text = "0"
+horizontal_alignment = 1
+
+[node name="High" type="Label" parent="UI/Height"]
+offset_left = 945.0
+offset_top = 565.0
+offset_right = 1016.0
+offset_bottom = 591.0
+text = "0"
+horizontal_alignment = 1
+
+[node name="FuelBar" type="ProgressBar" parent="UI"]
+offset_left = 56.0
+offset_top = 621.0
+offset_right = 319.0
+offset_bottom = 648.0
+value = 75.0
+show_percentage = false
+
+[node name="Text" type="Label" parent="UI/FuelBar"]
+layout_mode = 0
+offset_right = 261.0
+offset_bottom = 23.0
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BossBar" type="ProgressBar" parent="UI"]
+visible = false
+offset_left = 3.0
+offset_top = -109.0
+offset_right = 1018.0
+offset_bottom = -82.0
+value = 75.0
+show_percentage = false
+
+[node name="Text" type="Label" parent="UI/BossBar"]
+layout_mode = 0
+offset_right = 1014.0
+offset_bottom = 27.0
+text = "500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -5
+
+[node name="Background" type="ColorRect" parent="BackgroundLayer"]
+offset_left = -8.0
+offset_top = -47.0
+offset_right = 1217.0
+offset_bottom = 778.0
+color = Color(0.529412, 0.807843, 0.921569, 1)
+
+[node name="Spawner" type="Node2D" parent="."]
+script = ExtResource("1_d5fe3")
+Enemy = ExtResource("3_ju45p")
+Shrimp = ExtResource("5_bbasy")
+Clam = ExtResource("6_3daw6")
+Swarmer = ExtResource("7_6cpvj")
+Boss = ExtResource("8_6bkhq")
+ItemPlatform = ExtResource("8_abx8m")
+
+[node name="Weapon Pickup" type="CharacterBody2D" parent="."]
+position = Vector2(420, 511)
+collision_mask = 8
+script = ExtResource("13_yfdwb")
+
+[node name="WeaponPickupArea" type="Area2D" parent="Weapon Pickup"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Weapon Pickup/WeaponPickupArea"]
+shape = SubResource("RectangleShape2D_ltnvp")
+
+[node name="WorldCollision" type="CollisionShape2D" parent="Weapon Pickup"]
+shape = SubResource("RectangleShape2D_i6f1i")
+
+[node name="Sprite2D" type="Sprite2D" parent="Weapon Pickup"]
+position = Vector2(1.90735e-06, -2.38419e-07)
+texture = SubResource("GradientTexture2D_buwvy")
+
+[node name="Weapon Name" type="Label" parent="Weapon Pickup"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -27.0
+offset_right = 26.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Lazer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player" parent="." instance=ExtResource("1_5bqmq")]
+position = Vector2(587, 586)
+
+[node name="Floor" type="StaticBody2D" parent="."]
+z_index = 1
+position = Vector2(64, 688)
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("4_spiml")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(530, -15.5)
+shape = SubResource("RectangleShape2D_8oyl6")
+
+[node name="Sprite2D" type="Sprite2D" parent="Floor"]
+position = Vector2(531, 0)
+scale = Vector2(9.375, 1)
+texture = ExtResource("2_r4sw2")
+
+[connection signal="body_entered" from="Weapon Pickup/WeaponPickupArea" to="Player" method="_on_weapon_pickup_area_body_entered"]
+[connection signal="body_exited" from="Weapon Pickup/WeaponPickupArea" to="Player" method="_on_weapon_pickup_area_body_exited"]

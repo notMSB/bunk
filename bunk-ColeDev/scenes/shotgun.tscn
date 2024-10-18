@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1cujh6mkr13u"]
+
+[ext_resource type="Script" path="res://scripts/shotgun.gd" id="1_me8qx"]
+[ext_resource type="PackedScene" uid="uid://d21v67jy38jy8" path="res://scenes/splitter.tscn" id="2_7omgc"]
+
+[node name="shotgun" type="Node2D"]
+script = ExtResource("1_me8qx")
+Projectile = ExtResource("2_7omgc")

@@ -1,0 +1,131 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8vqn5img5oo8"]
+
+[ext_resource type="Script" path="res://scenes/Game Over.gd" id="1_hse76"]
+
+[node name="GameOver" type="Node2D"]
+script = ExtResource("1_hse76")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+offset = Vector2(0, -768)
+transform = Transform2D(1, 0, 0, 1, 0, -768)
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+offset_left = 185.0
+offset_top = 55.0
+offset_right = 225.0
+offset_bottom = 95.0
+scale = Vector2(16.0951, 16.9224)
+
+[node name="Title" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -173.5
+offset_top = -317.0
+offset_right = 173.5
+offset_bottom = -229.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = -123.0
+offset_right = -42.0
+offset_bottom = -78.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Score"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Score Value" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 29.0
+offset_top = -123.0
+offset_right = 376.0
+offset_bottom = -78.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "100"
+vertical_alignment = 1
+
+[node name="High Score" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = -59.0
+offset_right = -42.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "High Score"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="High Score Value" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 31.0
+offset_top = -59.0
+offset_right = 378.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "High Score"
+vertical_alignment = 1
+
+[node name="Restart" type="Button" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.0
+offset_top = 216.0
+offset_right = 174.0
+offset_bottom = 259.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Restart"
+
+[node name="Main Menu" type="Button" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.0
+offset_top = 278.0
+offset_right = 174.0
+offset_bottom = 321.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main Menu"
+
+[connection signal="button_up" from="CanvasLayer/Restart" to="." method="_on_restart_button_up"]
+[connection signal="button_up" from="CanvasLayer/Main Menu" to="." method="_on_main_menu_button_up"]
