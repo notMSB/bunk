@@ -56,9 +56,13 @@ func setup(_player, _spawn_source = SPAWN_SOURCE.Platform):
 		# Setting velocity to 0 didn't fix it. Not sure what's going on.
 		# So I just reparented to the spawner controller and spawned it above the platform. 
 		# This is likely to cause problems later as it might fall through or not be reliable. 
-		self.get_parent().get_parent().add_child(_pickup)	# Set parent to spawner, not platform
-		_pickup.position.y = get_parent().position.y - 32 # 45
-		_pickup.position.x = get_parent().position.x
+		
+		if(reward_source == SPAWN_SOURCE.Platform):
+			self.get_parent().get_parent().add_child(_pickup)	# Set parent to spawner, not platform
+		else:
+			self.get_parent().add_child(_pickup)	# Set parent to spawner, not platform
+		_pickup.global_position.y = get_parent().global_position.y - 64 # 32
+		_pickup.global_position.x = get_parent().global_position.x
 		queue_free()
 		return
 	
@@ -101,7 +105,7 @@ func get_gadget_weight():
 	else: return 20
 
 func get_weapon_weight():
-	return 3
+	return 300
 
 func _on_body_entered(_body):
 	if player == null: return

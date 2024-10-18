@@ -78,7 +78,8 @@ visible = false
 
 [node name="1" type="CharacterBody2D" parent="Platforms"]
 position = Vector2(136, 0)
-collision_layer = 24
+collision_layer = 48
+collision_mask = 0
 script = ExtResource("5_4lawr")
 
 [node name="Sprite2D" type="Sprite2D" parent="Platforms/1"]
@@ -92,7 +93,8 @@ one_way_collision = true
 
 [node name="2" type="CharacterBody2D" parent="Platforms"]
 position = Vector2(-104, 64)
-collision_layer = 24
+collision_layer = 48
+collision_mask = 0
 script = ExtResource("5_4lawr")
 
 [node name="Sprite2D" type="Sprite2D" parent="Platforms/2"]
