@@ -41,47 +41,106 @@ var enemyOdds : Array	# Should be the same number of entries of waves. Dictates 
 # Can b
 var enemyWavesData = {
 	0 : {
-			Wave_scene						= "res://Enemy Waves/Enemy wave 01.tscn"
-		,	wave_delay_next					= 1.0		# Delay applied when this wave spawns for the next wave. This allows customization of spawn times
-		,	randomize_horizontally 			= true		# Randomize positions of all elements horizontally
-		,	randomize_vertically 			= true		# Randomize positions of all elements vertically
-		,	item_platform_increment_weight 	= 1			# How much to increment the item platform frequency. Usually will match the number of enemies in the wave.
-		,	spawn_weight 					= [2.5, 3.5, 4.5, 6, 7]			# How likely it is for a wave asset to be chosen based on height thresholds
-	},
-	1 : {
-			Wave_scene						= "res://Enemy Waves/Enemy wave 02.tscn"
-		,	wave_delay_next 				= 4.0
-		,	randomize_horizontally 			= true
-		,	randomize_vertically 			= true
-		,	item_platform_increment_weight 	= 4
-		,	spawn_weight 					= [100, 3, 5, 7, 9]
-	},
-	2 : {
-			Wave_scene						= "res://Enemy Waves/Enemy wave 03.tscn"
-		,	wave_delay_next 				= 3.0
-		,	randomize_horizontally 			= true
-		,	randomize_vertically 			= true
-		,	item_platform_increment_weight 	= 3
-		,	spawn_weight 					= [0, 8, 10, 18, 30]
-	},
-	3 : {
-			Wave_scene						= "res://Enemy Waves/Enemy wave 04.tscn"
-		,	wave_delay_next 				= 1.0
-		,	randomize_horizontally 			= true
-		,	randomize_vertically 			= true
-		,	item_platform_increment_weight 	= 1
-		,	spawn_weight 					= [97.5, 85, 79, 67, 56]
-	},
-	4 : {
 			Wave_scene						= "res://Enemy Waves/Single Platform.tscn"
 		,	wave_delay_next 				= 0.05
 		,	randomize_horizontally 			= true
 		,	randomize_vertically 			= true
 		,	item_platform_increment_weight 	= 0
-		,	spawn_weight 					= [50, 50, 50, 50, 50]
+		,	spawn_weight 					= [500, 500, 500, 500, 500]
+	},
+	1 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 01.tscn"
+		,	wave_delay_next					= 3.5		# Delay applied when this wave spawns for the next wave. This allows customization of spawn times
+		,	randomize_horizontally 			= true		# Randomize positions of all elements horizontally
+		,	randomize_vertically 			= false		# Randomize positions of all elements vertically
+		,	item_platform_increment_weight 	= 1			# How much to increment the item platform frequency. Usually will match the number of enemies in the wave.
+		,	spawn_weight 					= [1000, 825, 500, 300, 100]			# How likely it is for a wave asset to be chosen based on height thresholds
+	},
+	2 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 02.tscn"
+		,	wave_delay_next 				= 4.2
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 4
+		,	spawn_weight 					= [0, 50, 150, 150, 150]
+	},
+	3 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 03.tscn"
+		,	wave_delay_next 				= 4.8
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 3
+		,	spawn_weight 					= [0, 50, 150, 150, 150]
+	},
+	4 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 04.tscn"
+		,	wave_delay_next 				= 5.4
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 50, 100, 100, 100]
+	},
+	5 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 05.tscn"
+		,	wave_delay_next 				= 6.0
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100]
+	},
+	6 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 06.tscn"
+		,	wave_delay_next 				= 6.4
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100]
+	},
+	7 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 07.tscn"
+		,	wave_delay_next 				= 4.5
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100]
+	},
+	8 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 08.tscn"
+		,	wave_delay_next 				= 3.0
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100]
+	},
+	9 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 09.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= true
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 125, 200, 100, 100]
+	},
+	10 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 10.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= true
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 125, 200, 100, 100]
+	},
+	11 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 11.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 125, 200, 100, 100]
 	}
+	
 }
 
+
+		
 const OFFSCREEN_LOOP = 2
 var offscreenSpawns = 0
 
@@ -120,37 +179,37 @@ func check_height_table(): #todo: optimize, should not calculate every frame
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[0])
 		
-		platformFrequency = 8
+		platformFrequency = 3
 	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[1]: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[1])
 		
-		platformFrequency = 10
+		platformFrequency = 3.5
 	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[2]: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[2])
 		
-		platformFrequency = 12
+		platformFrequency = 4
 	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[3]: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[3])
 		
-		platformFrequency = 14
+		platformFrequency = 4.5
 	else: 
 		# Total spawn weights for all waves
 		enemyOdds = []
 		for i in enemyWavesData.size():
 			enemyOdds.append(enemyWavesData[i].spawn_weight[4])
 		
-		platformFrequency = 16
+		platformFrequency = 5
 	@warning_ignore("narrowing_conversion")
-	if UI.paused: platformFrequency *= .33
+	if UI.paused: platformFrequency *= 0.75
 
 func set_spawns():
 	
