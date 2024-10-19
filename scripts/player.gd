@@ -78,7 +78,7 @@ var fuel := MAX_FUEL
 
 
 var hasItem := true
-var gadget_current = Global.PICKUP.grenade
+var gadget_current = Global.PICKUP.grenade #grenade
 
 const INVULN_TIME := 1.0 #seconds
 var invulnerable_timer := INVULN_TIME
@@ -123,7 +123,7 @@ func _physics_process(delta):
 	
 	# Player is off screen
 	if position.y > $Camera2D.get_screen_center_position().y - (($Camera2D.offset.y - BOTTOM_MOD) / $Camera2D.zoom.y): 
-		take_damage(false, 1, true, true)
+		take_damage(false, 1, true)
 		change_fuel(-5 * fuelThreshold)
 	
 	if superjumping: superjump_step();
@@ -509,31 +509,40 @@ func jump():
 		if currentCoyote > 0:
 			currentCoyote = 0
 			
-			# Set speed
-			change_velocity(JUMP_VELOCITY)
-			jump_alarm = JUMP_TIME
+			jump_initiate()
 			
-			# ???
-			if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
-			jumping = true
-			short_jumping = false
 			return
 	
 	# air jumps
 	if fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
 		currentAirJumps += 1
-		
-		# Set Speed
-		change_velocity(AIR_JUMP_VELOCITY)
-		jump_alarm = AIR_JUMP_TIME
-		
-		# Slow player down horizontally
-		velocity.x *= 1.4
-		
 		change_fuel(-1 * fuelThreshold)
-		jumping = true
-		short_jumping = false
-		fastfalling = false
+		jump_air_initiate()
+		
+
+func jump_initiate():
+	# Set speed
+	change_velocity(JUMP_VELOCITY)
+	jump_alarm = JUMP_TIME
+	
+	# ???
+	if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
+	jumping = true
+	short_jumping = false
+	pass
+
+func jump_air_initiate():
+	# Set Speed
+	change_velocity(AIR_JUMP_VELOCITY)
+	jump_alarm = AIR_JUMP_TIME
+	
+	# Slow player down horizontally
+	velocity.x *= 1.4
+	
+	jumping = true
+	short_jumping = false
+	fastfalling = false
+	pass
 
 func crouch():
 	scale.y = .5
@@ -571,14 +580,14 @@ func change_fuel(change):
 	if change > 0 && _fuel_old >= superjump_fuel_threshold:
 		superjump_start()
 
-func take_damage(goLeft, _damage = 0, bigHit = false, override_invulnerability = false):
+func take_damage(goLeft, _damage = 0, bigHit = false):
 	
 	# Always perform knockback, even if damage isn't taken
 	if bigHit: change_velocity(BIG_KNOCKBACK_Y)
 	else: velocity.x = -BASE_KNOCKBACK_X if goLeft else BASE_KNOCKBACK_X
 	
 	# early out for damage
-	if dead || (invulnerable && !override_invulnerability): return
+	if dead || invulnerable: return
 	
 	# Take damage
 	var _text = Global.spawn_notif_text("Ow!", self)
@@ -599,6 +608,7 @@ func set_invuln(new_invulnerability):
 	else:
 		#collision_layer -= 1 if new_invulnerability else -1
 		invulnerable = new_invulnerability
+		invulnerable_timer = INVULN_TIME
 
 func die():
 	
@@ -611,7 +621,6 @@ func die():
 	set_physics_process(false)
 	
 	Global.game_over()
-	
 
 func plat_drop():
 	position.y += 4
@@ -639,7 +648,6 @@ func aim_using_joystick(delta):
 	var _aim_position = (_aim_angle * controller_reticle_radius)
 	get_viewport().warp_mouse(lerp(get_global_transform_with_canvas().origin, get_global_transform_with_canvas().origin + _aim_position, controller_aim_lerp_speed * delta))
 	if $"Target Reticle".visible: $"Target Reticle".position = lerp($"Target Reticle".position, _aim_position, controller_aim_lerp_speed * delta)
-	
 
 func launch(boomPos): #from an explosion
 	launching = true

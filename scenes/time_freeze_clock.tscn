@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://chryllxo2i0k5"]
+
+[ext_resource type="Texture2D" uid="uid://bkgy6sbw5bp1c" path="res://assets/sprites/132195-antique-clock-png-download-free.png" id="1_wrg7h"]
+
+[node name="TimeFreezeClock" type="Sprite2D"]
+modulate = Color(1, 1, 1, 0.32549)
+position = Vector2(596, 369)
+texture = ExtResource("1_wrg7h")

@@ -9,7 +9,12 @@ const COOLDOWN := 2.0
 var shotCooldown := COOLDOWN
 var flipped := false
 
+var time_speed = 1.0
+
 func _process(delta):
+	delta *= time_speed
+	if delta == 0: return
+	
 	shotCooldown -= delta
 	if shotCooldown <= 0 and !enemy.killTimerSet and enemy.global_position.distance_to(player.global_position) < 600:
 		var bulletOrigin = enemy.global_position + Vector2(16, 32) #set all bullets to spawn from the middle

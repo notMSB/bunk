@@ -12,7 +12,20 @@ const BOOST_DEFAULT := .2
 var boostTimerSet := false
 var boostTimer := BOOST_DEFAULT
 
+var time_speed := 1.0
+
+func _ready():
+	
+	Global.player.get_node("Item/grenade").time_freeze.connect(time_freeze) 
+	if Global.player.get_node("Item/grenade").time_freeze_active: time_freeze(Global.player.get_node("Item/grenade").time_speed)
+	
+	pass
+
 func _physics_process(delta):
+	
+	delta *= time_speed
+	if delta == 0: return
+	
 	move_and_slide()
 	if camera and global_position.y > camera.get_screen_center_position().y + 375 / camera.zoom.y and velocity.y >= 0:
 		if velocity.y <= DEFAULT_VELOCITY: velocity.y = 0
@@ -39,3 +52,8 @@ func boost(value):
 func unboost():
 	boostTimerSet = false
 	velocity.y = DEFAULT_VELOCITY
+
+
+func time_freeze(_time_speed):
+	time_speed = _time_speed
+

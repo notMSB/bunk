@@ -11,6 +11,8 @@ var using_keyboard = true
 # Player object
 var player = null
 var UI = null
+var BackgroundLayer = null
+var Spawner = null
 # Weapon system
 
 enum PICKUP {fuel, health, weapon, grenade, EMP, Photon_Barrier, Time_Freeze, Portal_Trinket, length}

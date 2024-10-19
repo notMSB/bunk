@@ -10,6 +10,7 @@ var paused := false
 
 func _ready():
 	Global.UI = self
+	Global.BackgroundLayer = Background
 	$Height/High.text = str(Global.highScore)
 	if Global.shame: $Height/High.text = str($Height/High.text, "?")
 

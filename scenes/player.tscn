@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://0yy4i0l8ajh1"]
+[gd_scene load_steps=14 format=3 uid="uid://0yy4i0l8ajh1"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_2e5t6"]
 [ext_resource type="Texture2D" uid="uid://cgvmcx23r8ods" path="res://assets/sprites/player.png" id="2_f5gig"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c1cujh6mkr13u" path="res://scenes/shotgun.tscn" id="6_g4ar1"]
 [ext_resource type="Script" path="res://scripts/grenade.gd" id="7_bquw6"]
 [ext_resource type="PackedScene" uid="uid://dwboudnyjtnrq" path="res://scenes/explosion.tscn" id="8_2i5iv"]
+[ext_resource type="PackedScene" uid="uid://d05ux23agcpwf" path="res://scenes/EMP_effect.tscn" id="9_34b74"]
 [ext_resource type="Texture2D" uid="uid://2vxf00blm6y4" path="res://assets/sprites/bullet.png" id="9_d85gv"]
 [ext_resource type="Texture2D" uid="uid://ia1jkdtvaa1d" path="res://assets/sprites/18554.png" id="10_pntjh"]
 
@@ -59,6 +60,7 @@ drag_bottom_margin = 1.0
 [node name="grenade" type="Node2D" parent="Item"]
 script = ExtResource("7_bquw6")
 Explosion = ExtResource("8_2i5iv")
+EMP_effect = ExtResource("9_34b74")
 
 [node name="Line" type="Sprite2D" parent="."]
 visible = false
