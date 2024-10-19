@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://dflq157albwsy"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_ikn2k"]
+[ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_ddpxo"]
+[ext_resource type="Script" path="res://scripts/crab_ai.gd" id="3_ltu01"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v371p"]
+size = Vector2(95, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1x6j"]
+size = Vector2(95, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vj3ap"]
+size = Vector2(98, 38)
+
+[node name="Photon Barrier Platform" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 5
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_ikn2k")
+blocks_projectiles = true
+platform_only = true
+platform_sprite = "res://assets/sprites/photon_barrier_platform.png"
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="1" type="Sprite2D" parent="Sprites"]
+scale = Vector2(1.52, 1)
+texture = ExtResource("2_ddpxo")
+
+[node name="EnemyShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_v371p")
+
+[node name="PlatformBody" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 16
+
+[node name="PlatformShape" type="CollisionShape2D" parent="PlatformBody"]
+visible = false
+position = Vector2(0, -14)
+shape = SubResource("RectangleShape2D_b1x6j")
+disabled = true
+one_way_collision = true
+
+[node name="ContactDamage" type="Area2D" parent="."]
+collision_layer = 6
+collision_mask = 5
+
+[node name="DamageArea" type="CollisionShape2D" parent="ContactDamage"]
+scale = Vector2(1, 0.84)
+shape = SubResource("RectangleShape2D_vj3ap")
+
+[node name="AI" type="Node2D" parent="."]
+script = ExtResource("3_ltu01")
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="HPText" type="Label" parent="UI"]
+offset_left = -30.0
+offset_top = -12.0
+offset_right = 30.0
+offset_bottom = 14.0
+text = "0"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]

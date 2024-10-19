@@ -14,7 +14,6 @@ const SPEED_RAMP := .001
 const MAX_SPEED := 1.6
 var speed := BASE_SPEED
 
-
 var weapon_pickup = null
 
 func _ready():
@@ -25,6 +24,9 @@ func _ready():
 	bar.visible = true
 
 func _physics_process(_delta):
+	_delta *= time_speed
+	if _delta == 0: return
+	
 	recalibrate()
 	if isPlatform: position.y += BASE_SPEED
 	else:

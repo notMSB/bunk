@@ -94,7 +94,7 @@ var enemyWavesData = {
 		,	randomize_horizontally 			= false
 		,	randomize_vertically 			= false
 		,	item_platform_increment_weight 	= 1
-		,	spawn_weight 					= [0, 25, 100, 100, 100]
+		,	spawn_weight 					= [10000, 25, 100, 100, 100] 
 	},
 	7 : {
 			Wave_scene						= "res://Enemy Waves/Enemy wave 07.tscn"
@@ -147,6 +147,7 @@ var offscreenSpawns = 0
 func _ready():
 	#enemyScenes = [Swarmer, Clam, Shrimp, Enemy]
 	topSpawnMod = TOP_SPAWN / CAMERA.zoom.y
+	Global.Spawner = self
 	
 
 func spawn_boss():

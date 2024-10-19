@@ -3,9 +3,13 @@ extends CharacterBody2D
 const DEFAULT_VELOCITY := 60
 
 @onready var player : CharacterBody2D = Global.player
+@onready var AI = $AI
 var camera : Camera2D
 
 var isPlatform := false
+@export var blocks_projectiles = false
+@export var platform_only := false
+@export var platform_sprite = "res://assets/sprites/platform.png"
 
 const DEFAULT_KILL_TIMER := 1.0
 var killTimerSet := false
@@ -27,7 +31,10 @@ var boostTimer := BOOST_DEFAULT
 	,	[4000, 0.083]
 	,	[6500, 0.075]
 ]
-@export var platform_only := false
+
+
+var time_speed := 1.0
+
 
 func _ready():
 	velocity.y = DEFAULT_VELOCITY * 2
@@ -38,8 +45,16 @@ func _ready():
 		health = 0
 		change()
 		pass
+	
+	Global.player.get_node("Item/grenade").time_freeze.connect(time_freeze) 
+	if Global.player.get_node("Item/grenade").time_freeze_active: time_freeze(Global.player.get_node("Item/grenade").time_speed)
+	
 
 func _physics_process(delta):
+	
+	delta *= time_speed
+	if delta == 0: return
+	
 	move_and_slide()
 	if killTimerSet: 
 		killTimer -= delta
@@ -83,7 +98,7 @@ func single_platform():
 	$PlatformBody/PlatformShape.set_deferred("disabled", false)
 	var spriteCount := $Sprites.get_child_count()
 	for sprite in $Sprites.get_children():
-		sprite.texture = ResourceLoader.load("res://assets/sprites/platform.png")
+		sprite.texture = ResourceLoader.load(platform_sprite)
 		if sprite.get_index() == 1: #temp
 			sprite.rotation = 0
 			sprite.position.y = 0
@@ -172,3 +187,21 @@ func _on_contact_damage_body_entered(body):
 		var knockbackDir := false if body.position.x > position.x else true
 		if body.launching: take_damage(health) #a boosting player damages enemies
 		else: body.take_damage(knockbackDir, damage)
+	# Block projectiles when entering body and am a platform
+	elif isPlatform && blocks_projectiles:
+		#body.get_parent().name == "Projectiles"
+		print("Enemy _on_contact_damage_body_entered - body name:" + body.name)
+		print("Enemy _on_contact_damage_body_entered - body parent name:" + body.get_parent().name)
+		body.queue_free()
+		pass
+
+func time_freeze(_time_speed):
+	time_speed = _time_speed
+	
+	if $AI != null:
+		AI.time_speed = _time_speed
+	else:
+		print("time_freeze: Enemy does not have AI: " + self.name)
+	pass
+
+

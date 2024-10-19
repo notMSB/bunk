@@ -10,13 +10,22 @@ var ignoreMask : int
 var pierceTimer := .0
 var canPierce := true
 
+var time_speed := 1.0
+
 func _ready():
 	Global.player.get_node("Item/grenade").enemy_projectiles_destroyed.connect(projectiles_destroyed) 
+	Global.player.get_node("Item/grenade").time_freeze.connect(time_freeze) 
+	
+	if Global.player.get_node("Item/grenade").time_freeze_active: time_freeze(Global.player.get_node("Item/grenade").time_speed)
+	
 	pass
 
 func projectiles_destroyed():
 	queue_free()
 	pass
+
+func time_freeze(_time_speed):
+	time_speed = _time_speed
 
 func fire(goalPos, startPos, weaponDamage, pierce, mask = 2, speedMod = 1):
 	if pierce != 0: #0 pierce is infinite pierce
@@ -33,6 +42,9 @@ func rotate_direction(degree):
 	direction = direction.rotated(deg_to_rad(degree))
 
 func _process(delta):
+	
+	delta *= time_speed
+	
 	position += direction * speed * delta
 	if pierceTimer > 0: 
 		pierceTimer -= delta
