@@ -26,7 +26,7 @@ var boostTimer := BOOST_DEFAULT
 		# array of spawn chances for pickups. Can be overwritten per enemy. 
 		# first element: max elevation for chance
 		# second element: drop chance from 0-1
-		[1000, 0.90] # 0.10
+		[1000, 0.10] # 0.10
 	,	[2500, 0.092]
 	,	[4000, 0.083]
 	,	[6500, 0.075]
@@ -71,6 +71,9 @@ func _physics_process(delta):
 		boostTimerSet = false
 		boostTimer = BOOST_DEFAULT
 		velocity.y = DEFAULT_VELOCITY
+	
+	#for body in $PlatformBody.get_overlapping_bodies():
+		#print("Enemy overlapping bodies - body name:" + body.name + ". body parent name: " + body.get_parent().name)
 
 func setup(cam, p):
 	camera = cam
@@ -83,12 +86,18 @@ func change():
 	isPlatform = true
 	$UI/HPText.visible = false
 	$AI.queue_free()
-	$ContactDamage.visible = false
 	set_collision_layer_value(6, 1)
 	set_collision_layer_value(2, 0)
 	set_collision_mask_value(1, 0)
-	$ContactDamage.visible = false
 	if Global.useMobile: scale.x *= 2
+	
+	# Keep area to use for bullet collisions
+	if isPlatform && blocks_projectiles:
+		#$ContactDamage.visible = false
+		pass
+	else:
+		$ContactDamage.visible = false
+		pass
 	
 	if get_node_or_null("Platforms"): multi_platform()
 	else: single_platform()
@@ -183,17 +192,13 @@ func take_damage(amount):
 	
 
 func _on_contact_damage_body_entered(body):
-	if $ContactDamage.visible and body.collision_layer == 65: #damage player
+	print("Enemy _on_contact_damage_body_entered - body name: " + body.name + ". body parent name: " + body.get_parent().name)
+	# Block projectiles when entering body and am a platform
+	if !isPlatform && $ContactDamage.visible and body.collision_layer == 65: #damage player
 		var knockbackDir := false if body.position.x > position.x else true
 		if body.launching: take_damage(health) #a boosting player damages enemies
 		else: body.take_damage(knockbackDir, damage)
-	# Block projectiles when entering body and am a platform
-	elif isPlatform && blocks_projectiles:
-		#body.get_parent().name == "Projectiles"
-		print("Enemy _on_contact_damage_body_entered - body name:" + body.name)
-		print("Enemy _on_contact_damage_body_entered - body parent name:" + body.get_parent().name)
-		body.queue_free()
-		pass
+	
 
 func time_freeze(_time_speed):
 	time_speed = _time_speed
@@ -204,4 +209,11 @@ func time_freeze(_time_speed):
 		print("time_freeze: Enemy does not have AI: " + self.name)
 	pass
 
-
+func _on_contact_damage_area_entered(area):
+	# Clear projectiles colliding with object
+	print("Enemy _on_contact_damage_body_entered - area name: " + area.name + ". area parent name: " + area.get_parent().name)
+	if isPlatform && blocks_projectiles && area.get_parent().name == "Projectiles":
+		area.queue_free()
+		#body.call_deferred("queue_free")
+		pass
+	pass # Replace with function body.

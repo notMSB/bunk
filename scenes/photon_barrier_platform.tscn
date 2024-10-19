@@ -46,6 +46,7 @@ one_way_collision = true
 [node name="ContactDamage" type="Area2D" parent="."]
 collision_layer = 6
 collision_mask = 5
+priority = 10
 
 [node name="DamageArea" type="CollisionShape2D" parent="ContactDamage"]
 scale = Vector2(1, 0.84)
@@ -65,4 +66,5 @@ text = "0"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
+[connection signal="area_entered" from="ContactDamage" to="." method="_on_contact_damage_area_entered"]
 [connection signal="body_entered" from="ContactDamage" to="." method="_on_contact_damage_body_entered"]

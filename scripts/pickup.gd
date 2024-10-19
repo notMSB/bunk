@@ -15,26 +15,31 @@ var pickup = {
 	}, 
 	Global.PICKUP.grenade: {
 		name = "Grenade",
-		sprite = "res://assets/sprites/grenade.png"
+		sprite = "res://assets/sprites/grenade.png",
+		spawn_weight = 1.0
 	}, 
 	Global.PICKUP.EMP: {
 		name = "EMP",
 		displayname = "EMP",
+		spawn_weight = 1.0
 		#sprite = "res://assets/sprites/grenade.png"
 	}, 
 	Global.PICKUP.Photon_Barrier: {
 		name = "Photon Barrier",
 		displayname = "PB",
+		spawn_weight = 2.0
 		#sprite = "res://assets/sprites/grenade.png"
 	}, 
 	Global.PICKUP.Time_Freeze: {
 		name = "Time Freeze",
 		displayname = "TF",
+		spawn_weight = 0.5
 		#sprite = "res://assets/sprites/grenade.png"
 	}, 
 	Global.PICKUP.Portal_Trinket: {
 		name = "Portal Trinket",
 		displayname = "PT",
+		spawn_weight = 1.0
 		#sprite = "res://assets/sprites/grenade.png"
 	}
 }
@@ -104,7 +109,27 @@ func setup(_player, _spawn_source = SPAWN_SOURCE.Platform):
 	# Default to a grenade item
 	rando -= gadgetWeight
 	if rando <= 0 && gadgetWeight > 0:
-		pickup_index = randi_range(Global.PICKUP.grenade, Global.PICKUP.length-1)
+		
+		# Get all weights
+		var _gadget_weight_total = 0.0
+		for key in Global.PICKUP.length:
+			# skip all entries until we reach gadgets
+			if key < Global.PICKUP.grenade: continue;
+			_gadget_weight_total += pickup[key].spawn_weight
+			pass
+		
+		# Randomize weight chosen, and pick gadget based on that
+		var _gadget_weight_chosen = randf_range(0, _gadget_weight_total)
+		for key in Global.PICKUP.length:
+			if key < Global.PICKUP.grenade: continue;
+			_gadget_weight_chosen -= pickup[key].spawn_weight
+			
+			if _gadget_weight_chosen <= 0:
+				pickup_index = key
+				break;
+		
+		
+		#pickup_index = randi_range(Global.PICKUP.grenade, Global.PICKUP.length-1)
 		
 		# Set sprite
 		if pickup[pickup_index].has("sprite"):
