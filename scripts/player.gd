@@ -577,7 +577,8 @@ func change_fuel(change):
 	else: fuel = clamp(fuel + change, 0, 100)
 	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
 	
-	if change > 0 && _fuel_old >= superjump_fuel_threshold:
+	# Superjump when getting fuel above a threshold
+	if change > 0 && _fuel_old >= superjump_fuel_threshold && !UI.paused:
 		superjump_start()
 
 func take_damage(goLeft, _damage = 0, bigHit = false):

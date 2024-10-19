@@ -5,13 +5,13 @@ extends Area2D
 
 var pickup = {
 	Global.PICKUP.fuel: {
-		name = "fuel"
+		name = "Fuel"
 	}, 
 	Global.PICKUP.health: {
-		name = "health"
+		name = "Health"
 	}, 
 	Global.PICKUP.weapon: {
-		name = "weapon"
+		name = "Weapon"
 	}, 
 	Global.PICKUP.grenade: {
 		name = "Grenade",
