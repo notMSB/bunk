@@ -3,6 +3,8 @@ extends Node2D
 var player : CharacterBody2D
 @onready var enemy = get_parent()
 
+var time_speed = 1.0
+
 func setup(p, offset = 0):
 	player = p
 	var direction : Vector2 = (player.global_position - enemy.global_position).normalized()
