@@ -28,6 +28,7 @@ gdscript/warnings/integer_division=0
 
 window/size/viewport_width=1024
 window/size/viewport_height=768
+window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [filesystem]
