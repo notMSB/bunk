@@ -46,7 +46,7 @@ var enemyWavesData = {
 		,	randomize_horizontally 			= true
 		,	randomize_vertically 			= true
 		,	item_platform_increment_weight 	= 0
-		,	spawn_weight 					= [500, 500, 500, 500, 500]
+		,	spawn_weight 					= [0, 500, 500, 500, 500]
 	},
 	1 : {
 			Wave_scene						= "res://Enemy Waves/Enemy wave 01.tscn"
@@ -54,7 +54,7 @@ var enemyWavesData = {
 		,	randomize_horizontally 			= true		# Randomize positions of all elements horizontally
 		,	randomize_vertically 			= false		# Randomize positions of all elements vertically
 		,	item_platform_increment_weight 	= 1			# How much to increment the item platform frequency. Usually will match the number of enemies in the wave.
-		,	spawn_weight 					= [1000, 825, 500, 300, 100]			# How likely it is for a wave asset to be chosen based on height thresholds
+		,	spawn_weight 					= [0, 825, 500, 300, 100]			# How likely it is for a wave asset to be chosen based on height thresholds
 	},
 	2 : {
 			Wave_scene						= "res://Enemy Waves/Enemy wave 02.tscn"
@@ -135,8 +135,16 @@ var enemyWavesData = {
 		,	randomize_vertically 			= false
 		,	item_platform_increment_weight 	= 1
 		,	spawn_weight 					= [0, 125, 200, 100, 100]
-	}
-	
+	},
+
+	12 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 12.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [10000, 1250000, 200000, 100, 100]
+	},
 }
 
 
