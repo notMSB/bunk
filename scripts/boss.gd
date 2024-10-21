@@ -14,7 +14,6 @@ const SPEED_RAMP := .001
 const MAX_SPEED := 1.6
 var speed := BASE_SPEED
 
-
 var weapon_pickup = null
 
 func _ready():
@@ -25,6 +24,9 @@ func _ready():
 	bar.visible = true
 
 func _physics_process(_delta):
+	_delta *= time_speed
+	if _delta == 0: return
+	
 	recalibrate()
 	if isPlatform: position.y += BASE_SPEED
 	else:
@@ -70,7 +72,7 @@ func take_damage(amount):
 
 func recalibrate():
 	#if playerY: global_position.y += player.global_position.y - playerY
-	global_position.x = player.global_position.x - $EnemyShape.shape.size.x*.42 + player.get_node("CollisionShape2D").shape.size.x
+	global_position.x = player.global_position.x #- $EnemyShape.shape.size.x*.42 + player.get_node("CollisionShape2D").shape.size.x
 	#playerY = player.global_position.y
 	if weapon_pickup != null && is_instance_valid(weapon_pickup):
 		weapon_pickup.position.x = get_node("Item Spawn Position").position.x

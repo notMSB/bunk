@@ -1,224 +1,304 @@
 extends Node2D
 
-# Caches a reference to the UI node, allowing easy access to the UI in the scene.
 @onready var UI := get_node("../UI")
-# Caches a reference to the Player node, providing easy access to player-related operations.
 @onready var PLAYER := get_node("../Player")
-# Caches a reference to the Camera2D node attached to the player, used for positioning and zoom calculations.
 @onready var CAMERA := get_node("../Player/Camera2D")
-
-# Defines an export variable for different enemy scenes, allowing them to be set in the editor.
 @export var Enemy : PackedScene
 @export var Shrimp : PackedScene
 @export var Clam : PackedScene
 @export var Swarmer : PackedScene
 @export var Boss : PackedScene
 
-# Defines an export variable for item platform scene, allowing it to be set in the editor.
 @export var ItemPlatform: PackedScene
 
-# Constants for vertical and horizontal spawn modifiers.
 const VERT_BASE := 350
 const VERT_MOD := 400
 const HORIZ_MOD := 600
 
-# Constant for the top spawn position.
 const TOP_SPAWN := 500
 var topSpawnMod = TOP_SPAWN
 
-# Spawn rate of waves. Each entry contains height minimum and spawn time between waves.
-const TIMER_LIST := [
-	[0, 1.3],
-	[500, 1.3],
-	[2000, 1.3],
-	[5000, 1.3],
-	[8000, 1.3],
-	[11000, 1.3]
-]
+# Spawn rate of waves. 
+var TIMER_LIST = Global.elevation_threshold_data.timer_list
 var timerIndex := 0
-var timer := TIMER_LIST[0][1]
+var timer = TIMER_LIST[0][1]
 
-# Stores the current height of the player, used to determine enemy spawn rates and difficulty.
 var height : int
 
-# Platform spawn frequency and counter.
-var platformFrequency := 10
+var platformFrequency := 1
 var platSpawnCounter := 0
+var platformTimerCooldown := 0.0
 
-# Get all wave assets in "enemy waves" folder to be used later.
-var enemyWavesArray = Global.getFilePathsByExtension("res://Enemy Waves/", "tscn")
-var enemyWavesRandomYSpawnMax = -768/2  # Max height enemies will randomly set their spawn position to.
-var enemyWavesRandomXSpawnMax = 1024/2  # Max distance enemies will randomly set their spawn position to from center.
-var enemyOdds : Array  # Should be the same number of entries of waves. Dictates how likely a specific wave can be chosen.
 
-# Data for each wave, including delay and randomization properties.
+#var enemyScenes : Array
+
+# Get all wave assets in "enemy waves" folder to be used later
+var enemyWavesRandomYSpawnMax = -768/2	# Max height enemies will randomly set their spawn position to
+var enemyWavesRandomXSpawnMax = 1024/2	# Max distance enemies will randomly set their spawn position to from centre
+var enemyOdds : Array	# Should be the same number of entries of waves. Dictates how likely a specific wave can be chosen
+
+# Data for each wave
+# Can b
 var enemyWavesData = {
-	0: {
-		"wave_delay_next": 3.5,                  # Delay applied when this wave spawns for the next wave
-		"randomize_horizontally": true,       # Randomize positions of all elements horizontally
-		"randomize_vertically": false,         # Randomize positions of all elements vertically
-		"item_platform_increment_weight": 1,   # How much to increment the item platform frequency
+	0 : {
+			Wave_scene						= "res://Enemy Waves/Single Platform.tscn"
+		,	wave_delay_next 				= 0.05
+		,	randomize_horizontally 			= true
+		,	randomize_vertically 			= true
+		,	item_platform_increment_weight 	= 0
+		,	spawn_weight 					= [0, 500, 500, 500, 500]
 	},
-	1: {
-		"wave_delay_next": 4.2,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	1 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 01.tscn"
+		,	wave_delay_next					= 3.5		# Delay applied when this wave spawns for the next wave. This allows customization of spawn times
+		,	randomize_horizontally 			= true		# Randomize positions of all elements horizontally
+		,	randomize_vertically 			= false		# Randomize positions of all elements vertically
+		,	item_platform_increment_weight 	= 1			# How much to increment the item platform frequency. Usually will match the number of enemies in the wave.
+		,	spawn_weight 					= [0, 825, 500, 300, 100]			# How likely it is for a wave asset to be chosen based on height thresholds
 	},
-	2: {
-		"wave_delay_next": 4.8,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	2 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 02.tscn"
+		,	wave_delay_next 				= 4.2
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 4
+		,	spawn_weight 					= [0, 50, 150, 150, 150]
 	},
-	3: {
-		"wave_delay_next": 5.4,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	3 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 03.tscn"
+		,	wave_delay_next 				= 4.8
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 3
+		,	spawn_weight 					= [0, 50, 150, 150, 150]
 	},
-	4: {  # New wave data
-		"wave_delay_next": 6,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	4 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 04.tscn"
+		,	wave_delay_next 				= 5.4
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 50, 100, 100, 100]
 	},
-	5: {  # New wave data
-		"wave_delay_next": 6.4,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	5 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 05.tscn"
+		,	wave_delay_next 				= 6.0
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100]
 	},
-	# Add more entries as needed
-	6: {
-		"wave_delay_next": 4.5,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	6 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 06.tscn"
+		,	wave_delay_next 				= 6.4
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100] 
 	},
-	
-	7: {
-		"wave_delay_next": 3,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	7 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 07.tscn"
+		,	wave_delay_next 				= 4.5
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100]
 	},
-	8: {
-		"wave_delay_next": 3.3,
-		"randomize_horizontally": true,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	8 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 08.tscn"
+		,	wave_delay_next 				= 3.0
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 25, 100, 100, 100]
 	},
-	9: {
-		"wave_delay_next": 3.3,
-		"randomize_horizontally": true,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	9 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 09.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= true
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 125, 200, 100, 100]
 	},
-	10: {
-		"wave_delay_next": 3.3,
-		"randomize_horizontally": false,
-		"randomize_vertically": false,
-		"item_platform_increment_weight": 1,
+	10 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 10.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= true
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 125, 200, 100, 100]
+	},
+	11 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 11.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [0, 125, 200, 100, 100]
+	},
+
+	12 : {
+			Wave_scene						= "res://Enemy Waves/Enemy wave 12.tscn"
+		,	wave_delay_next 				= 3.3
+		,	randomize_horizontally 			= false
+		,	randomize_vertically 			= false
+		,	item_platform_increment_weight 	= 1
+		,	spawn_weight 					= [10000, 1250000, 200000, 100, 100]
 	},
 }
 
+
+		
 const OFFSCREEN_LOOP = 2
 var offscreenSpawns = 0
 
-# Called when the node enters the scene; initializes values like top spawn modifier.
 func _ready():
+	#enemyScenes = [Swarmer, Clam, Shrimp, Enemy]
 	topSpawnMod = TOP_SPAWN / CAMERA.zoom.y
+	Global.Spawner = self
+	
 
-# Spawns a boss enemy at the camera's center position.
 func spawn_boss():
 	spawn(CAMERA.get_screen_center_position(), true, true)
 
-# Called every frame; handles timer updates and checks if it's time to spawn new enemies.
 func _process(delta):
 	height = UI.get_height()
+	
+	# Update spawning parameters
 	check_height_table()
+	
+	# Spawn enemies every so often using a timer
 	timer -= delta
 	if timer <= 0:
 		set_spawns()
+		
 
-# Determines the current spawn timer value based on player height and updates the timer index.
 func get_timer():
-	if timerIndex == TIMER_LIST.size() - 1:
-		return TIMER_LIST[-1][1]
+	if timerIndex == TIMER_LIST.size()-1: return TIMER_LIST[-1][1]
 	else:
-		if height >= TIMER_LIST[timerIndex + 1][0]:
+		if height >= TIMER_LIST[timerIndex+1][0]:
 			timerIndex += 1
+		#print(TIMER_LIST[timerIndex][1])
 		return TIMER_LIST[timerIndex][1]
 
-# Adjusts enemy odds and platform frequency based on player height to increase difficulty dynamically.
-func check_height_table():
-	if height < 1000:
-		enemyOdds = [1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+func check_height_table(): #todo: optimize, should not calculate every frame
+	if height < Global.elevation_threshold_data.enemy_spawn_threshold[0]: 
+		# Total spawn weights for all waves
+		enemyOdds = []
+		for i in enemyWavesData.size():
+			enemyOdds.append(enemyWavesData[i].spawn_weight[0])
+		
 		platformFrequency = 3
-	elif height < 2500:
-		enemyOdds = [825, 50, 50, 50, 25, 25, 25, 25, 125, 125, 125]
+	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[1]: 
+		# Total spawn weights for all waves
+		enemyOdds = []
+		for i in enemyWavesData.size():
+			enemyOdds.append(enemyWavesData[i].spawn_weight[1])
+		
 		platformFrequency = 3.5
-	elif height < 4000:
-		enemyOdds = [500, 150, 150, 100, 100, 100, 100, 100, 200, 200, 200]
+	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[2]: 
+		# Total spawn weights for all waves
+		enemyOdds = []
+		for i in enemyWavesData.size():
+			enemyOdds.append(enemyWavesData[i].spawn_weight[2])
+		
 		platformFrequency = 4
-	elif height < 6500:
-		enemyOdds = [300, 150, 150, 100, 100, 100, 100, 100, 100, 100, 100]
+	elif height < Global.elevation_threshold_data.enemy_spawn_threshold[3]: 
+		# Total spawn weights for all waves
+		enemyOdds = []
+		for i in enemyWavesData.size():
+			enemyOdds.append(enemyWavesData[i].spawn_weight[3])
+		
 		platformFrequency = 4.5
-	else:
-		enemyOdds = [100, 150, 150, 100, 100, 100, 100, 100, 100, 100, 100]
+	else: 
+		# Total spawn weights for all waves
+		enemyOdds = []
+		for i in enemyWavesData.size():
+			enemyOdds.append(enemyWavesData[i].spawn_weight[4])
+		
 		platformFrequency = 5
+	@warning_ignore("narrowing_conversion")
+	if UI.paused: platformFrequency *= 0.75
 
-	if UI.paused:
-		platformFrequency *= 0.75
-
-# Handles the spawning of enemies at specific screen positions, including off-screen.
 func set_spawns():
+	
+	# Get screen position
 	var screenX : int = ProjectSettings.get_setting("display/window/size/viewport_width") / CAMERA.zoom.x
 	var screenY : int = ProjectSettings.get_setting("display/window/size/viewport_height") / CAMERA.zoom.y
+	
+	
+	# Spawn enemies in the middle. Also randomly spawn a pickup
 	spawn(CAMERA.get_screen_center_position(), true)
-	offscreenSpawns += 2
-	if offscreenSpawns > OFFSCREEN_LOOP:
+	
+	# Spawn enemies to the left and right
+	#spawn(Vector2(CAMERA.get_screen_center_position().x - screenX, CAMERA.get_screen_center_position().y))
+	#spawn(Vector2(CAMERA.get_screen_center_position().x + screenX, CAMERA.get_screen_center_position().y))
+	
+	# Spawn enemies off screen
+	offscreenSpawns +=1
+	if offscreenSpawns > OFFSCREEN_LOOP: 
 		offscreenSpawns = 0
 		spawn(Vector2(CAMERA.get_screen_center_position().x, CAMERA.get_screen_center_position().y - screenY))
 
-# Handles the actual instantiation and positioning of enemies, bosses, or item platforms.
 func spawn(center, original = false, boss = false):
+	#var newSpawn : CharacterBody2D
 	var newSpawn = null
 	var isItem := false
 	var timer_new_delay := 1.0
 	var enemy_wave_spawn_index := -1
 	var enemy_wave_item_platform_increment_weight = 1
+	
 	var specificHoriz : int = HORIZ_MOD if original else HORIZ_MOD / 2
-
-	if boss:
-		newSpawn = Boss.instantiate()
+	
+	# spawn Boss
+	if boss: newSpawn = Boss.instantiate();
 	else:
-		if platSpawnCounter >= platformFrequency and original:
+		# Now incremented after enemy waves are spawned
+		#if original: platSpawnCounter +=1
+		
+		# spawn item platform
+		if platSpawnCounter >= platformFrequency and original: 
 			newSpawn = ItemPlatform.instantiate()
-			if PLAYER.mobile:
-				newSpawn.scale.x *= 2
+			if PLAYER.mobile: newSpawn.scale.x *= 2
 			platSpawnCounter = 0
 			isItem = true
+		# Spawn enemy
 		else:
-			var totalOdds := 0
-			for i in enemyOdds:
-				totalOdds += i
-			var enemyRando := randi() % totalOdds
-			for i in enemyWavesArray.size():
+			# Figure out what enemy to spawn based on spawning chances of each enemy
+			#var totalOdds := 0
+			#for i in enemyOdds: totalOdds += i
+			#var enemyRando := randi() % totalOdds
+			#for i in enemyScenes.size():
+				#enemyRando -= enemyOdds[i]
+				#
+				## Actually spawn enemy
+				#if enemyRando < 0:
+					#newSpawn = enemyScenes[i].instantiate()
+					#break
+			
+			# Total all odds of waves
+			var totalOdds := 0.0
+			for i in enemyOdds.size(): 
+				totalOdds += enemyOdds[i]
+			
+			# Figure out what to spawn based on random selection
+			var enemyRando := randf_range(0.0, totalOdds)
+			for i in enemyOdds.size():
 				enemyRando -= enemyOdds[i]
-				if enemyRando < 0:
+				
+				# Actually spawn enemy
+				if enemyRando <= 0:
 					enemy_wave_spawn_index = i
-					newSpawn = load(enemyWavesArray[enemy_wave_spawn_index]).instantiate()
+					newSpawn = load(enemyWavesData[enemy_wave_spawn_index].Wave_scene).instantiate()
 					break
-
-	if newSpawn == null:
-		return
-
+	
+	if newSpawn == null: return
+	
 	add_child(newSpawn)
-
+	
+	# Set up item spawn post-creation
 	if isItem:
-		var yPos : float = center.y - (VERT_BASE / CAMERA.zoom.y) - randi() % VERT_MOD
+		var yPos : float = center.y - (VERT_BASE / CAMERA.zoom.y) - randi() % (VERT_MOD)
 		var rando = randi() % 2
 		if rando == 0:
 			newSpawn.global_position = Vector2(center.x - HORIZ_MOD, yPos)
@@ -226,28 +306,65 @@ func spawn(center, original = false, boss = false):
 		elif rando == 1:
 			newSpawn.global_position = Vector2(center.x + HORIZ_MOD, yPos)
 			newSpawn.velocity.x = -100
+		
 		newSpawn.setup(CAMERA, PLAYER)
-		timer_new_delay = get_timer()
+		timer_new_delay = platformTimerCooldown * get_timer()
+		pass
 	elif boss:
-		var xPos : float = center.x + specificHoriz - randi() % (specificHoriz * 2)
+		var xPos : float = center.x
 		newSpawn.global_position = Vector2(xPos, center.y - topSpawnMod)
 		newSpawn.setup(CAMERA, PLAYER)
 		timer_new_delay = get_timer()
+		pass
+	# Set up enemy position
 	else:
+		# Old single-enemy spawning logic
+		#var xPos : float = center.x + specificHoriz - randi() % (specificHoriz * 2)
+		#newSpawn.global_position = Vector2(xPos, center.y - topSpawnMod)
+		
+		# Spawn wave at top centre of screen
 		newSpawn.global_position = Vector2(center.x, center.y - topSpawnMod)
+		
+		# Set up each instance in the wave
 		for _e in newSpawn.get_child_count():
+			# Get first instance, as we reparent each one
 			var _wave_instance = newSpawn.get_child(0)
-			if enemyWavesData[enemy_wave_spawn_index].randomize_horizontally:
+			
+			# Randomize positions of instances in the wave if able
+			if(enemyWavesData[enemy_wave_spawn_index].randomize_horizontally):
 				_wave_instance.position.x = randf_range(enemyWavesRandomXSpawnMax, -enemyWavesRandomXSpawnMax)
-			if enemyWavesData[enemy_wave_spawn_index].randomize_vertically:
+				pass
+			if(enemyWavesData[enemy_wave_spawn_index].randomize_vertically):
 				_wave_instance.position.y = randf_range(enemyWavesRandomYSpawnMax, 0)
+				pass
+			
+			# Put instance to spawner instance
+			#var _old_position = _wave_instance.global_position
 			_wave_instance.reparent(self, true)
-			_wave_instance.setup(CAMERA, PLAYER)
+			#_wave_instance.global_position = _old_position
+			
+			
+			# Set up instance after repositioning/moving to spawner
+			if(_wave_instance.has_method("setup")):
+				_wave_instance.setup(CAMERA, PLAYER)
+			
+			pass
+		
+		# Delay next wave by this wave's time
+		# Multiplies the delay by default timer delay, so it scales with height
 		timer_new_delay = enemyWavesData[enemy_wave_spawn_index].wave_delay_next * get_timer()
+		
+		# Increment item platform spawn counter
 		enemy_wave_item_platform_increment_weight = enemyWavesData[enemy_wave_spawn_index].item_platform_increment_weight
+		
+		
+		# Clean up leftover "wave" instance as it's no longer needed
 		newSpawn.queue_free()
-
+		pass
+	
+	#if PLAYER.mobile: newSpawn.scale *= 2
+	#timer = get_timer()
 	timer = timer_new_delay
-
-	if original:
-		platSpawnCounter += enemy_wave_item_platform_increment_weight
+	
+	# Increment item platform spawn counter by weight added from waves
+	if original: platSpawnCounter += enemy_wave_item_platform_increment_weight

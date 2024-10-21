@@ -6,25 +6,25 @@ extends CharacterBody2D
 #const SPEED := 350.0
 const move_speed_decel_floor 	:= 60.0
 const move_speed_decel_air 		:= 60.0
-const move_speed_accel 			:= 20.0	## How fast they speed up to max speed
-const move_speed_decel_manual 	:= 400.0	## Manual deceleration speed, such as moving in the opposite direction of the current velocity
+const move_speed_accel 			:= 30.0	## How fast they speed up to max speed
+const move_speed_decel_manual 	:= 90.0	## Manual deceleration speed, such as moving in the opposite direction of the current velocity
 const move_speed_decel_maxed_manual 	:= 30.0	## Manual deceleration speed when above max
 const move_speed_decel_maxed 	:= 5.0		## Player's deceleration speed when they are beyond their max speed
-const move_speed_max 			:= 450
+const move_speed_max 			:= 600.0
 var move_speed_current := 0.0
 
 # Jumps
 var jumping := false
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-var gravity_decel 				= 1600.0 # Decel gravity allows floating more
-var gravity_accel 				= 800.0 # Accel gravity brings player down
-const GRAVITY_MAX				= 1000.0
-const JUMP_VELOCITY 			:= -800 #-1065.0 #-725.0
+var gravity_decel 				= 2250.0 # Decel gravity allows floating more
+var gravity_accel 				= 2500.0 # Accel gravity brings player down
+const GRAVITY_MAX				= 1400.0
+const JUMP_VELOCITY 			:= -1000 #-1065.0 #-725.0
 const AIR_JUMP_VELOCITY 		:= JUMP_VELOCITY / 1.15
 const JUMP_TIME					:= 5.0/60.0 # fractions of a second. For setting full velocity of jump for a time, to make it smoother
 const AIR_JUMP_TIME				:= 5.0/60.0 # fractions of a second. For setting full velocity of jump for a time, to make it smoother
-var JUMP_SHORT_GRAVITY			= gravity_accel * 1.5 # + 1400.0	# Speed of gravity when short jumping
-var JUMP_SHORT_DECEL			= gravity_accel * 6 # 2000.0	# Deceleration when short jumping, so the jump ends sooner
+var JUMP_SHORT_GRAVITY			= gravity_accel * 1.7 # + 1400.0	# Speed of gravity when short jumping
+var JUMP_SHORT_DECEL			= gravity_accel * 2 # 2000.0	# Deceleration when short jumping, so the jump ends sooner
 var jump_alarm = 0
 const AIR_JUMPS 				:= 2
 var currentAirJumps := 0
@@ -34,6 +34,15 @@ var currentCoyote := COYOTE_TIME
 var fastfalling := false
 var short_jumping = false
 const CROUCH_FASTFALL_SPEED 			:= 600.0
+
+var superjumping = false
+var superjump_fuel_threshold = 80
+var superjump_height_start = 0
+var superjump_height_end = 0
+var superjump_distance_max = 500
+var superjump_velocity = -500
+var superjump_velocity_end = -1000
+
 
 const PLATFORM_LAYER := 16
 
@@ -56,17 +65,12 @@ var crouched := false
 var health := 3
 var dead := false
 
-var healthWeight := 0
-var fuelWeight := 0
-var grenadeWeight := 0
-var weaponWeight := 0
-
 const CROUCH_DIFF := 17 #adjusting player position on crouch/uncrouch to prevent going airborne
 
 const BASE_KNOCKBACK_X 	= 700 #for when the player takes damage
 const BASE_KNOCKBACK_Y 	= 1150 #700 #for when the player takes damage
-const BIG_KNOCKBACK_X 	= 1600 #for when the player is hit by the boss or falls off the bottom
-const BIG_KNOCKBACK_Y 	= -2000 #800 #for when the player is hit by the boss or falls off the bottom
+const BIG_KNOCKBACK_X 	= 800 #for when the player is hit by the boss or falls off the bottom
+const BIG_KNOCKBACK_Y 	= -1300 #800 #for when the player is hit by the boss or falls off the bottom
 
 const MAX_FUEL := 100
 var fuelThreshold := 5
@@ -74,9 +78,10 @@ var fuel := MAX_FUEL
 
 
 var hasItem := true
+var gadget_current = Global.PICKUP.grenade #grenade
 
 const INVULN_TIME := 1.0 #seconds
-var currentInvuln := INVULN_TIME
+var invulnerable_timer := INVULN_TIME
 var invulnerable := false
 
 # Weapons
@@ -121,13 +126,15 @@ func _physics_process(delta):
 		take_damage(false, 1, true)
 		change_fuel(-5 * fuelThreshold)
 	
+	if superjumping: superjump_step();
+	
 	# Apply gravity
 	if !is_on_floor():
 		if crouched and !fastfalling: 
 			uncrouch()
 		
 		
-		if jump_alarm == 0:
+		if jump_alarm == 0 && !superjumping:
 			
 			# Apply decel to slow down when starting to fall
 			if(velocity.y < 0):
@@ -180,8 +187,11 @@ func _physics_process(delta):
 	else: mobile_process()
 	
 	if invulnerable:
-		currentInvuln -= delta
-		if currentInvuln <= 0:
+		# Allow invuln to continue when superjumping
+		if superjumping: pass
+		
+		invulnerable_timer -= delta
+		if invulnerable_timer <= 0:
 			set_invuln(false)
 	
 	move_and_slide()
@@ -270,7 +280,7 @@ func classic_process(delta):
 	# Use items
 	if Input.is_action_just_pressed("item") and hasItem:
 		$Item.get_child(0).use()
-		change_item(false)
+		change_item(-1)
 	
 	
 	# 360 degree aiming using controller/reticle
@@ -499,31 +509,40 @@ func jump():
 		if currentCoyote > 0:
 			currentCoyote = 0
 			
-			# Set speed
-			change_velocity(JUMP_VELOCITY)
-			jump_alarm = JUMP_TIME
+			jump_initiate()
 			
-			# ???
-			if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
-			jumping = true
-			short_jumping = false
 			return
 	
 	# air jumps
 	if fuel >= fuelThreshold and currentAirJumps < AIR_JUMPS:
 		currentAirJumps += 1
-		
-		# Set Speed
-		change_velocity(AIR_JUMP_VELOCITY)
-		jump_alarm = AIR_JUMP_TIME
-		
-		# Slow player down horizontally
-		velocity.x *= 1.4
-		
 		change_fuel(-1 * fuelThreshold)
-		jumping = true
-		short_jumping = false
-		fastfalling = false
+		jump_air_initiate()
+		
+
+func jump_initiate():
+	# Set speed
+	change_velocity(JUMP_VELOCITY)
+	jump_alarm = JUMP_TIME
+	
+	# ???
+	if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
+	jumping = true
+	short_jumping = false
+	pass
+
+func jump_air_initiate():
+	# Set Speed
+	change_velocity(AIR_JUMP_VELOCITY)
+	jump_alarm = AIR_JUMP_TIME
+	
+	# Slow player down horizontally
+	velocity.x *= 1.4
+	
+	jumping = true
+	short_jumping = false
+	fastfalling = false
+	pass
 
 func crouch():
 	scale.y = .5
@@ -545,38 +564,52 @@ func uncrouch(adjust = true):
 	scale.y = 1
 	if adjust: position.y -= CROUCH_DIFF
 
-func change_item(change):
-	hasItem = change
-	UI.set_item(hasItem)
+func change_item(item_id):
+	hasItem = false if item_id == -1 else true
+	gadget_current = item_id
+	UI.set_item(item_id)
 
 func change_fuel(change):
+	
+	var _fuel_old = fuel
+	
 	if mobile: fuel = max(fuel + change, 0)
 	else: fuel = clamp(fuel + change, 0, 100)
 	UI.set_fuel(fuel, fuelThreshold, currentAirJumps, AIR_JUMPS)
+	
+	# Superjump when getting fuel above a threshold
+	if change > 0 && _fuel_old >= superjump_fuel_threshold && !UI.paused:
+		superjump_start()
 
 func take_damage(goLeft, _damage = 0, bigHit = false):
 	
-	if dead: return
+	# Always perform knockback, even if damage isn't taken
+	if bigHit: change_velocity(BIG_KNOCKBACK_Y)
+	else: velocity.x = -BASE_KNOCKBACK_X if goLeft else BASE_KNOCKBACK_X
 	
+	# early out for damage
+	if dead || invulnerable: return
+	
+	# Take damage
 	var _text = Global.spawn_notif_text("Ow!", self)
 	_text.set_style_fast_tiny()
-	
 	health -= 1
 	if health <= 0: die()
 	UI.update_health(health, false)
-	if bigHit: change_velocity(BIG_KNOCKBACK_Y)
-	else: velocity.x = -BASE_KNOCKBACK_X if goLeft else BASE_KNOCKBACK_X
 	set_invuln(true)
 
 func heal(amount):
 	health = min(health + amount, 3)
 	UI.update_health(health, true)
 
-func set_invuln(isInvuln):
-	if invulnerable and isInvuln: currentInvuln = INVULN_TIME
+func set_invuln(new_invulnerability):
+	# refresh invulnerability
+	if invulnerable and new_invulnerability: invulnerable_timer = INVULN_TIME
+	# Set/reset invulnerability
 	else:
-		collision_layer -= 1 if isInvuln else -1
-		invulnerable = isInvuln
+		#collision_layer -= 1 if new_invulnerability else -1
+		invulnerable = new_invulnerability
+		invulnerable_timer = INVULN_TIME
 
 func die():
 	
@@ -589,7 +622,6 @@ func die():
 	set_physics_process(false)
 	
 	Global.game_over()
-	
 
 func plat_drop():
 	position.y += 4
@@ -617,14 +649,13 @@ func aim_using_joystick(delta):
 	var _aim_position = (_aim_angle * controller_reticle_radius)
 	get_viewport().warp_mouse(lerp(get_global_transform_with_canvas().origin, get_global_transform_with_canvas().origin + _aim_position, controller_aim_lerp_speed * delta))
 	if $"Target Reticle".visible: $"Target Reticle".position = lerp($"Target Reticle".position, _aim_position, controller_aim_lerp_speed * delta)
-	
 
 func launch(boomPos): #from an explosion
 	launching = true
 	velocity.y = 0
 	jump_alarm = 0
 	var direction = (position - boomPos).normalized()
-	velocity = 1250 * direction
+	velocity = 750 * direction
 	velocity.x *= 1.5
 	if currentPlatform != null: currentPlatform.boost(JUMP_VELOCITY)
 
@@ -633,3 +664,70 @@ func change_velocity(value):
 	#	
 	#	print(value)
 	velocity.y = value
+
+func superjump_start():
+	
+	# set state
+	superjumping = true
+	set_invuln(true)
+	jump_alarm = 0
+	jumping = false
+	short_jumping = false
+	
+	# record distance to stop
+	superjump_height_start = UI.get_height()
+	superjump_height_end = superjump_height_start + superjump_distance_max
+	
+	var _text = Global.spawn_notif_text("Super Jump!", self)
+	_text.set_style_fast_tiny()
+	
+	# trail of "weeeeee!" start
+	_text = Global.spawn_notif_text("W", self)
+	_text.set_style_fast_tiny()
+	
+	pass
+
+func superjump_step():
+	
+	set_invuln(true)
+	
+	# set speed
+	#velocity.x = 0
+	velocity.y = superjump_velocity
+	
+	# set speed
+	#velocity.x = 0
+	velocity.y = superjump_velocity_end
+	
+	# trail of "e"'s
+	var _text = Global.spawn_notif_text("e", self)
+	_text.set_style_fast_tiny()
+	
+	# end check
+	if UI.get_height() >= superjump_height_end: superjump_end()
+	
+	pass
+
+func superjump_end():
+	
+	# set state
+	superjumping = false
+	set_invuln(true)
+	
+	# set speed
+	#velocity.x = 0
+	velocity.y = superjump_velocity_end
+	
+	# trail of "e"'s end
+	var _text = Global.spawn_notif_text("!", self)
+	_text.set_style_fast_tiny()
+	
+	# Spawn platform under player's feet
+	var _platform = load("res://scenes/platform.tscn").instantiate()
+	var _platform_padding_y = 0
+	get_node("../Spawner").add_child(_platform)
+	_platform.global_position.x = global_position.x
+	_platform.global_position.y = global_position.y + $CollisionShape2D.shape.size.y/2 + _platform.get_node("EnemyShape").shape.size.y/2 + _platform_padding_y
+	_platform.setup($Camera2D, self)
+	
+	pass

@@ -11,7 +11,11 @@ var seek_player_trigger_distance := 400.0
 const CHARGE_DEFAULT := 5
 var chargeTime := CHARGE_DEFAULT
 
+var time_speed = 1.0
+
 func _process(delta):
+	delta *= time_speed
+	if delta == 0: return
 	
 	# Decide when to seek player
 	if !seeking_player && enemy.global_position.distance_to(player.global_position) < seek_player_trigger_distance:

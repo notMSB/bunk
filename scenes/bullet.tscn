@@ -21,7 +21,6 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_1e0ew")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("RectangleShape2D_xhnio")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

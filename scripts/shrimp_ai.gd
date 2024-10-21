@@ -11,7 +11,12 @@ var flipped := false
 var xScale := 1
 var yScale := 1
 
+var time_speed = 1.0
+
 func _process(delta):
+	delta *= time_speed
+	if delta == 0: return
+	
 	flip(enemy.global_position.x > player.global_position.x)
 	shotCooldown -= delta
 	if shotCooldown <= 0 and !enemy.killTimerSet and enemy.global_position.distance_to(player.global_position) < 550:

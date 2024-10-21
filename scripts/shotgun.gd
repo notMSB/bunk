@@ -5,9 +5,9 @@ extends Node2D
 const NAME = "Shotgun"
 const COOLDOWN = .5
 const DAMAGE = 1
-const PIERCE = 15
-const RELOAD_TIME := .5
-const MAGAZINE_SIZE := 4
+const PIERCE = .15
+const RELOAD_TIME := 1.5
+const MAGAZINE_SIZE := 2
 const ITEM_SPRITE := "res://assets/sprites/shotgun.png"
 const AMMO_ASCII := " []"
 

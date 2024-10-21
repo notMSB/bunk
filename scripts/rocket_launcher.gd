@@ -7,8 +7,8 @@ const COOLDOWN = .35
 const DAMAGE = 10
 const PIERCE := .0
 const ALT_PIERCE := .05
-const RELOAD_TIME := .85
-const MAGAZINE_SIZE := 5
+const RELOAD_TIME := 2
+const MAGAZINE_SIZE := 4
 const ITEM_SPRITE := "res://assets/sprites/rocket launcher.png"
 const AMMO_ASCII := "Y"
 

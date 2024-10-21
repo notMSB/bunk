@@ -10,8 +10,27 @@ var using_keyboard = true
 
 # Player object
 var player = null
+var UI = null
+var BackgroundLayer = null
+var Spawner = null
 # Weapon system
 
+enum PICKUP {fuel, health, weapon, grenade, EMP, Photon_Barrier, Time_Freeze, Portal_Trinket, length}
+
+var elevation_threshold_data = {
+	enemy_spawn_threshold = [1000, 2500, 4000, 6500],	# Thresholds for enemy wave chances
+	timer_list = [
+		# Spawn rate of waves. 
+		# first entry: height minimum for entry
+		# Second entry: spawn time between waves. 
+			[0, 		1.3]
+		,	[500, 		1.3] 
+		,	[2000, 		1.2] 
+		,	[5000, 		1.1] 
+		,	[8000, 		1.0] 
+		,	[11000, 	0.9]
+	]
+}
 
 
 func game_over():

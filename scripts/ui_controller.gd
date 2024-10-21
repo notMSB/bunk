@@ -9,6 +9,8 @@ var pauseVal := PAUSE_INCREMENT
 var paused := false
 
 func _ready():
+	Global.UI = self
+	Global.BackgroundLayer = Background
 	$Height/High.text = str(Global.highScore)
 	if Global.shame: $Height/High.text = str($Height/High.text, "?")
 
@@ -50,7 +52,8 @@ func update_health(value, isHeal):
 	else: $Health.get_child(value).visible = false
 
 func set_item(hasItem):
-	$Consumable.visible = hasItem
+	$Consumable.visible = false if hasItem == -1 else true
+	
 
 func change_background():
 	var fadeVal : int = get_height() * 235 / 6500
