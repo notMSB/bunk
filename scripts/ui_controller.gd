@@ -21,12 +21,14 @@ func pause():
 	paused = true
 	$Height/Current.text = str(floor(pauseVal))
 	get_node("../Spawner").spawn_boss()
+	Global.elevator_paused.emit()
 
 func unpause(value): #player height on boss kill
 	#print(value)
 	paused = false
 	modifier = value + pauseVal
 	pauseVal += PAUSE_INCREMENT
+	Global.elevator_resumed.emit()
 
 func set_height(value):
 	if !paused:

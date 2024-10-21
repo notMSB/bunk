@@ -115,6 +115,7 @@ func _ready():
 	if Global.using_keyboard:	$"Target Reticle".hide()
 	else:						$"Target Reticle".show()
 	
+	Global.elevator_paused.connect(on_elevator_paused)
 
 func _physics_process(delta):
 	
@@ -730,4 +731,8 @@ func superjump_end():
 	_platform.global_position.y = global_position.y + $CollisionShape2D.shape.size.y/2 + _platform.get_node("EnemyShape").shape.size.y/2 + _platform_padding_y
 	_platform.setup($Camera2D, self)
 	
+	pass
+
+func on_elevator_paused():
+	superjump_end()
 	pass

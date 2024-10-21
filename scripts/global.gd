@@ -15,6 +15,10 @@ var BackgroundLayer = null
 var Spawner = null
 # Weapon system
 
+# Signals
+signal elevator_paused
+signal elevator_resumed
+
 enum PICKUP {fuel, health, weapon, grenade, EMP, Photon_Barrier, Time_Freeze, Portal_Trinket, length}
 
 var elevation_threshold_data = {
