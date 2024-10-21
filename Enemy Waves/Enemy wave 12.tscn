@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://e142lngt2voh"]
+
+[ext_resource type="PackedScene" uid="uid://72qkskcwtyry" path="res://scenes/platform.tscn" id="1_ya2na"]
+
+[node name="Wave" type="Node2D"]
+position = Vector2(512, 768)
+
+[node name="Platform" parent="." instance=ExtResource("1_ya2na")]
+position = Vector2(-2, -109)
+
+[node name="Platform2" parent="." instance=ExtResource("1_ya2na")]
+position = Vector2(111, -290)
+
+[node name="Platform3" parent="." instance=ExtResource("1_ya2na")]
+position = Vector2(-113, -430)
+
+[node name="Platform4" parent="." instance=ExtResource("1_ya2na")]
+position = Vector2(-393, -239)
+
+[node name="Platform5" parent="." instance=ExtResource("1_ya2na")]
+position = Vector2(313, -556)
+
+[node name="Platform6" parent="." instance=ExtResource("1_ya2na")]
+position = Vector2(-287, -615)
+
+[node name="Platform7" parent="." instance=ExtResource("1_ya2na")]
+position = Vector2(455, -60)
