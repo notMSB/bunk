@@ -1,16 +1,42 @@
-[gd_scene load_steps=14 format=3 uid="uid://0yy4i0l8ajh1"]
+[gd_scene load_steps=40 format=3 uid="uid://0yy4i0l8ajh1"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_2e5t6"]
-[ext_resource type="Texture2D" uid="uid://cgvmcx23r8ods" path="res://assets/sprites/player.png" id="2_f5gig"]
+[ext_resource type="Texture2D" uid="uid://dporoebmfrpp3" path="res://assets/sprites/bunk/Bunk_shark_jet.png" id="2_bisho"]
 [ext_resource type="PackedScene" uid="uid://m6ux2qjpvwha" path="res://scenes/laser_gun.tscn" id="3_5i3k8"]
+[ext_resource type="Texture2D" uid="uid://buudag1m6k0wg" path="res://assets/sprites/bunk/Bunk_upper_arm_L.png" id="3_bu2lg"]
 [ext_resource type="PackedScene" uid="uid://cd5egnil261mn" path="res://scenes/basic_gun.tscn" id="3_dpfgx"]
+[ext_resource type="Texture2D" uid="uid://dlahpxf2kmq6x" path="res://assets/sprites/bunk/Bunk_sleeve_L.png" id="4_l1lis"]
 [ext_resource type="PackedScene" uid="uid://c8mcymji32hy6" path="res://scenes/rocket_launcher.tscn" id="5_41iu5"]
+[ext_resource type="Texture2D" uid="uid://f60uiu1qyaco" path="res://assets/sprites/bunk/Bunk_upper_body.png" id="5_d5xkl"]
 [ext_resource type="PackedScene" uid="uid://c1cujh6mkr13u" path="res://scenes/shotgun.tscn" id="6_g4ar1"]
+[ext_resource type="Texture2D" uid="uid://58jfkdnoenxt" path="res://assets/sprites/bunk/Bunk_strap_R.png" id="6_qjcs2"]
 [ext_resource type="Script" path="res://scripts/grenade.gd" id="7_bquw6"]
+[ext_resource type="Texture2D" uid="uid://ss0utphaapyv" path="res://assets/sprites/bunk/Bunk_strap_L.png" id="7_sokqx"]
 [ext_resource type="PackedScene" uid="uid://dwboudnyjtnrq" path="res://scenes/explosion.tscn" id="8_2i5iv"]
+[ext_resource type="Texture2D" uid="uid://d1ig4kyfvf2ep" path="res://assets/sprites/bunk/Bunk_neck.png" id="8_f3le7"]
+[ext_resource type="Texture2D" uid="uid://c0rp6qj6cqofl" path="res://assets/sprites/bunk/bunk_helmet.png" id="9_5fdnw"]
 [ext_resource type="PackedScene" uid="uid://d05ux23agcpwf" path="res://scenes/EMP_effect.tscn" id="9_34b74"]
 [ext_resource type="Texture2D" uid="uid://2vxf00blm6y4" path="res://assets/sprites/bullet.png" id="9_d85gv"]
+[ext_resource type="Texture2D" uid="uid://cneaeacf55l0t" path="res://assets/sprites/bunk/bunk_eyebrows.png" id="10_5cjsy"]
 [ext_resource type="Texture2D" uid="uid://ia1jkdtvaa1d" path="res://assets/sprites/18554.png" id="10_pntjh"]
+[ext_resource type="Texture2D" uid="uid://cvy5od3pxoljj" path="res://assets/sprites/bunk/bunk_mouth.png" id="11_0ss4v"]
+[ext_resource type="Texture2D" uid="uid://fksdsus8tkd5" path="res://assets/sprites/bunk/Bunk_upper_arm_R.png" id="12_7kdag"]
+[ext_resource type="Texture2D" uid="uid://c1uxbttdq1u2n" path="res://assets/sprites/bunk/laser.png" id="13_6ldy4"]
+[ext_resource type="Texture2D" uid="uid://cfqrx27fl1ry1" path="res://assets/sprites/bunk/Laser_Electricity.png" id="14_sng06"]
+[ext_resource type="Texture2D" uid="uid://xsbeehmxfm20" path="res://assets/sprites/bunk/Light_01.png" id="15_dy6ky"]
+[ext_resource type="Texture2D" uid="uid://dcbibl5ihvkne" path="res://assets/sprites/bunk/Light_02.png" id="16_ac5np"]
+[ext_resource type="Texture2D" uid="uid://cslv0p03funnl" path="res://assets/sprites/bunk/Bunk_hand_L.png" id="17_mt2af"]
+[ext_resource type="Texture2D" uid="uid://cipajeygfd8ow" path="res://assets/sprites/bunk/Bunk_lower_arm_R.png" id="18_dkoh7"]
+[ext_resource type="Texture2D" uid="uid://k6sy4eqcuemd" path="res://assets/sprites/bunk/Bunk_hand_R.png" id="19_wjg5w"]
+[ext_resource type="Texture2D" uid="uid://bbs23dgqdw3tr" path="res://assets/sprites/bunk/Bunk_lower_arm_L.png" id="20_haobu"]
+[ext_resource type="Texture2D" uid="uid://dfp5ou6wqtniq" path="res://assets/sprites/bunk/Bunk_sleeve_R.png" id="21_qbj0j"]
+[ext_resource type="Texture2D" uid="uid://duokfwx282735" path="res://assets/sprites/bunk/Bunk_upper_leg_L.png" id="22_vdii4"]
+[ext_resource type="Texture2D" uid="uid://dqe4jkf6fm5t1" path="res://assets/sprites/bunk/Bunk_lower_leg_L.png" id="23_ph466"]
+[ext_resource type="Texture2D" uid="uid://vouvlh7wq7dk" path="res://assets/sprites/bunk/Bunk_shoe_L.png" id="24_ut84u"]
+[ext_resource type="Texture2D" uid="uid://c7clqgwcj6v0f" path="res://assets/sprites/bunk/Bunk_upper_leg_R.png" id="25_ewnen"]
+[ext_resource type="Texture2D" uid="uid://bc8ec3r5liix2" path="res://assets/sprites/bunk/Bunk_lower_leg_R.png" id="26_l56ht"]
+[ext_resource type="Texture2D" uid="uid://dusvwppactsc3" path="res://assets/sprites/bunk/Bunk_shioe_R.png" id="27_qfrvp"]
+[ext_resource type="Texture2D" uid="uid://d1igk4st3a7tw" path="res://assets/sprites/bunk/Bunk_waist.png" id="28_xhb51"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fcr74"]
 size = Vector2(32, 64)
@@ -23,17 +49,141 @@ collision_layer = 65
 collision_mask = 24
 script = ExtResource("1_2e5t6")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_f5gig")
+[node name="Model" type="Sprite2D" parent="."]
+position = Vector2(1, 24)
+scale = Vector2(0.25, 0.25)
+
+[node name="BunkSharkJet" type="Sprite2D" parent="Model"]
+position = Vector2(-72, -97.5)
+texture = ExtResource("2_bisho")
+
+[node name="BunkUpperArmL" type="Sprite2D" parent="Model"]
+position = Vector2(20, -124)
+rotation = -1.31598
+texture = ExtResource("3_bu2lg")
+offset = Vector2(12, 36)
+
+[node name="ArmHolderL" type="Node2D" parent="Model/BunkUpperArmL"]
+position = Vector2(17.5231, 55.3709)
+rotation = -0.270961
+
+[node name="BunkLowerArmL" type="Sprite2D" parent="Model/BunkUpperArmL/ArmHolderL"]
+rotation = 0.349066
+texture = ExtResource("20_haobu")
+offset = Vector2(26.4924, -3.87065)
+
+[node name="BunkSleeveL" type="Sprite2D" parent="Model"]
+position = Vector2(40, -127.5)
+texture = ExtResource("4_l1lis")
+
+[node name="BunkUpperBody" type="Sprite2D" parent="Model"]
+position = Vector2(-7, -96.5)
+texture = ExtResource("5_d5xkl")
+
+[node name="BunkStrapR" type="Sprite2D" parent="Model/BunkUpperBody"]
+z_index = 1
+position = Vector2(-21, -26)
+texture = ExtResource("6_qjcs2")
+
+[node name="BunkStrapL" type="Sprite2D" parent="Model/BunkUpperBody"]
+position = Vector2(33, -31)
+texture = ExtResource("7_sokqx")
+
+[node name="BunkNeck" type="Sprite2D" parent="Model/BunkUpperBody"]
+position = Vector2(8, -33)
+texture = ExtResource("8_f3le7")
+
+[node name="BunkHelmet" type="Sprite2D" parent="Model/BunkUpperBody"]
+position = Vector2(2, -72)
+texture = ExtResource("9_5fdnw")
+
+[node name="BunkEyebrows" type="Sprite2D" parent="Model/BunkUpperBody/BunkHelmet"]
+position = Vector2(7, -25)
+texture = ExtResource("10_5cjsy")
+
+[node name="BunkMouth" type="Sprite2D" parent="Model/BunkUpperBody/BunkHelmet"]
+position = Vector2(16, 12)
+texture = ExtResource("11_0ss4v")
+
+[node name="BunkUpperArmR" type="Sprite2D" parent="Model"]
+position = Vector2(-44, -120)
+rotation = -0.785398
+texture = ExtResource("12_7kdag")
+offset = Vector2(-9, 20.5)
+
+[node name="Laser" type="Sprite2D" parent="Model/BunkUpperArmR"]
+z_index = 2
+position = Vector2(113, 19.5)
+texture = ExtResource("13_6ldy4")
+
+[node name="LaserElectricity" type="Sprite2D" parent="Model/BunkUpperArmR/Laser"]
+position = Vector2(102, -4)
+texture = ExtResource("14_sng06")
+
+[node name="Light01" type="Sprite2D" parent="Model/BunkUpperArmR/Laser"]
+position = Vector2(101, -29)
+texture = ExtResource("15_dy6ky")
+
+[node name="Light02" type="Sprite2D" parent="Model/BunkUpperArmR/Laser"]
+position = Vector2(101, 22)
+texture = ExtResource("16_ac5np")
+
+[node name="BunkHandL" type="Sprite2D" parent="Model/BunkUpperArmR/Laser"]
+z_index = 3
+position = Vector2(5.5, 12)
+texture = ExtResource("17_mt2af")
+
+[node name="BunkLowerArmR" type="Sprite2D" parent="Model/BunkUpperArmR"]
+z_index = 2
+position = Vector2(18, 45.5)
+texture = ExtResource("18_dkoh7")
+
+[node name="BunkHandR" type="Sprite2D" parent="Model/BunkUpperArmR/BunkLowerArmR"]
+position = Vector2(37, -8)
+texture = ExtResource("19_wjg5w")
+
+[node name="BunkSleeveR" type="Sprite2D" parent="Model"]
+position = Vector2(-41, -123.5)
+texture = ExtResource("21_qbj0j")
+
+[node name="BunkUpperLegL" type="Sprite2D" parent="Model"]
+position = Vector2(18, -33.5)
+texture = ExtResource("22_vdii4")
+
+[node name="BunkLowerLegL" type="Sprite2D" parent="Model/BunkUpperLegL"]
+position = Vector2(5, 20)
+texture = ExtResource("23_ph466")
+
+[node name="BunkShoeL" type="Sprite2D" parent="Model/BunkUpperLegL"]
+position = Vector2(1, 47)
+texture = ExtResource("24_ut84u")
+
+[node name="BunkUpperLegR" type="Sprite2D" parent="Model"]
+position = Vector2(-19, -20.5)
+texture = ExtResource("25_ewnen")
+
+[node name="BunkLowerLegR" type="Sprite2D" parent="Model/BunkUpperLegR"]
+position = Vector2(0, 17)
+texture = ExtResource("26_l56ht")
+
+[node name="BunkShioeR" type="Sprite2D" parent="Model/BunkUpperLegR"]
+position = Vector2(-14, 38)
+texture = ExtResource("27_qfrvp")
+
+[node name="BunkWaist" type="Sprite2D" parent="Model"]
+position = Vector2(-10, -42.5)
+texture = ExtResource("28_xhb51")
 
 [node name="Pickup Area" type="Area2D" parent="."]
 collision_layer = 128
 collision_mask = 128
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pickup Area"]
+visible = false
 shape = SubResource("RectangleShape2D_fcr74")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_pwljv")
 
 [node name="Camera2D" type="Camera2D" parent="."]

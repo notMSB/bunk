@@ -1,8 +1,196 @@
-[gd_scene load_steps=7 format=3 uid="uid://cydvsy2fg6d5e"]
+[gd_scene load_steps=53 format=3 uid="uid://cydvsy2fg6d5e"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_rheqo"]
 [ext_resource type="Texture2D" uid="uid://v2pfogxv7iam" path="res://assets/sprites/enemy.png" id="2_nbfk6"]
+[ext_resource type="Texture2D" uid="uid://3q52wmp6a178" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00000.png" id="3_dgbxv"]
 [ext_resource type="Script" path="res://scripts/crab_ai.gd" id="3_qh04d"]
+[ext_resource type="Texture2D" uid="uid://bc6biup13p1h0" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00001.png" id="4_3inp0"]
+[ext_resource type="Texture2D" uid="uid://cxyqxkxscnafo" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00002.png" id="5_yo8i8"]
+[ext_resource type="Texture2D" uid="uid://6wqe1utc0ctu" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00003.png" id="6_8urfh"]
+[ext_resource type="Texture2D" uid="uid://boi7nnclxuhm6" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00004.png" id="7_ycew3"]
+[ext_resource type="Texture2D" uid="uid://jca3umf0mj24" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00005.png" id="8_by4jp"]
+[ext_resource type="Texture2D" uid="uid://2hhka4wxhmpw" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00006.png" id="9_rkir6"]
+[ext_resource type="Texture2D" uid="uid://cp8kcmrl546p0" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00007.png" id="10_264v4"]
+[ext_resource type="Texture2D" uid="uid://8jyl58ts7w1n" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00008.png" id="11_d5cyg"]
+[ext_resource type="Texture2D" uid="uid://bxwegwb6x3gru" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00009.png" id="12_uywxu"]
+[ext_resource type="Texture2D" uid="uid://deobje5phravt" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00010.png" id="13_kvw07"]
+[ext_resource type="Texture2D" uid="uid://ceclto8gflec0" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00011.png" id="14_caywx"]
+[ext_resource type="Texture2D" uid="uid://cfs1g4daclkxe" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00012.png" id="15_dl317"]
+[ext_resource type="Texture2D" uid="uid://dbsd5xlqdsfhc" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00013.png" id="16_3eorm"]
+[ext_resource type="Texture2D" uid="uid://fd6dpcy63xb1" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00014.png" id="17_1adom"]
+[ext_resource type="Texture2D" uid="uid://1lgxfoebywlh" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00015.png" id="18_7gsud"]
+[ext_resource type="Texture2D" uid="uid://dus7vehynhn4w" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00016.png" id="19_t8xsm"]
+[ext_resource type="Texture2D" uid="uid://q8u6o84hg6o4" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00017.png" id="20_cj7ru"]
+[ext_resource type="Texture2D" uid="uid://ckvpueq8b3eip" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00018.png" id="21_4vibd"]
+[ext_resource type="Texture2D" uid="uid://b0jjd71c2fmum" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00019.png" id="22_x1xyv"]
+[ext_resource type="Texture2D" uid="uid://do22mi6oek08b" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00020.png" id="23_3n75h"]
+[ext_resource type="Texture2D" uid="uid://b3mb3modjahnq" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00021.png" id="24_pgtfb"]
+[ext_resource type="Texture2D" uid="uid://cpvs05g43k2yd" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00022.png" id="25_befyj"]
+[ext_resource type="Texture2D" uid="uid://daaxrbp50omk7" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00023.png" id="26_mhb7v"]
+[ext_resource type="Texture2D" uid="uid://ytuql6wmf4ys" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00024.png" id="27_ak0q2"]
+[ext_resource type="Texture2D" uid="uid://cpoh7vguoub3x" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00025.png" id="28_mr5ye"]
+[ext_resource type="Texture2D" uid="uid://y3le6kgch4rx" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00026.png" id="29_albke"]
+[ext_resource type="Texture2D" uid="uid://ck1mkr48sua4k" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00027.png" id="30_ngaek"]
+[ext_resource type="Texture2D" uid="uid://cxm8p1fuh2sb8" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00028.png" id="31_lnjun"]
+[ext_resource type="Texture2D" uid="uid://datmnyf8nb74" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00029.png" id="32_cre0q"]
+[ext_resource type="Texture2D" uid="uid://cfnbiycccwp0h" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00030.png" id="33_wvicm"]
+[ext_resource type="Texture2D" uid="uid://cujdar06cyhjc" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00031.png" id="34_jvlre"]
+[ext_resource type="Texture2D" uid="uid://nc7dsi2ebhfn" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00032.png" id="35_vvuuc"]
+[ext_resource type="Texture2D" uid="uid://daduv7moq2tjn" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00033.png" id="36_23vsy"]
+[ext_resource type="Texture2D" uid="uid://c4tko2s77ccdo" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00034.png" id="37_m40fq"]
+[ext_resource type="Texture2D" uid="uid://c7sm4glw0w7ea" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00035.png" id="38_sp7uk"]
+[ext_resource type="Texture2D" uid="uid://c5ef7nlw8vabi" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00036.png" id="39_5g38s"]
+[ext_resource type="Texture2D" uid="uid://bnklsbtl3ttnv" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00037.png" id="40_y828y"]
+[ext_resource type="Texture2D" uid="uid://qfmyn1m7pjmc" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00038.png" id="41_nf1mo"]
+[ext_resource type="Texture2D" uid="uid://c5m4jbyw560eh" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00039.png" id="42_8rt3g"]
+[ext_resource type="Texture2D" uid="uid://m3ucg0xrkik7" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00040.png" id="43_xowca"]
+[ext_resource type="Texture2D" uid="uid://bk4vgtk5cwbx8" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00041.png" id="44_secby"]
+[ext_resource type="Texture2D" uid="uid://eyavf7yaowaj" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00042.png" id="45_6jtex"]
+[ext_resource type="Texture2D" uid="uid://b3qxd6hdvn076" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00043.png" id="46_0g1lc"]
+[ext_resource type="Texture2D" uid="uid://be0ew3u1o1eu3" path="res://assets/sprites/Crab_Idle_Pose/Crab_Idle_Pose_00044.png" id="47_2hdo1"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jc4vm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_dgbxv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_3inp0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_yo8i8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_8urfh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ycew3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_by4jp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_rkir6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_264v4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_d5cyg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_uywxu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_kvw07")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_caywx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_dl317")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_3eorm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_1adom")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_7gsud")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_t8xsm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_cj7ru")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_4vibd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_x1xyv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_3n75h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_pgtfb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_befyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_mhb7v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_ak0q2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_mr5ye")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_albke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ngaek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_lnjun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_cre0q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_wvicm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_jvlre")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_vvuuc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_23vsy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_m40fq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_sp7uk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_5g38s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_y828y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_nf1mo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_8rt3g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_xowca")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_secby")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_6jtex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_0g1lc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_2hdo1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v371p"]
 size = Vector2(62, 30)
@@ -20,12 +208,19 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_rheqo")
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(6, -5)
+sprite_frames = SubResource("SpriteFrames_jc4vm")
+autoplay = "default"
+frame_progress = 0.307656
+
 [node name="Sprites" type="Node2D" parent="."]
 
 [node name="1" type="Sprite2D" parent="Sprites"]
 texture = ExtResource("2_nbfk6")
 
 [node name="EnemyShape" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_v371p")
 
 [node name="PlatformBody" type="StaticBody2D" parent="."]

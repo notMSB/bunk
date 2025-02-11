@@ -107,6 +107,7 @@ func single_platform():
 	$PlatformBody/PlatformShape.set_deferred("disabled", false)
 	var spriteCount := $Sprites.get_child_count()
 	for sprite in $Sprites.get_children():
+		#Animated sprite is placed outside of sprite for now
 		sprite.texture = ResourceLoader.load(platform_sprite)
 		if sprite.get_index() == 1: #temp
 			sprite.rotation = 0

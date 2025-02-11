@@ -120,7 +120,7 @@ func _ready():
 func _physics_process(delta):
 	
 	UI.set_height(position.y)
-	
+	handleAimAnimation(global_position.angle_to_point(get_global_mouse_position()))
 	
 	# Player is off screen
 	if position.y > $Camera2D.get_screen_center_position().y - (($Camera2D.offset.y - BOTTOM_MOD) / $Camera2D.zoom.y): 
@@ -651,6 +651,8 @@ func aim_using_joystick(delta):
 	get_viewport().warp_mouse(lerp(get_global_transform_with_canvas().origin, get_global_transform_with_canvas().origin + _aim_position, controller_aim_lerp_speed * delta))
 	if $"Target Reticle".visible: $"Target Reticle".position = lerp($"Target Reticle".position, _aim_position, controller_aim_lerp_speed * delta)
 
+	
+
 func launch(boomPos): #from an explosion
 	launching = true
 	velocity.y = 0
@@ -736,3 +738,17 @@ func superjump_end():
 func on_elevator_paused():
 	superjump_end()
 	pass
+	
+func handleAimAnimation(_aim_angle : float = 0):
+	
+	if get_global_mouse_position().x > global_position.x:
+		$Model.scale = Vector2(.25, .25)
+	else:
+		$Model.scale = Vector2(-.25, .25);
+	
+	#Temporary code, very dirty
+	
+	$Model/BunkUpperArmR.look_at(get_global_mouse_position())
+	$Model/BunkUpperArmL/ArmHolderL.look_at($Model/BunkUpperArmR/Laser/BunkHandL.global_position)
+	$Model/BunkUpperArmL.rotation = $Model/BunkUpperArmR.rotation * 2
+	$Model/BunkUpperBody.rotation =$Model/BunkUpperArmR.rotation  * .1
