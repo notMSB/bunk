@@ -58,6 +58,7 @@ func update_draw():
 	pass
 
 func picked_up():
+	get_parent().on_weapon_pick_up(self)
 	
 	# Clears object by being picked up
 	

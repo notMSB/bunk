@@ -740,15 +740,14 @@ func on_elevator_paused():
 	pass
 	
 func handleAimAnimation(_aim_angle : float = 0):
-	
+	var scl = abs($Model.scale)
 	if get_global_mouse_position().x > global_position.x:
 		$Model.scale = Vector2(.25, .25)
 	else:
-		$Model.scale = Vector2(-.25, .25);
+		$Model.scale = Vector2(-.25, .25)
 	
 	#Temporary code, very dirty
-	
-	$Model/BunkUpperArmR.look_at(get_global_mouse_position())
-	$Model/BunkUpperArmL/ArmHolderL.look_at($Model/BunkUpperArmR/Laser/BunkHandL.global_position)
-	$Model/BunkUpperArmL.rotation = $Model/BunkUpperArmR.rotation * 2
-	$Model/BunkUpperBody.rotation =$Model/BunkUpperArmR.rotation  * .1
+	$Model/BunkWaist/BunkUpperArmR.look_at(get_global_mouse_position())
+	$Model/BunkWaist/BunkUpperArmL/ArmHolderL.look_at($Model/BunkWaist/BunkUpperArmR/Laser/BunkHandL.global_position)
+	$Model/BunkWaist/BunkUpperArmL.rotation = $Model/BunkWaist/BunkUpperArmR.rotation * 2
+	$Model/BunkWaist/BunkUpperBody.rotation =$Model/BunkWaist/BunkUpperArmR.rotation  * .1
