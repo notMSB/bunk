@@ -10,6 +10,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @export var weapon_id : int = -1
 
 func _ready() -> void:
+	get_parent().starter_weapons.push_back(self)
 	
 	$"Pickup Prompt".hide()
 	

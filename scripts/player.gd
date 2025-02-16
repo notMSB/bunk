@@ -208,7 +208,7 @@ func classic_process(delta):
 		if weaponCooldown == 0:
 			
 			# reload after cooldown
-			if weapon_ammo <= 0:
+			if weapon_ammo <= 0 and weapon_ammo_max > 0:
 				reload_weapon()
 			
 			pass

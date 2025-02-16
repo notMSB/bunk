@@ -18,10 +18,8 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8oyl6"]
 size = Vector2(1200, 95)
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("starter_weapon_1", "starter_weapon_2")]
+[node name="Game" type="Node2D"]
 script = ExtResource("1_s4ac1")
-starter_weapon_1 = NodePath("Weapon Pickup")
-starter_weapon_2 = NodePath("Weapon Pickup2")
 
 [node name="UI" type="CanvasLayer" parent="."]
 offset = Vector2(0, 120)
@@ -215,13 +213,17 @@ Swarmer = ExtResource("7_6cpvj")
 Boss = ExtResource("8_6bkhq")
 ItemPlatform = ExtResource("8_abx8m")
 
-[node name="Weapon Pickup2" parent="." instance=ExtResource("10_2dprp")]
-position = Vector2(785, 339)
-weapon_id = 2
-
 [node name="Weapon Pickup" parent="." instance=ExtResource("10_2dprp")]
 position = Vector2(353, 346)
 weapon_id = 3
+
+[node name="Weapon Pickup2" parent="." instance=ExtResource("10_2dprp")]
+position = Vector2(785, 339)
+weapon_id = 4
+
+[node name="Weapon Pickup3" parent="." instance=ExtResource("10_2dprp")]
+position = Vector2(100, 342)
+weapon_id = 5
 
 [node name="Player" parent="." instance=ExtResource("1_5bqmq")]
 position = Vector2(587, 586)
